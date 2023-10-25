@@ -20,7 +20,6 @@ public class Polygon2D {
             ypoints[i] = (int) Math.round(points[i].y);
         }
         g.setColor(colour);
-        g.fillPolygon(xpoints, ypoints, xpoints.length);
-
+        g.drawPolygon(xpoints, ypoints, xpoints.length);
     }
 }

@@ -27,6 +27,18 @@ public class GameState implements State {
         new Vector3(100, 50, 100), new Vector3(200, 50, 100), 
         new Vector3(200, 50, 0), new Vector3(100, 50, 0)
     }, Color.green);
+    Polygon3D face4 = new Polygon3D(new Vector3[] { 
+        new Vector3(100, 150, 100), new Vector3(200, 150, 100), 
+        new Vector3(200, 150, 0), new Vector3(100, 150, 0)
+    }, Color.green);
+    Polygon3D face5 = new Polygon3D(new Vector3[] { 
+        new Vector3(200, 50, 100), new Vector3(200, 50, 0), 
+        new Vector3(200, 150, 0), new Vector3(200, 150, 100) 
+    }, Color.blue);
+    Polygon3D face6 = new Polygon3D(new Vector3[] { 
+        new Vector3(100, 50, 100), new Vector3(200, 50, 100), 
+        new Vector3(200, 150, 100), new Vector3(100, 150, 100) 
+    }, Color.red);
 
     @Override
     public void start(State prevState) {
@@ -41,9 +53,18 @@ public class GameState implements State {
     @Override
     public void render(Graphics2D g) {
         // drawing custom polygon
+        face5.draw(g, FOCAL_LENGTH);
+        face4.draw(g, FOCAL_LENGTH);
         face2.draw(g, FOCAL_LENGTH);
         face3.draw(g, FOCAL_LENGTH);
+        face6.draw(g, FOCAL_LENGTH);
         face1.draw(g, FOCAL_LENGTH);
+        face6.translate(new Vector3(0.5, -0.5, 0));
+        face5.translate(new Vector3(0.5, -0.5, 0));
+        face4.translate(new Vector3(0.5, -0.5, 0));
+        face2.translate(new Vector3(0.5, -0.5, 0));
+        face3.translate(new Vector3(0.5, -0.5, 0));
+        face1.translate(new Vector3(0.5, -0.5, 0));
     }
 
     @Override

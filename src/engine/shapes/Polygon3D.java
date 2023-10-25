@@ -24,4 +24,10 @@ public class Polygon3D {
 
       return new Polygon2D(projectedPoints, this.colour);
     }
+
+    public void translate(Vector3 distance) {
+      for (int i = 0; i < points.length; i++) {
+        points[i].translate(distance);
+      }
+    }
 }
