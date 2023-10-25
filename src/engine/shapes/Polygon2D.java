@@ -3,12 +3,13 @@ package engine.shapes;
 import java.awt.Color;
 import java.awt.Graphics2D;
 
-public class Polygon {
+public class Polygon2D {
     Vector2[] points;
     Color colour = Color.red;
 
-    public Polygon(Vector2[] points) {
+    public Polygon2D(Vector2[] points, Color color) {
         this.points = points;
+        this.colour = color;
     }
 
     public void draw(Graphics2D g) {

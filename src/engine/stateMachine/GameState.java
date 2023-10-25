@@ -3,16 +3,30 @@ package engine.stateMachine;
 import java.awt.Color;
 import java.awt.Graphics2D;
 
-import engine.shapes.Polygon;
+import engine.shapes.Polygon2D;
+import engine.shapes.Polygon3D;
 import engine.shapes.Vector2;
+import engine.shapes.Vector3;
 
 public class GameState implements State {
-    // using java awts polygon class
-    java.awt.Polygon javaPolygon = new java.awt.Polygon(new int[] { 100, 85, 120, 130, 130 },
-            new int[] { 50, 60, 80, 80, 50 }, 5);
     // using the custom polygon class
-    Polygon customPolygon = new Polygon(new Vector2[] { new Vector2(50, 10), new Vector2(50, 30), new Vector2(62, 50),
-            new Vector2(80, 30), new Vector2(80, 10) });
+
+    //A B    A B
+    //C D -> D C
+    double FOCAL_LENGTH = 200;
+    Polygon2D customPolygon = new Polygon2D(new Vector2[] { new Vector2(0, 0), new Vector2(100, 0), new Vector2(100, 100), new Vector2(0, 100) }, Color.red);
+    Polygon3D face1 = new Polygon3D(new Vector3[] { 
+        new Vector3(100, 50, 0), new Vector3(200, 50, 0), 
+        new Vector3(200, 150, 0), new Vector3(100, 150, 0) 
+    }, Color.red);
+    Polygon3D face2 = new Polygon3D(new Vector3[] { 
+        new Vector3(100, 50, 100), new Vector3(100, 50, 0), 
+        new Vector3(100, 150, 0), new Vector3(100, 150, 100) 
+    }, Color.blue);
+    Polygon3D face3 = new Polygon3D(new Vector3[] { 
+        new Vector3(100, 50, 100), new Vector3(200, 50, 100), 
+        new Vector3(200, 50, 0), new Vector3(100, 50, 0)
+    }, Color.green);
 
     @Override
     public void start(State prevState) {
@@ -27,10 +41,9 @@ public class GameState implements State {
     @Override
     public void render(Graphics2D g) {
         // drawing custom polygon
-        customPolygon.draw(g);
-        // drawing java polygon
-        g.setColor(Color.BLUE);
-        g.fill(javaPolygon);
+        face2.draw(g, FOCAL_LENGTH);
+        face3.draw(g, FOCAL_LENGTH);
+        face1.draw(g, FOCAL_LENGTH);
     }
 
     @Override
