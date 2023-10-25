@@ -21,5 +21,4 @@ public class Polygon2D {
         this.edges = edges;
         this.colour = color;
     }
-
 }

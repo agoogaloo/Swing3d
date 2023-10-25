@@ -36,4 +36,16 @@ public class Polygon3D {
         vertices[i].translate(distance);
       }
     }
+
+    public Vector3[] getVertices() {
+      return this.vertices;
+    }
+
+    public Color getColor() {
+      return this.colour;
+    }
+
+    public int[][] getEdges() {
+      return this.edges;
+    }
 }

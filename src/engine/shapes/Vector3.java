@@ -1,7 +1,7 @@
 package engine.shapes;
 
 public class Vector3 {
-  int x, y, z;
+  public int x, y, z;
 
     public Vector3(int x, int y, int z) {
         this.x = x;
