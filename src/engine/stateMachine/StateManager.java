@@ -2,6 +2,7 @@ package engine.stateMachine;
 
 import java.awt.Color;
 import java.awt.Graphics2D;
+import java.awt.image.BufferedImage;
 
 public class StateManager {
 	private static State currentState;
@@ -16,9 +17,9 @@ public class StateManager {
 
 	}
 
-	public static void render(Graphics2D g) {
+	public static void render(BufferedImage image) {
 		if (currentState != null) {
-			currentState.render(g);
+			currentState.render(image);
 		}
 	}
 

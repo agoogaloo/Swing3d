@@ -22,14 +22,4 @@ public class Polygon2D {
         this.colour = color;
     }
 
-    public void draw(Graphics2D g) {
-        //converting the polygon into x and y arrays to be drawn
-        g.setColor(colour);
-        for (int i = 0; i < edges.length; i++) {
-            int[] edge = edges[i];
-            Vector2 v1 = vertices[edge[0]];
-            Vector2 v2 = vertices[edge[1]];
-            g.drawLine(v1.x, v1.y, v2.x, v2.y);
-        }
-    }
 }

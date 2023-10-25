@@ -22,10 +22,6 @@ public class Polygon3D {
         this.colour = color;
     }
 
-    public void draw(Graphics2D g, int focalLength) {
-      this.getProjected(focalLength).draw(g);
-    }
-
     public Polygon2D getProjected(int focalLength) {
       Vector2[] projetedVertices = new Vector2[vertices.length];
       for (int i = 0; i < vertices.length; i++) {

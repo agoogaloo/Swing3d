@@ -45,10 +45,9 @@ public class Display extends JPanel {
 		g.setColor(StateManager.getBgColour());
 		g.fillRect(0, 0, Main.getWindow().getWindowWidth(), Main.getWindow().getWindowHeight());
 		BufferedImage image = new BufferedImage(width, height, BufferedImage.TYPE_INT_ARGB);
-		Graphics2D g2d = (Graphics2D) image.getGraphics();
-		g2d.setRenderingHint(RenderingHints.KEY_STROKE_CONTROL, RenderingHints.VALUE_STROKE_PURE);
+		
 		// doing the rendering
-		StateManager.render(g2d);
+		StateManager.render(image);
 
 		// putting the image onto the display and scaling it
 		g.drawImage(image, Main.getWindow().getxOffset(), Main.getWindow().getyOffset(),
