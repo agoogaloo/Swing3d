@@ -13,12 +13,20 @@ public class Polygon3D {
         this.edges = edges;
         this.colour = color;
     }
+    public Polygon3D(int[][] vertices, int[][] edges, Color color) {
+        this.vertices = new Vector3[vertices.length];
+        for (int i = 0; i < vertices.length; i++) {
+          this.vertices[i] = new Vector3(vertices[i][0], vertices[i][1], vertices[i][2]);
+        }
+        this.edges = edges;
+        this.colour = color;
+    }
 
-    public void draw(Graphics2D g, double focalLength) {
+    public void draw(Graphics2D g, int focalLength) {
       this.getProjected(focalLength).draw(g);
     }
 
-    public Polygon2D getProjected(double focalLength) {
+    public Polygon2D getProjected(int focalLength) {
       Vector2[] projetedVertices = new Vector2[vertices.length];
       for (int i = 0; i < vertices.length; i++) {
         projetedVertices[i] = vertices[i].getProjected(focalLength);
