@@ -4,22 +4,24 @@ import java.awt.Color;
 import java.awt.Graphics2D;
 
 public class Polygon2D {
-    Vector2[] points;
+    Vector2[] vertices;
+    int[][] edges;
     Color colour = Color.red;
 
-    public Polygon2D(Vector2[] points, Color color) {
-        this.points = points;
+    public Polygon2D(Vector2[] vertices, int[][] edges, Color color) {
+        this.vertices = vertices;
+        this.edges = edges;
         this.colour = color;
     }
 
     public void draw(Graphics2D g) {
         //converting the polygon into x and y arrays to be drawn
-        int[] xpoints = new int[points.length], ypoints = new int[points.length];
-        for (int i = 0; i < points.length; i++) {
-            xpoints[i] = (int) Math.round(points[i].x);
-            ypoints[i] = (int) Math.round(points[i].y);
-        }
         g.setColor(colour);
-        g.drawPolygon(xpoints, ypoints, xpoints.length);
+        for (int i = 0; i < edges.length; i++) {
+            int[] edge = edges[i];
+            Vector2 v1 = vertices[edge[0]];
+            Vector2 v2 = vertices[edge[1]];
+            g.drawLine((int)v1.x, (int)v1.y, (int)v2.x, (int)v2.y);
+        }
     }
 }
