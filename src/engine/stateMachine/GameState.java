@@ -1,10 +1,9 @@
 package engine.stateMachine;
 
 import java.awt.Color;
-import java.awt.Graphics2D;
-import java.awt.RenderingHints;
 import java.awt.image.BufferedImage;
 
+import engine.rendering.Renderer;
 import engine.shapes.Polygon2D;
 import engine.shapes.Polygon3D;
 import engine.shapes.Vector2;
@@ -13,6 +12,7 @@ import engine.shapes.Vector3;
 public class GameState implements State {
     int FOCAL_LENGTH = 200;
     Polygon3D[] polygons;
+    Renderer renderer;
     
     Polygon2D customPolygon = new Polygon2D(new int[][] { 
         {0, 0}, {100, 0}, {100, 100}, {0, 100} 
@@ -45,6 +45,8 @@ public class GameState implements State {
         polygons = new Polygon3D[] {
             cube, pyramid
         };
+
+        this.renderer = new Renderer();
     }
 
     @Override
@@ -55,11 +57,7 @@ public class GameState implements State {
     @Override
     public void render(BufferedImage image) {
         // drawing custom polygon
-        Graphics2D g2d = (Graphics2D) image.getGraphics();
-		g2d.setRenderingHint(RenderingHints.KEY_STROKE_CONTROL, RenderingHints.VALUE_STROKE_PURE);
-        
-        drawPolygons(image, polygons);
-        //image.setRGB(0, 0, getIntFromColor(255, 255, 0, 0));
+        renderer.render(image);
     }
 
     void drawPolygons(BufferedImage image, Polygon3D[] polygons) {
