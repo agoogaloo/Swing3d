@@ -79,9 +79,36 @@ public class GameState implements State {
                 image.setRGB(vertex.x+1, vertex.y+1, color.getRGB());
             }
 
-            for (int[] edge : polygon.getEdges()) {
-                Vector2 v1 = projectedVertices[edge[0]];
-                Vector2 v2 = projectedVertices[edge[1]];
+            int[][] edges = polygon.getEdges();
+            for (int j = 0; j < edges.length; j++) {
+                Vector2 v1 = new Vector2(projectedVertices[edges[j][0]]);
+                Vector2 v0 = new Vector2(projectedVertices[edges[j][1]]);
+                //System.out.println(String.format("j: %d, v0: %d, %d, v1: %d, %d, e: %d,%d", j, v0.x, v0.y, v1.x, v1.y, edges[j][0], edges[j][1]));
+                // Vector2 v0 = new Vector2(0, 100);
+                // Vector2 v1 = new Vector2(0, 0);
+
+                //implementation of Bresenham's line drawing algorithm
+                int dx = Math.abs(v1.x - v0.x);
+                int sx = v0.x < v1.x ? 1 : -1;
+                int dy = -Math.abs(v1.y - v0.y);
+                int sy = v0.y < v1.y ? 1 : -1;
+                int error = dx + dy;
+                
+                while(true) {
+                    image.setRGB(v0.x, v0.y, color.getRGB());
+                    if(v0.x == v1.x && v0.y == v1.y) break;
+                    int e2 = 2 * error;
+                    if(e2 >= dy) {
+                        if(v0.x == v1.x) break;
+                        error = error + dy;
+                        v0.x = v0.x + sx;
+                    }
+                    if(e2 <= dx) {
+                        if(v0.y == v1.y) break;
+                        error = error + dx;
+                        v0.y = v0.y + sy;
+                    }
+                }
             }
         }
     }
