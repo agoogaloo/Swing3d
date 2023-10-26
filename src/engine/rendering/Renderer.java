@@ -7,6 +7,7 @@ import engine.rendering.Shaders.ExFragmentShader;
 import engine.rendering.Shaders.FragmentShader;
 import engine.rendering.Shaders.VertexShader;
 import engine.rendering.VertexTramsforms.ClipVertices;
+import engine.rendering.VertexTramsforms.NormalizeClipVertices;
 import engine.rendering.VertexTramsforms.VertexTransform;
 import engine.rendering.VertexTramsforms.WindowTransform;
 
@@ -19,14 +20,17 @@ public class Renderer {
 
   public Renderer() {
     this.vertexPositions = new double[][] {
-      { 0.75, 0.75, 0.0, 1.0 },
-      { 0.75, -0.75, 0.0, 1.0 },
+      { 0.5, 0.75, 0.0, 1.0 },
       { -0.75, -0.75, 0.0, 1.0 },
+      { 0.75, -0.75, 0.0, 1.0 },
+      { -0.75, -0.25, 0.0, 1.0 },
+      { 0.3, 0.8, 0.0, 1.0 },
+      { -0.8, 0.5, 0.0, 1.0 },
     };
     renderPipeline = new RenderPipeline();
 
     this.vertexTransforms = new VertexTransform[] {
-      new ClipVertices(), new WindowTransform()
+      new ClipVertices(), new NormalizeClipVertices(), new WindowTransform()
     };
     this.vertexShaders = new VertexShader[] {
 
@@ -38,7 +42,6 @@ public class Renderer {
 
   public void render(BufferedImage frame) {
     renderPipeline.initialize(vertexPositions, frame.getWidth(), frame.getHeight());
-    //System.out.println("Width: " + frame.getWidth() + ", Height: " + frame.getHeight());
     renderPipeline.applyVertexTransformations(vertexTransforms);
     renderPipeline.applyVertexShaders(vertexShaders);
     renderPipeline.scan();
