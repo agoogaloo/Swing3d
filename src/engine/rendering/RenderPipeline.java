@@ -34,7 +34,7 @@ public class RenderPipeline {
       for(int y = 0; y < height; y++) {
         //TODO draw pixels based on triangles
         frameBuffer[x][y] = new double[] {
-          1, 1, 0, 0
+          1, 0, 0, 0
         };
       }
     }
@@ -42,7 +42,7 @@ public class RenderPipeline {
 
   public void applyFragmentShaders(FragmentShader[] fragmentShaders) {
     for (FragmentShader shader : fragmentShaders) {
-      this.frameBuffer = shader.compute(this.frameBuffer);
+      this.frameBuffer = shader.compute(this.frameBuffer, width, height);
     }
   }
 

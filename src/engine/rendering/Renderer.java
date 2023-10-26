@@ -3,6 +3,7 @@ package engine.rendering;
 import java.awt.Image;
 import java.awt.image.BufferedImage;
 
+import engine.rendering.Shaders.ExFragmentShader;
 import engine.rendering.Shaders.FragmentShader;
 import engine.rendering.Shaders.VertexShader;
 import engine.rendering.VertexTramsforms.ClipVertices;
@@ -31,7 +32,7 @@ public class Renderer {
 
     };
     this.fragmentShaders = new FragmentShader[] {
-
+      new ExFragmentShader()
     };
   }
 
