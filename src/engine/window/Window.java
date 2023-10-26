@@ -23,24 +23,26 @@ public class Window {
 	public static final int WIDTHOFFSET = 0, HEIGHTOFFSET = 0;
 	private JFrame frame;
 	private Display display;
-	private int scale = 2, xOffset, yOffset, windowWidth, windowHeight;
+	private int windowWidth, windowHeight;
+	private double scale=2, xOffset, yOffset;
 
 	ComponentAdapter screenResize = new ComponentAdapter() {
 		public void componentResized(ComponentEvent evt) {
 			Component c = (Component) evt.getSource();
 			windowWidth = c.getWidth() - WIDTHOFFSET;
 			windowHeight = c.getHeight() - HEIGHTOFFSET;
-			System.out.println(windowWidth + ",  " + windowHeight);
-			scale = 5;
-			while (Main.WIDTH * scale > windowWidth || Main.HEIGHT * scale > windowHeight) {
-				scale--;
+
+			double scaleX = (double)windowWidth/(double)Main.WIDTH;
+			double scaleY = (double)windowHeight/(double)Main.HEIGHT;
+			if(scaleX <= scaleY) {
+				scale = scaleX;
+			} else {
+				scale = scaleY;
 			}
-			if (scale == 0) {
-				scale = 1;
-			}
+
 			xOffset = (windowWidth - Main.WIDTH * scale) / 2;
 			yOffset = (windowHeight - Main.HEIGHT * scale) / 2;
-			System.out.println(scale + " - " + xOffset + ", " + yOffset);
+			//System.out.println(scale + " - " + xOffset + ", " + yOffset);
 		}
 
 	};
@@ -78,15 +80,15 @@ public class Window {
 		return frame;
 	}
 
-	public int getScale() {
+	public double getScale() {
 		return scale;
 	}
 
-	public int getxOffset() {
+	public double getxOffset() {
 		return xOffset;
 	}
 
-	public int getyOffset() {
+	public double getyOffset() {
 		return yOffset;
 	}
 
