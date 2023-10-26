@@ -22,6 +22,8 @@ public class Renderer {
       { 0.75, -0.75, 0.0, 1.0 },
       { -0.75, -0.75, 0.0, 1.0 },
     };
+    renderPipeline = new RenderPipeline();
+
     this.vertexTransforms = new VertexTransform[] {
       new ClipVertices(), new WindowTransform()
     };
@@ -34,10 +36,11 @@ public class Renderer {
   }
 
   public void render(BufferedImage frame) {
-    renderPipeline = new RenderPipeline(vertexPositions);
+    renderPipeline.initialize(vertexPositions, frame.getWidth(), frame.getHeight());
+    //System.out.println("Width: " + frame.getWidth() + ", Height: " + frame.getHeight());
     renderPipeline.applyVertexTransformations(vertexTransforms);
     renderPipeline.applyVertexShaders(vertexShaders);
-    renderPipeline.scan(new double[][] {{}});
+    renderPipeline.scan();
     renderPipeline.applyFragmentShaders(fragmentShaders);
     renderPipeline.display(frame);
   }

@@ -58,6 +58,14 @@ public class GameState implements State {
     public void render(BufferedImage image) {
         // drawing custom polygon
         renderer.render(image);
+        for(int x = 0; x < image.getWidth(); x++) {
+            for(int y = 0; y < image.getHeight(); y++) {
+                int rgb = image.getRGB(x, y);
+                int[] color = getColorFromInt(rgb);
+                //System.out.println(String.format("a: %d, r: %d, g: %d, b: %d,", color[0], color[1], color[2], color[3]));
+            }
+        }
+
     }
 
     void drawPolygons(BufferedImage image, Polygon3D[] polygons) {
@@ -111,13 +119,13 @@ public class GameState implements State {
         }
     }
 
-    public int getIntFromColor(int alpha, int red, int green, int blue){
-        alpha = (alpha << 24) & 0xFF000000; //Shift red 16-bits and mask out other stuff
-        red = (red << 16) & 0x00FF0000; //Shift red 16-bits and mask out other stuff
-        green = (green << 8) & 0x0000FF00; //Shift Green 8-bits and mask out other stuff
-        blue = blue & 0x000000FF; //Mask out anything not blue.
+    public int[] getColorFromInt(int rgb){
+        int alpha = (rgb >> 24) & 0xFF; //Shift red 16-bits and mask out other stuff
+        int red = (rgb >> 16) & 0xFF; //Shift red 16-bits and mask out other stuff
+        int green = (rgb >> 8) & 0xFF; //Shift Green 8-bits and mask out other stuff
+        int blue = rgb & 0xFF; //Mask out anything not blue.
     
-        return alpha | red | green | blue; //0xFF000000 for 100% Alpha. Bitwise OR everything together.
+        return new int[] { alpha, red, green, blue }; //0xFF000000 for 100% Alpha. Bitwise OR everything together.
     }
 
     @Override
