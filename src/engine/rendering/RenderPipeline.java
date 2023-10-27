@@ -8,17 +8,15 @@ import engine.rendering.VertexTramsforms.VertexTransform;
 import engine.shapes.Vector2;
 
 public class RenderPipeline {
-  double[][] worldVertices;
-  double[][] vertices;
-  double[][] surfaceNormals;
+  VertexData vertexData;
   double[][][] frameBuffer;
-  int width, height;
   
   public void initialize(double[][] vertices, int width, int height) {
-    this.worldVertices = vertices;
-    this.vertices = new double[worldVertices.length][4];
-    this.width = width;
-    this.height = height;
+    vertexData = new VertexData();
+    vertexData.worldVertices = vertices;
+    vertexData.vertices = new double[vertices.length][4];
+    vertexData.width = width;
+    vertexData.height = height;
   }
 
   public void projectVertices() {
@@ -26,7 +24,7 @@ public class RenderPipeline {
     double far = 1000;
     double fovRad = 90/2 * (3.1415/180);
     double fov = 1/Math.tan(fovRad);
-    double aspectRatio = (double)height/(double)width;
+    double aspectRatio = (double)vertexData.height/(double)vertexData.width;
 
     double[][] projectionMatrix = new double[][] {
       { aspectRatio * fov, 0, 0, 0 },
@@ -35,8 +33,8 @@ public class RenderPipeline {
       { 0, 0, (-far * near)/(far-near), 0 },
     };
 
-    for(int i = 0; i < worldVertices.length; i++) {
-      vertices[i] = multiplyVectorMatrix4(worldVertices[i], projectionMatrix);
+    for(int i = 0; i < vertexData.worldVertices.length; i++) {
+      vertexData.vertices[i] = multiplyVectorMatrix4(vertexData.worldVertices[i], projectionMatrix);
     }    
     return;
   }
@@ -49,15 +47,15 @@ public class RenderPipeline {
     if(w != 0) {
       x /= w; y /= w; z /= w; 
     }
-    return new double[] { x, y, z,w };
+    return new double[] { x, y, z, w };
   }
 
   public void computeSurfaceNormals() {
-    surfaceNormals = new double[vertices.length][3];
-    for(int i = 0; i < vertices.length; i += 3) {
-      double[] v0 = vertices[i];
-      double[] v1 = vertices[i+1];
-      double[] v2 = vertices[i+2];
+    vertexData.surfaceNormals = new double[vertexData.vertices.length][3];
+    for(int i = 0; i < vertexData.vertices.length; i += 3) {
+      double[] v0 = vertexData.vertices[i];
+      double[] v1 = vertexData.vertices[i+1];
+      double[] v2 = vertexData.vertices[i+2];
 
       double[] line1 = new double[] {
         v1[0] - v0[0], v1[1] - v0[1], v1[2] - v0[2],
@@ -78,31 +76,31 @@ public class RenderPipeline {
         normal[0]/l, normal[1]/l, normal[2]/l,
       };
 
-      surfaceNormals[i/3] = normal;
+      vertexData.surfaceNormals[i/3] = normal;
     }
   }
 
   public void applyVertexTransformations(VertexTransform[] vertexTransforms) {
     for (VertexTransform vertexTransform : vertexTransforms) {
-      this.vertices = vertexTransform.compute(this.vertices, this.surfaceNormals, this.width, this.height);
+      vertexData.vertices = vertexTransform.compute(vertexData);
     }
   }
 
   public void applyVertexShaders(VertexShader[] vertexShaders) {
     for (VertexShader shader : vertexShaders) {
-      this.vertices = shader.compute(this.vertices);
+      vertexData.vertices = shader.compute(vertexData);
     }
   }
   public void scan(boolean drawEdges, boolean fill) {
-    frameBuffer = new double[width][height][4];
+    frameBuffer = new double[vertexData.width][vertexData.height][4];
     if(fill) {
-      for(int x = 0; x < width; x++) {
-        for(int y = 0; y < height; y++) {
+      for(int x = 0; x < vertexData.width; x++) {
+        for(int y = 0; y < vertexData.height; y++) {
           boolean pixelInTriangle = false;
-          for(int i = 0; i < vertices.length; i += 3) {
-            double[] v0 = vertices[i];
-            double[] v1 = vertices[i+1];
-            double[] v2 = vertices[i+2];
+          for(int i = 0; i < vertexData.vertices.length; i += 3) {
+            double[] v0 = vertexData.vertices[i];
+            double[] v1 = vertexData.vertices[i+1];
+            double[] v2 = vertexData.vertices[i+2];
             if(PointInTriangle(new double[] { x, y }, v0, v1, v2)) {
               pixelInTriangle = true;
               break;
@@ -121,10 +119,10 @@ public class RenderPipeline {
       }
     }
     if(drawEdges) {
-      for(int i = 0; i < vertices.length; i += 3) {
-        double[] v0 = vertices[i];
-        double[] v1 = vertices[i+1];
-        double[] v2 = vertices[i+2];
+      for(int i = 0; i < vertexData.vertices.length; i += 3) {
+        double[] v0 = vertexData.vertices[i];
+        double[] v1 = vertexData.vertices[i+1];
+        double[] v2 = vertexData.vertices[i+2];
 
         drawLine(v1, v0, frameBuffer);
         drawLine(v2, v1, frameBuffer);
@@ -145,7 +143,7 @@ public class RenderPipeline {
       int error = dx + dy;
 
       while(true) {
-          if(v0.x < width && v0.y < height && v0.x >= 0 && v0.y >= 0) {
+          if(v0.x < vertexData.width && v0.y < vertexData.height && v0.x >= 0 && v0.y >= 0) {
             frameBuffer[v0.x][v0.y] = new double[] {
               1, 0, 0, 1
             };
@@ -186,19 +184,19 @@ public class RenderPipeline {
 
   public void applyFragmentShaders(FragmentShader[] fragmentShaders) {
     for (FragmentShader shader : fragmentShaders) {
-      this.frameBuffer = shader.compute(this.frameBuffer, width, height);
+      this.frameBuffer = shader.compute(this.frameBuffer, vertexData.width, vertexData.height);
     }
   }
 
   public void display(BufferedImage frame) {
-    int[] stackedFrame = new int[width*height];
-    for(int x = 0; x < width; x++) {
-      for(int y = 0; y < height; y++) {
+    int[] stackedFrame = new int[vertexData.width*vertexData.height];
+    for(int x = 0; x < vertexData.width; x++) {
+      for(int y = 0; y < vertexData.height; y++) {
         double[] color = frameBuffer[x][y];
-        stackedFrame[y*width+x] = getIntFromColor((int)(color[0]*255), (int)(color[1]*255), (int)(color[2]*255), (int)(color[3]*255));
+        stackedFrame[y*vertexData.width+x] = getIntFromColor((int)(color[0]*255), (int)(color[1]*255), (int)(color[2]*255), (int)(color[3]*255));
       }
     }
-    frame.setRGB(0, 0, width, height, stackedFrame, 0, width);
+    frame.setRGB(0, 0, vertexData.width, vertexData.height, stackedFrame, 0, vertexData.width);
   }
 
   int getIntFromColor(int alpha, int red, int green, int blue){

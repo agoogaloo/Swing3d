@@ -49,6 +49,7 @@ public class Renderer {
     
     renderPipeline.initialize(vertexPositions, frame.getWidth(), frame.getHeight());
     renderPipeline.projectVertices();
+    renderPipeline.computeSurfaceNormals();
     renderPipeline.applyVertexTransformations(vertexTransforms);
     renderPipeline.applyVertexShaders(vertexShaders);
     renderPipeline.scan(true, true);

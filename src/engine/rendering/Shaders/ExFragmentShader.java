@@ -1,11 +1,11 @@
 package engine.rendering.Shaders;
 
 public class ExFragmentShader implements FragmentShader {
-  public double[][][] compute(double[][][] pixels, int width, int height) {
+  public double[][][] compute(double[][][] frameBuffer, int width, int height) {
     double[][][] updatedFrame = new double[width][height][4];
     for(int px = 0; px < width; px++) {
       for(int py = 0; py < height; py++) {
-        double[] pixel = pixels[px][py];
+        double[] pixel = frameBuffer[px][py];
         if(pixel[1] == 1) {
           //normalize x and y to be from 0 to 1, 
           //0 is the left/top and 1 is the right/bottom
