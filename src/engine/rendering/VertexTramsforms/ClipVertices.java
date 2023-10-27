@@ -5,7 +5,7 @@ public class ClipVertices implements VertexTransform {
     double[][] outputVertices = new double[vertices.length][4];
     for(int i = 0; i < vertices.length; i++) {
       outputVertices[i] = new double[] {
-        Math.min(vertices[i][0], 1), Math.min(vertices[i][1], 1), vertices[i][2], vertices[i][3]
+        vertices[i][0], vertices[i][1], vertices[i][2], vertices[i][3]
       };
     }
     return outputVertices;

@@ -51,7 +51,7 @@ public class Renderer {
     renderPipeline.projectVertices();
     renderPipeline.applyVertexTransformations(vertexTransforms);
     renderPipeline.applyVertexShaders(vertexShaders);
-    renderPipeline.scan(true, false);
+    renderPipeline.scan(true, true);
     renderPipeline.applyFragmentShaders(fragmentShaders);
     renderPipeline.display(frame);
   }

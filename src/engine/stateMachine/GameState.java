@@ -8,8 +8,9 @@ import engine.shapes.Mesh;
 public class GameState implements State {
     Renderer renderer;
     Mesh[] meshes;
+    double startTime;
 
-    Mesh cube = new Mesh(new double[][][] {
+    Mesh unitCube = new Mesh(new double[][][] {
         {{ 0.0, 0.0, 0.0 }, { 0.0, 1.0, 0.0 }, { 1.0, 1.0, 0.0 }},
 		{{ 0.0, 0.0, 0.0 }, { 1.0, 1.0, 0.0 }, { 1.0, 0.0, 0.0 }},
 
@@ -31,10 +32,7 @@ public class GameState implements State {
 
     @Override
     public void start(State prevState) {
-        cube.translate(new double[] { 0, 0, 1.5 });
-        meshes = new Mesh[] {
-            cube
-        };
+        startTime = System.currentTimeMillis();
         this.renderer = new Renderer();
     }
 
@@ -45,8 +43,16 @@ public class GameState implements State {
 
     @Override
     public void render(BufferedImage image) {
-        //cube.translate(new double[] { 0.1, 0, 0.1 });
-        renderer.render(image, meshes, cube.triangles.length*3);
+        double elapsedTime = (System.currentTimeMillis() - startTime)/1000;
+        Mesh cube = Mesh.copy(unitCube);
+        cube.rotate(new double[] { 25*elapsedTime, 50*elapsedTime, 75*elapsedTime });
+        cube.translate(new double[] { 0, 0, 2 });
+
+        meshes = new Mesh[] {
+            cube
+        };
+
+        renderer.render(image, meshes, unitCube.triangles.length*3);
     }
 
     @Override

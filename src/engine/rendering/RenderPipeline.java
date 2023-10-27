@@ -114,9 +114,9 @@ public class RenderPipeline {
       int error = dx + dy;
 
       while(true) {
-          if(v0.x < width && v0.y < height) {
+          if(v0.x < width && v0.y < height && v0.x >= 0 && v0.y >= 0) {
             frameBuffer[v0.x][v0.y] = new double[] {
-              1, 0, 1, 0
+              1, 0, 0, 1
             };
           }
           if(v0.x == v1.x && v0.y == v1.y) break;
