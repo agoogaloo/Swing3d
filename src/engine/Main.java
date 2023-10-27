@@ -10,7 +10,7 @@ public class Main {
 	private static boolean running = true;
 
 	public static void main(String[] args) {
-		final int FPS = 60, DELAY = 1000000000 / FPS;
+		final int FPS = 1, DELAY = 1000000000 / FPS;
 
 		window = new Window(WIDTH, HEIGHT);
 		StateManager.setCurrentState(new GameState());

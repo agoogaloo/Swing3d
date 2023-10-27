@@ -5,6 +5,7 @@ import java.awt.image.BufferedImage;
 import engine.rendering.Shaders.FragmentShader;
 import engine.rendering.Shaders.VertexShader;
 import engine.rendering.VertexTramsforms.VertexTransform;
+import engine.shapes.Vector2;
 
 public class RenderPipeline {
   double[][] worldVertices;
@@ -22,33 +23,32 @@ public class RenderPipeline {
   public void projectVertices() {
     double near = 0.1;
     double far = 1000;
-    double fov = 1/Math.tan(90 * 0.5 / 180 * 3.1415);
-    double aspectRation = (double)width/(double)height;
+    double fovRad = 90/2 * (3.1415/180);
+    double fov = 1/Math.tan(fovRad);
+    double aspectRatio = (double)height/(double)width;
 
     double[][] projectionMatrix = new double[][] {
-      { aspectRation * fov, 0, 0, 0 },
+      { aspectRatio * fov, 0, 0, 0 },
       { 0, fov, 0, 0 },
       { 0, 0, far/(far-near), 1 },
       { 0, 0, (-far * near)/(far-near), 0 },
     };
 
-
     for(int i = 0; i < worldVertices.length; i++) {
       vertices[i] = multiplyVectorMatrix4(worldVertices[i], projectionMatrix);
-    }
+    }    
+    return;
   }
 
   private double[] multiplyVectorMatrix4(double[] vector, double[][] matrix) {
+    double x = vector[0] * matrix[0][0] + vector[1] * matrix[1][0] + vector[2] * matrix[2][0] + matrix[3][0];
+    double y = vector[0] * matrix[0][1] + vector[1] * matrix[1][1] + vector[2] * matrix[2][1] + matrix[3][1];
+    double z = vector[0] * matrix[0][2] + vector[1] * matrix[1][2] + vector[2] * matrix[2][2] + matrix[3][2];
     double w = vector[0] * matrix[0][3] + vector[1] * matrix[1][3] + vector[2] * matrix[2][3] + matrix[3][3];
-    if(w == 0) {
-      w = 1;
+    if(w != 0) {
+      x /= w; y /= w; z /= w; 
     }
-    return new double[] {
-      (vector[0] * matrix[0][0] + vector[1] * matrix[1][0] + vector[2] * matrix[2][0] + matrix[3][0])/w,
-		  (vector[0] * matrix[0][1] + vector[1] * matrix[1][1] + vector[2] * matrix[2][1] + matrix[3][1])/w,
-		  (vector[0] * matrix[0][2] + vector[1] * matrix[1][2] + vector[2] * matrix[2][2] + matrix[3][2])/w,
-		  w
-    };
+    return new double[] { x, y, z,w };
   }
 
   public void applyVertexTransformations(VertexTransform[] vertexTransforms) {
@@ -66,27 +66,77 @@ public class RenderPipeline {
     frameBuffer = new double[width][height][4];
     for(int x = 0; x < width; x++) {
       for(int y = 0; y < height; y++) {
-        boolean pixelInTriangle = false;
-        for(int i = 0; i < vertices.length; i += 3) {
-          double[] v0 = vertices[i];
-          double[] v1 = vertices[i+1];
-          double[] v2 = vertices[i+2];
-          if(PointInTriangle(new double[] { x, y }, v0, v1, v2)) {
-            pixelInTriangle = true;
-            break;
-          }
-        }
-        if(pixelInTriangle) {
-          frameBuffer[x][y] = new double[] {
-            1, 1, 0, 0
-          };
-        } else {
-          frameBuffer[x][y] = new double[] {
-            1, 0, 0, 0
-          };
-        }
+        // boolean pixelInTriangle = false;
+        // for(int i = 0; i < vertices.length; i += 3) {
+        //   double[] v0 = vertices[i];
+        //   double[] v1 = vertices[i+1];
+        //   double[] v2 = vertices[i+2];
+        //   if(PointInTriangle(new double[] { x, y }, v0, v1, v2)) {
+        //     pixelInTriangle = true;
+        //     break;
+        //   }
+        // }
+        // if(pixelInTriangle) {
+        //   frameBuffer[x][y] = new double[] {
+        //     1, 1, 0, 0
+        //   };
+        // } else {
+        //   frameBuffer[x][y] = new double[] {
+        //     1, 0, 0, 0
+        //   };
+        // }
+        frameBuffer[x][y] = new double[] {
+          1, 1, 1, 1
+        };
       }
     }
+    for(int i = 0; i < vertices.length; i += 3) {
+      double[] v0 = vertices[i];
+      double[] v1 = vertices[i+1];
+      double[] v2 = vertices[i+2];
+      // if(PointInTriangle(new double[] { x, y }, v0, v1, v2)) {
+      //   pixelInTriangle = true;
+      //   break;
+      // }
+      drawLine(v1, v0, frameBuffer);
+      drawLine(v2, v1, frameBuffer);
+      drawLine(v0, v2, frameBuffer);
+    }
+  }
+
+  private void drawLine(double[] vertex1, double[] vertex2, double[][][] frameBuffer) {
+      Vector2 v1 = new Vector2((int)vertex1[0], (int)vertex1[1]);
+      Vector2 v0 = new Vector2((int)vertex2[0], (int)vertex2[1]);
+      //System.out.println(String.format("j: %d, v0: %d, %d, v1: %d, %d, e: %d,%d", j, v0.x, v0.y, v1.x, v1.y, edges[j][0], edges[j][1]));
+      // Vector2 v0 = new Vector2(0, 100);
+      // Vector2 v1 = new Vector2(0, 0);
+
+      //implementation of Bresenham's line drawing algorithm
+      int dx = Math.abs(v1.x - v0.x);
+      int sx = v0.x < v1.x ? 1 : -1;
+      int dy = -Math.abs(v1.y - v0.y);
+      int sy = v0.y < v1.y ? 1 : -1;
+      int error = dx + dy;
+
+      while(true) {
+          if(v0.x < width && v0.y < height) {
+            frameBuffer[v0.x][v0.y] = new double[] {
+              1, 1, 0, 0
+            };
+          }
+          if(v0.x == v1.x && v0.y == v1.y) break;
+          int e2 = 2 * error;
+          if(e2 >= dy) {
+              if(v0.x == v1.x) break;
+              error = error + dy;
+              v0.x = v0.x + sx;
+          }
+          if(e2 <= dx) {
+              if(v0.y == v1.y) break;
+              error = error + dx;
+              v0.y = v0.y + sy;
+          }
+      }
   }
 
   private double sign (double[] v0, double[] v1, double[] v2) {

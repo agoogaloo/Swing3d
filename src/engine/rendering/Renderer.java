@@ -23,7 +23,7 @@ public class Renderer {
     renderPipeline = new RenderPipeline();
 
     this.vertexTransforms = new VertexTransform[] {
-      new NormalizeClipVertices(), new WindowTransform()
+      new ClipVertices(), new NormalizeClipVertices(), new WindowTransform()
     };
     this.vertexShaders = new VertexShader[] {
 
