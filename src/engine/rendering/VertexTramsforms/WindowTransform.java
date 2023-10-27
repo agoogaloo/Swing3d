@@ -2,7 +2,7 @@ package engine.rendering.VertexTramsforms;
 
 public class WindowTransform implements VertexTransform {
   int width, height;
-  public double[][] compute(double[][] vertices, int width, int height) {
+  public double[][] compute(double[][] vertices, double[][] normals, int width, int height) {
     double[][] outputVertices = new double[vertices.length][4];
     for(int i = 0; i < vertices.length; i++) {
       outputVertices[i] = new double[] {

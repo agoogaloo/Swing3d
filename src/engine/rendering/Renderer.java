@@ -6,7 +6,6 @@ import java.awt.image.BufferedImage;
 import engine.rendering.Shaders.ExFragmentShader;
 import engine.rendering.Shaders.FragmentShader;
 import engine.rendering.Shaders.VertexShader;
-import engine.rendering.VertexTramsforms.ClipVertices;
 import engine.rendering.VertexTramsforms.CullTriangles;
 import engine.rendering.VertexTramsforms.NormalizeClipVertices;
 import engine.rendering.VertexTramsforms.VertexTransform;
@@ -24,13 +23,13 @@ public class Renderer {
     renderPipeline = new RenderPipeline();
 
     this.vertexTransforms = new VertexTransform[] {
-      new ClipVertices(), new CullTriangles(), new NormalizeClipVertices(), new WindowTransform()
+      new CullTriangles(), new NormalizeClipVertices(), new WindowTransform()
     };
     this.vertexShaders = new VertexShader[] {
 
     };
     this.fragmentShaders = new FragmentShader[] {
-      //new ExFragmentShader()
+      new ExFragmentShader()
     };
   }
 
