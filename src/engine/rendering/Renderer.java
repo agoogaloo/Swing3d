@@ -20,12 +20,9 @@ public class Renderer {
 
   public Renderer() {
     this.vertexPositions = new double[][] {
-      { 0.5, 0.75, 0.0, 1.0 },
-      { -0.75, -0.75, 0.0, 1.0 },
-      { 0.75, -0.75, 0.0, 1.0 },
-      { -0.75, -0.25, 0.0, 1.0 },
-      { 0.3, 0.8, 0.0, 1.0 },
-      { -0.8, 0.5, 0.0, 1.0 },
+      { -0.75, -0.75, 2.0, 1.0 },
+      { 0.75, -0.75, 1.0, 1.0 },
+      { 0.75, 0.75, 1.0, 1.0 },
     };
     renderPipeline = new RenderPipeline();
 
@@ -42,6 +39,7 @@ public class Renderer {
 
   public void render(BufferedImage frame) {
     renderPipeline.initialize(vertexPositions, frame.getWidth(), frame.getHeight());
+    renderPipeline.projectVertices();
     renderPipeline.applyVertexTransformations(vertexTransforms);
     renderPipeline.applyVertexShaders(vertexShaders);
     renderPipeline.scan();

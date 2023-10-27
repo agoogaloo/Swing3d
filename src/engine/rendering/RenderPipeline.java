@@ -17,6 +17,16 @@ public class RenderPipeline {
     this.height = height;
   }
 
+  public void projectVertices() {
+    for(int i = 0; i < vertices.length; i++) {
+      double[] vertex = vertices[i];
+      vertices[i] = new double[] {
+        vertex[0]/vertex[2], vertex[1]/vertex[2],
+        vertex[2], vertex[3]
+      };
+    }
+  }
+
   public void applyVertexTransformations(VertexTransform[] vertexTransforms) {
     for (VertexTransform vertexTransform : vertexTransforms) {
       this.vertices = vertexTransform.compute(this.vertices, this.width, this.height);
