@@ -5,4 +5,5 @@ public class VertexData {
   public double[][] worldVertices;
   public double[][] vertices;
   public double[][] surfaceNormals;
+  public double[] cameraPosition;
 }

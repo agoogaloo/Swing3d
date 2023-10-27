@@ -17,6 +17,7 @@ public class RenderPipeline {
     vertexData.vertices = new double[vertices.length][4];
     vertexData.width = width;
     vertexData.height = height;
+    vertexData.cameraPosition = new double[] { 0, 0, 0 };
   }
 
   public void projectVertices() {
@@ -51,7 +52,7 @@ public class RenderPipeline {
   }
 
   public void computeSurfaceNormals() {
-    vertexData.surfaceNormals = new double[vertexData.vertices.length][3];
+    vertexData.surfaceNormals = new double[vertexData.vertices.length][4];
     for(int i = 0; i < vertexData.vertices.length; i += 3) {
       double[] v0 = vertexData.vertices[i];
       double[] v1 = vertexData.vertices[i+1];
@@ -73,7 +74,7 @@ public class RenderPipeline {
       double l = Math.sqrt(normal[0]*normal[0] + normal[1]*normal[1] + normal[2]*normal[2]);
 
       normal = new double[] {
-        normal[0]/l, normal[1]/l, normal[2]/l,
+        normal[0]/l, normal[1]/l, normal[2]/l, l
       };
 
       vertexData.surfaceNormals[i/3] = normal;
