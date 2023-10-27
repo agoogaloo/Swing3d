@@ -7,24 +7,48 @@ import engine.rendering.Shaders.VertexShader;
 import engine.rendering.VertexTramsforms.VertexTransform;
 
 public class RenderPipeline {
+  double[][] worldVertices;
   double[][] vertices;
   double[][][] frameBuffer;
   int width, height;
   
   public void initialize(double[][] vertices, int width, int height) {
-    this.vertices = vertices;
+    this.worldVertices = vertices;
+    this.vertices = new double[worldVertices.length][4];
     this.width = width;
     this.height = height;
   }
 
   public void projectVertices() {
-    for(int i = 0; i < vertices.length; i++) {
-      double[] vertex = vertices[i];
-      vertices[i] = new double[] {
-        vertex[0]/vertex[2], vertex[1]/vertex[2],
-        vertex[2], vertex[3]
-      };
+    double near = 0.1;
+    double far = 1000;
+    double fov = 1/Math.tan(90 * 0.5 / 180 * 3.1415);
+    double aspectRation = (double)width/(double)height;
+
+    double[][] projectionMatrix = new double[][] {
+      { aspectRation * fov, 0, 0, 0 },
+      { 0, fov, 0, 0 },
+      { 0, 0, far/(far-near), 1 },
+      { 0, 0, (-far * near)/(far-near), 0 },
+    };
+
+
+    for(int i = 0; i < worldVertices.length; i++) {
+      vertices[i] = multiplyVectorMatrix4(worldVertices[i], projectionMatrix);
     }
+  }
+
+  private double[] multiplyVectorMatrix4(double[] vector, double[][] matrix) {
+    double w = vector[0] * matrix[0][3] + vector[1] * matrix[1][3] + vector[2] * matrix[2][3] + matrix[3][3];
+    if(w == 0) {
+      w = 1;
+    }
+    return new double[] {
+      (vector[0] * matrix[0][0] + vector[1] * matrix[1][0] + vector[2] * matrix[2][0] + matrix[3][0])/w,
+		  (vector[0] * matrix[0][1] + vector[1] * matrix[1][1] + vector[2] * matrix[2][1] + matrix[3][1])/w,
+		  (vector[0] * matrix[0][2] + vector[1] * matrix[1][2] + vector[2] * matrix[2][2] + matrix[3][2])/w,
+		  w
+    };
   }
 
   public void applyVertexTransformations(VertexTransform[] vertexTransforms) {
