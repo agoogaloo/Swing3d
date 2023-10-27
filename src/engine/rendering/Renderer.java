@@ -40,13 +40,13 @@ public class Renderer {
       for(int j = 0; j < mesh.triangles.length; j++) {
         double[] triangle = mesh.triangles[j];
         this.vertexPositions[j*3] = new double[] {
-          triangle[0], triangle[1], triangle[2]
+          triangle[0], triangle[1], triangle[2]+3
         };
         this.vertexPositions[j*3+1] = new double[] {
-          triangle[3], triangle[4], triangle[5]
+          triangle[3], triangle[4], triangle[5]+3
         };
         this.vertexPositions[j*3+2] = new double[] {
-          triangle[6], triangle[7], triangle[8]
+          triangle[6], triangle[7], triangle[8]+3
         };
       }
     }
@@ -55,7 +55,7 @@ public class Renderer {
     renderPipeline.projectVertices();
     renderPipeline.applyVertexTransformations(vertexTransforms);
     renderPipeline.applyVertexShaders(vertexShaders);
-    renderPipeline.scan();
+    renderPipeline.scan(true, true);
     renderPipeline.applyFragmentShaders(fragmentShaders);
     renderPipeline.display(frame);
   }

@@ -62,54 +62,49 @@ public class RenderPipeline {
       this.vertices = shader.compute(this.vertices);
     }
   }
-  public void scan() {
+  public void scan(boolean drawEdges, boolean fill) {
     frameBuffer = new double[width][height][4];
-    for(int x = 0; x < width; x++) {
-      for(int y = 0; y < height; y++) {
-        // boolean pixelInTriangle = false;
-        // for(int i = 0; i < vertices.length; i += 3) {
-        //   double[] v0 = vertices[i];
-        //   double[] v1 = vertices[i+1];
-        //   double[] v2 = vertices[i+2];
-        //   if(PointInTriangle(new double[] { x, y }, v0, v1, v2)) {
-        //     pixelInTriangle = true;
-        //     break;
-        //   }
-        // }
-        // if(pixelInTriangle) {
-        //   frameBuffer[x][y] = new double[] {
-        //     1, 1, 0, 0
-        //   };
-        // } else {
-        //   frameBuffer[x][y] = new double[] {
-        //     1, 0, 0, 0
-        //   };
-        // }
-        frameBuffer[x][y] = new double[] {
-          1, 1, 1, 1
-        };
+    if(fill) {
+      for(int x = 0; x < width; x++) {
+        for(int y = 0; y < height; y++) {
+          boolean pixelInTriangle = false;
+          for(int i = 0; i < vertices.length; i += 3) {
+            double[] v0 = vertices[i];
+            double[] v1 = vertices[i+1];
+            double[] v2 = vertices[i+2];
+            if(PointInTriangle(new double[] { x, y }, v0, v1, v2)) {
+              pixelInTriangle = true;
+              break;
+            }
+          }
+          if(pixelInTriangle) {
+            frameBuffer[x][y] = new double[] {
+              1, 1, 0, 0
+            };
+          } else {
+            frameBuffer[x][y] = new double[] {
+              1, 0, 0, 0
+            };
+          }
+        }
       }
     }
-    for(int i = 0; i < vertices.length; i += 3) {
-      double[] v0 = vertices[i];
-      double[] v1 = vertices[i+1];
-      double[] v2 = vertices[i+2];
-      // if(PointInTriangle(new double[] { x, y }, v0, v1, v2)) {
-      //   pixelInTriangle = true;
-      //   break;
-      // }
-      drawLine(v1, v0, frameBuffer);
-      drawLine(v2, v1, frameBuffer);
-      drawLine(v0, v2, frameBuffer);
+    if(drawEdges) {
+      for(int i = 0; i < vertices.length; i += 3) {
+        double[] v0 = vertices[i];
+        double[] v1 = vertices[i+1];
+        double[] v2 = vertices[i+2];
+
+        drawLine(v1, v0, frameBuffer);
+        drawLine(v2, v1, frameBuffer);
+        drawLine(v0, v2, frameBuffer);
+      }
     }
   }
 
   private void drawLine(double[] vertex1, double[] vertex2, double[][][] frameBuffer) {
-      Vector2 v1 = new Vector2((int)vertex1[0], (int)vertex1[1]);
-      Vector2 v0 = new Vector2((int)vertex2[0], (int)vertex2[1]);
-      //System.out.println(String.format("j: %d, v0: %d, %d, v1: %d, %d, e: %d,%d", j, v0.x, v0.y, v1.x, v1.y, edges[j][0], edges[j][1]));
-      // Vector2 v0 = new Vector2(0, 100);
-      // Vector2 v1 = new Vector2(0, 0);
+      Vector2 v0 = new Vector2((int)vertex1[0], (int)vertex1[1]);
+      Vector2 v1 = new Vector2((int)vertex2[0], (int)vertex2[1]);
 
       //implementation of Bresenham's line drawing algorithm
       int dx = Math.abs(v1.x - v0.x);
@@ -121,7 +116,7 @@ public class RenderPipeline {
       while(true) {
           if(v0.x < width && v0.y < height) {
             frameBuffer[v0.x][v0.y] = new double[] {
-              1, 1, 0, 0
+              1, 0, 1, 0
             };
           }
           if(v0.x == v1.x && v0.y == v1.y) break;
@@ -145,7 +140,7 @@ public class RenderPipeline {
 
   private boolean PointInTriangle (double[] vt, double[] v0, double[] v1, double[] v2) {
     double d0, d1, d2;
-    boolean has_neg, has_pos;
+    boolean has_neg, has_pos, zero;
 
     d0 = sign(vt, v0, v1);
     d1 = sign(vt, v1, v2);
@@ -153,8 +148,9 @@ public class RenderPipeline {
 
     has_neg = (d0 < 0) || (d1 < 0) || (d2 < 0);
     has_pos = (d0 > 0) || (d1 > 0) || (d2 > 0);
+    zero = (d0 == d1) && (d1 == d2) && (d0 == 0);
 
-    return !(has_neg && has_pos);
+    return !(has_neg && has_pos) && !zero;
   }
 
   public void applyFragmentShaders(FragmentShader[] fragmentShaders) {
