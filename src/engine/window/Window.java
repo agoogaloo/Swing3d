@@ -20,7 +20,7 @@ public class Window {
 	 * this class represents the window that the game is played on and uses java
 	 * swing for some reason
 	 */
-	public static final int WIDTHOFFSET = 0, HEIGHTOFFSET = 0;
+	public static final int WIDTHOFFSET = 0, HEIGHTOFFSET = 39; //window header is ~39 pixels and for some reason is included in the height of the window
 	private JFrame frame;
 	private Display display;
 	private int windowWidth, windowHeight;
