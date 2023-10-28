@@ -27,7 +27,7 @@ public class Mesh {
       { 1, 0, 0, 0 },
       { 0, Math.cos(xAngle), Math.sin(xAngle), 0 },
       { 0, -Math.sin(xAngle), Math.cos(xAngle), 0 },
-      { 0, 0, 0, 1 },
+      { 0, 0, 0, 0 },
     };
 
     double[][] yRotationMatrix = new double[][] {
@@ -40,7 +40,7 @@ public class Mesh {
     double[][] zRotationMatrix = new double[][] {
       { Math.cos(zAngle), Math.sin(zAngle), 0, 0 },
       { -Math.sin(zAngle), Math.cos(zAngle), 0, 0 },
-      { 0, 0, 0, 0 },
+      { 0, 0, 1, 0 },
       { 0, 0, 0, 0 },
     };
 
