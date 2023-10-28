@@ -15,6 +15,7 @@ import engine.shapes.Mesh;
 
 public class Renderer {
   double[][] vertexPositions;
+  double[][] surfaceColors;
   RenderPipeline renderPipeline;
   VertexTransform[] preProjection;
   VertexTransform[] postProjection;
@@ -41,6 +42,7 @@ public class Renderer {
 
   public void render(BufferedImage frame, Mesh[] meshes, int vertexCount) {
     this.vertexPositions = new double[vertexCount][4];
+    this.surfaceColors = new double[vertexCount/3][4];
     for(int i = 0; i < meshes.length; i++) {
       Mesh mesh = meshes[i];
       for(int j = 0; j < mesh.triangles.length; j++) {
@@ -50,10 +52,11 @@ public class Renderer {
             triangle[k][0], triangle[k][1], triangle[k][2], 0
           };
         }
+        surfaceColors[j] = mesh.colors[j];
       }
     }
     
-    renderPipeline.initialize(vertexPositions, frame.getWidth(), frame.getHeight());
+    renderPipeline.initialize(vertexPositions, surfaceColors, frame.getWidth(), frame.getHeight());
     renderPipeline.computeSurfaceNormals();
     renderPipeline.applyVertexTransformations(preProjection);
     renderPipeline.projectVertices();

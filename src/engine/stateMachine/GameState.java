@@ -28,6 +28,13 @@ public class GameState implements State {
 
 		{{ 1.0, 0.0, 1.0 }, { 0.0, 0.0, 1.0 }, { 0.0, 0.0, 0.0 }},
 		{{ 1.0, 0.0, 1.0 }, { 0.0, 0.0, 0.0 }, { 1.0, 0.0, 0.0 }},
+    }, new double[][] {
+        { 1, 1, 0, 0 }, { 1, 1, 0, 0 },
+        { 1, 0, 1, 0 }, { 1, 0, 1, 0 },
+        { 1, 1, 0, 0 }, { 1, 1, 0, 0 },
+        { 1, 0, 1, 0 }, { 1, 0, 1, 0 },
+        { 1, 0, 0, 1 }, { 1, 0, 0, 1 },
+        { 1, 0, 0, 1 }, { 1, 0, 0, 1 },
     });
 
     @Override
@@ -46,7 +53,7 @@ public class GameState implements State {
         double elapsedTime = (System.currentTimeMillis() - startTime)/1000;
         Mesh cube = Mesh.copy(unitCube);
         cube.translate(new double[] { -0.5, -0.5, -0.5 });
-        cube.rotate(new double[] { 25*elapsedTime, Math.cos(elapsedTime % (3.14159*2)), Math.sin(elapsedTime % (3.14159*2))*75 });
+        cube.rotate(new double[] { Math.cos(elapsedTime % (3.14159*2))*150, Math.cos(elapsedTime % (3.14159*2))*100, Math.sin(elapsedTime % (3.14159*2))*75 });
         cube.translate(new double[] { 0, 0, 2 });
 
         meshes = new Mesh[] {

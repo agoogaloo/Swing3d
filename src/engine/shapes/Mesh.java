@@ -2,9 +2,11 @@ package engine.shapes;
 
 public class Mesh {
   public double[][][] triangles;
+  public double[][] colors;
 
-  public Mesh(double[][][] triangles) {
+  public Mesh(double[][][] triangles, double[][] colors) {
     this.triangles = triangles;
+    this.colors = colors;
   }
 
   public void translate(double[] distance) {
@@ -56,6 +58,7 @@ public class Mesh {
 
   public static Mesh copy(Mesh mesh) {
     double[][][] trianglesCopy = new double[mesh.triangles.length][3][3];
+    double[][] colorsCopy = new double[mesh.triangles.length][4];
     for(int j = 0; j < mesh.triangles.length; j++) {
       double[][] triangle = mesh.triangles[j];
       for (int k = 0; k < triangle.length; k++) {
@@ -65,7 +68,8 @@ public class Mesh {
           triangle[k][2],
         };
       }
+      colorsCopy[j] = mesh.colors[j];
     }
-    return new Mesh(trianglesCopy);
+    return new Mesh(trianglesCopy, colorsCopy);
   }
 }
