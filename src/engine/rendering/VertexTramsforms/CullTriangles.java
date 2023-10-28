@@ -4,6 +4,7 @@ import engine.rendering.VertexData;
 
 public class CullTriangles implements VertexTransform {
   public double[][] compute(VertexData vertexData) {
+    //TODO remove triangles from vertex data that don't need to be calculated
     boolean[] drawTriangles = new boolean[vertexData.vertices.length/3];
     for(int i = 0; i < vertexData.vertices.length; i += 3) {
       double[] normal = vertexData.surfaceNormals[i/3];

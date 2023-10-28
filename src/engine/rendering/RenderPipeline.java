@@ -100,6 +100,7 @@ public class RenderPipeline {
   public void scan(boolean drawEdges, boolean fill) {
     frameBuffer = new double[vertexData.width][vertexData.height][4];
     if(fill) {
+      //TODO optimize to only check pixel inside of a triangle
       for(int x = 0; x < vertexData.width; x++) {
         for(int y = 0; y < vertexData.height; y++) {
           for(int i = 0; i < vertexData.vertices.length; i += 3) {

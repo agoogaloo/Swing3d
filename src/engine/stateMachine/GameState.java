@@ -45,7 +45,8 @@ public class GameState implements State {
     public void render(BufferedImage image) {
         double elapsedTime = (System.currentTimeMillis() - startTime)/1000;
         Mesh cube = Mesh.copy(unitCube);
-        cube.rotate(new double[] { 25*elapsedTime, 50*elapsedTime, 75*elapsedTime });
+        cube.translate(new double[] { -0.5, -0.5, -0.5 });
+        cube.rotate(new double[] { 25*elapsedTime, Math.cos(elapsedTime % (3.14159*2)), Math.sin(elapsedTime % (3.14159*2))*75 });
         cube.translate(new double[] { 0, 0, 2 });
 
         meshes = new Mesh[] {
