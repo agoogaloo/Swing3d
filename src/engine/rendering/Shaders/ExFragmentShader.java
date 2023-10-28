@@ -1,6 +1,6 @@
 package engine.rendering.Shaders;
 
-public class ExFragmentShader implements FragmentShader {
+public class ExFragmentShader extends FragmentShader {
   public double[][][] compute(double[][][] frameBuffer, int width, int height) {
     double[][][] updatedFrame = new double[width][height][4];
     for(int px = 0; px < width; px++) {

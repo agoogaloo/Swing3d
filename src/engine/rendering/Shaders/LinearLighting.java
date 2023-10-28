@@ -2,8 +2,9 @@ package engine.rendering.Shaders;
 
 import engine.rendering.VertexData;
 
-public class LinearLighting implements VertexShader {
-  public double[][] compute(VertexData vertexData) {
+public class LinearLighting extends VertexShader {
+  //TODO write to vertex instead of writing the color
+  public void compute(VertexData vertexData) {
     double[] light = new double[] { 0, 0, -1 };
     double l = Math.sqrt(light[0]*light[0] + light[1]*light[1] + light[2]*light[2]);
     light = new double[] {
@@ -19,7 +20,5 @@ public class LinearLighting implements VertexShader {
         };
       }
     }
-
-    return vertexData.vertices;
   }
 }

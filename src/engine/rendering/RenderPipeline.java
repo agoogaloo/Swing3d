@@ -41,7 +41,6 @@ public class RenderPipeline {
     for(int i = 0; i < vertexData.worldVertices.length; i++) {
       vertexData.vertices[i] = multiplyVectorMatrix4(vertexData.worldVertices[i], projectionMatrix);
     }    
-    return;
   }
 
   private double[] multiplyVectorMatrix4(double[] vector, double[][] matrix) {
@@ -88,15 +87,16 @@ public class RenderPipeline {
 
   public void applyVertexTransformations(VertexTransform[] vertexTransforms) {
     for (VertexTransform vertexTransform : vertexTransforms) {
-      vertexData.vertices = vertexTransform.compute(vertexData);
+      vertexTransform.compute(vertexData);
     }
   }
 
   public void applyVertexShaders(VertexShader[] vertexShaders) {
     for (VertexShader shader : vertexShaders) {
-      vertexData.vertices = shader.compute(vertexData);
+      shader.compute(vertexData);
     }
   }
+
   public void scan(boolean drawEdges, boolean fill) {
     frameBuffer = new double[vertexData.width][vertexData.height][4];
     if(fill) {
