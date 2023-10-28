@@ -5,6 +5,7 @@ import java.awt.image.BufferedImage;
 
 import engine.rendering.Shaders.ExFragmentShader;
 import engine.rendering.Shaders.FragmentShader;
+import engine.rendering.Shaders.LinearLighting;
 import engine.rendering.Shaders.VertexShader;
 import engine.rendering.VertexTramsforms.CullTriangles;
 import engine.rendering.VertexTramsforms.NormalizeClipVertices;
@@ -31,7 +32,7 @@ public class Renderer {
       new WindowTransform()
     };
     this.vertexShaders = new VertexShader[] {
-
+      new LinearLighting()
     };
     this.fragmentShaders = new FragmentShader[] {
       //new ExFragmentShader()
@@ -58,7 +59,7 @@ public class Renderer {
     renderPipeline.projectVertices();
     renderPipeline.applyVertexTransformations(postProjection);
     renderPipeline.applyVertexShaders(vertexShaders);
-    renderPipeline.scan(true, true);
+    renderPipeline.scan(false, true);
     renderPipeline.applyFragmentShaders(fragmentShaders);
     renderPipeline.display(frame);
   }

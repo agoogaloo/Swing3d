@@ -21,6 +21,7 @@ public class RenderPipeline {
     vertexData.width = width;
     vertexData.height = height;
     vertexData.cameraPosition = new double[] { 0, 0, 0 };
+    vertexData.surfaceColors = new double[vertices.length/3][4];
   }
 
   public void projectVertices() {
@@ -107,10 +108,8 @@ public class RenderPipeline {
               double[] v1 = vertexData.vertices[i+1];
               double[] v2 = vertexData.vertices[i+2];
               if(PointInTriangle(new double[] { x, y }, v0, v1, v2)) {
-
-                frameBuffer[x][y] = new double[] {
-                  1, 1, 0, 0
-                };
+                double[] color = vertexData.surfaceColors[i/3];
+                frameBuffer[x][y] = color;
               }
             }
           }
