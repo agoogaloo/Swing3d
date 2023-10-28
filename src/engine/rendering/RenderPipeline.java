@@ -15,6 +15,9 @@ public class RenderPipeline {
     vertexData = new VertexData();
     vertexData.worldVertices = vertices;
     vertexData.vertices = new double[vertices.length][4];
+    for(int i = 0; i < vertexData.worldVertices.length; i++) {
+      vertexData.vertices[i] = vertexData.worldVertices[i];
+    }
     vertexData.width = width;
     vertexData.height = height;
     vertexData.cameraPosition = new double[] { 0, 0, 0 };
@@ -52,7 +55,7 @@ public class RenderPipeline {
   }
 
   public void computeSurfaceNormals() {
-    vertexData.surfaceNormals = new double[vertexData.vertices.length][4];
+    vertexData.surfaceNormals = new double[vertexData.vertices.length/3][4];
     for(int i = 0; i < vertexData.vertices.length; i += 3) {
       double[] v0 = vertexData.vertices[i];
       double[] v1 = vertexData.vertices[i+1];
@@ -79,6 +82,7 @@ public class RenderPipeline {
 
       vertexData.surfaceNormals[i/3] = normal;
     }
+    //System.out.println(String.format("%f, %f, %f", vertexData.surfaceNormals[0][0], vertexData.surfaceNormals[0][1], vertexData.surfaceNormals[0][2]));
   }
 
   public void applyVertexTransformations(VertexTransform[] vertexTransforms) {
@@ -97,37 +101,33 @@ public class RenderPipeline {
     if(fill) {
       for(int x = 0; x < vertexData.width; x++) {
         for(int y = 0; y < vertexData.height; y++) {
-          boolean pixelInTriangle = false;
           for(int i = 0; i < vertexData.vertices.length; i += 3) {
-            double[] v0 = vertexData.vertices[i];
-            double[] v1 = vertexData.vertices[i+1];
-            double[] v2 = vertexData.vertices[i+2];
-            if(PointInTriangle(new double[] { x, y }, v0, v1, v2)) {
-              pixelInTriangle = true;
-              break;
+            if(vertexData.drawTriangles[i/3]) {
+              double[] v0 = vertexData.vertices[i];
+              double[] v1 = vertexData.vertices[i+1];
+              double[] v2 = vertexData.vertices[i+2];
+              if(PointInTriangle(new double[] { x, y }, v0, v1, v2)) {
+
+                frameBuffer[x][y] = new double[] {
+                  1, 1, 0, 0
+                };
+              }
             }
-          }
-          if(pixelInTriangle) {
-            frameBuffer[x][y] = new double[] {
-              1, 1, 0, 0
-            };
-          } else {
-            frameBuffer[x][y] = new double[] {
-              1, 0, 0, 0
-            };
           }
         }
       }
     }
     if(drawEdges) {
       for(int i = 0; i < vertexData.vertices.length; i += 3) {
-        double[] v0 = vertexData.vertices[i];
-        double[] v1 = vertexData.vertices[i+1];
-        double[] v2 = vertexData.vertices[i+2];
-
-        drawLine(v1, v0, frameBuffer);
-        drawLine(v2, v1, frameBuffer);
-        drawLine(v0, v2, frameBuffer);
+        if(vertexData.drawTriangles[i/3]) {
+          double[] v0 = vertexData.vertices[i];
+          double[] v1 = vertexData.vertices[i+1];
+          double[] v2 = vertexData.vertices[i+2];
+  
+          drawLine(v1, v0, frameBuffer);
+          drawLine(v2, v1, frameBuffer);
+          drawLine(v0, v2, frameBuffer);
+        }
       }
     }
   }
@@ -194,7 +194,12 @@ public class RenderPipeline {
     for(int x = 0; x < vertexData.width; x++) {
       for(int y = 0; y < vertexData.height; y++) {
         double[] color = frameBuffer[x][y];
-        stackedFrame[y*vertexData.width+x] = getIntFromColor((int)(color[0]*255), (int)(color[1]*255), (int)(color[2]*255), (int)(color[3]*255));
+        stackedFrame[y*vertexData.width+x] = getIntFromColor(
+          (int)(Math.min(color[0],1)*255), 
+          (int)(Math.min(color[1],1)*255), 
+          (int)(Math.min(color[2],1)*255), 
+          (int)(Math.min(color[3],1)*255) 
+        );
       }
     }
     frame.setRGB(0, 0, vertexData.width, vertexData.height, stackedFrame, 0, vertexData.width);
@@ -209,3 +214,4 @@ public class RenderPipeline {
     return alpha | red | green | blue; //0xFF000000 for 100% Alpha. Bitwise OR everything together.
   }
 }
+

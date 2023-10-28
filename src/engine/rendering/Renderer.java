@@ -15,42 +15,48 @@ import engine.shapes.Mesh;
 public class Renderer {
   double[][] vertexPositions;
   RenderPipeline renderPipeline;
-  VertexTransform[] vertexTransforms;
+  VertexTransform[] preProjection;
+  VertexTransform[] postProjection;
   VertexShader[] vertexShaders;
   FragmentShader[] fragmentShaders;
 
   public Renderer() {
     renderPipeline = new RenderPipeline();
 
-    this.vertexTransforms = new VertexTransform[] {
-      new CullTriangles(), new NormalizeClipVertices(), new WindowTransform()
+    this.preProjection = new VertexTransform[] {
+      new CullTriangles(), 
+    };
+    this.postProjection = new VertexTransform[] {
+      new NormalizeClipVertices(),
+      new WindowTransform()
     };
     this.vertexShaders = new VertexShader[] {
 
     };
     this.fragmentShaders = new FragmentShader[] {
-      new ExFragmentShader()
+      //new ExFragmentShader()
     };
   }
 
   public void render(BufferedImage frame, Mesh[] meshes, int vertexCount) {
-    this.vertexPositions = new double[vertexCount][3];
+    this.vertexPositions = new double[vertexCount][4];
     for(int i = 0; i < meshes.length; i++) {
       Mesh mesh = meshes[i];
       for(int j = 0; j < mesh.triangles.length; j++) {
         double[][] triangle = mesh.triangles[j];
         for (int k = 0; k < triangle.length; k++) {
           this.vertexPositions[j*3+k] = new double[] {
-            triangle[k][0], triangle[k][1], triangle[k][2]
+            triangle[k][0], triangle[k][1], triangle[k][2], 0
           };
         }
       }
     }
     
     renderPipeline.initialize(vertexPositions, frame.getWidth(), frame.getHeight());
-    renderPipeline.projectVertices();
     renderPipeline.computeSurfaceNormals();
-    renderPipeline.applyVertexTransformations(vertexTransforms);
+    renderPipeline.applyVertexTransformations(preProjection);
+    renderPipeline.projectVertices();
+    renderPipeline.applyVertexTransformations(postProjection);
     renderPipeline.applyVertexShaders(vertexShaders);
     renderPipeline.scan(true, true);
     renderPipeline.applyFragmentShaders(fragmentShaders);
