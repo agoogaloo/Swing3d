@@ -61,10 +61,10 @@ public class RenderPipeline {
       double[] v1 = vertexData.vertices[i+1];
       double[] v2 = vertexData.vertices[i+2];
 
-      double[] line1 = new double[] {
+      double[] line2 = new double[] {
         v1[0] - v0[0], v1[1] - v0[1], v1[2] - v0[2],
       };
-      double[] line2 = new double[] {
+      double[] line1 = new double[] {
         v2[0] - v0[0], v2[1] - v0[1], v2[2] - v0[2],
       };
 
