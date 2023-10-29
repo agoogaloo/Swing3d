@@ -61,7 +61,8 @@ public class GameState implements State {
         Mesh cube = Mesh.copy(shipMesh);
         cube.translate(new double[] { -0.5, -0.5, -0.5 });
         cube.rotate(new double[] { Math.cos(elapsedTime % (3.14159*2))*150, Math.cos(elapsedTime % (3.14159*2))*100, Math.sin(elapsedTime % (3.14159*2))*75 });
-        cube.translate(new double[] { 0, 0, 6 });
+        // cube.rotate(new double[] { 45, 45, 90 });
+        cube.translate(new double[] { 0, 0, 5 });
 
         meshes = new Mesh[] {
             cube

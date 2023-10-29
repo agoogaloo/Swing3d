@@ -40,7 +40,8 @@ public class RenderPipeline {
 
     for(int i = 0; i < vertexData.worldVertices.length; i++) {
       vertexData.vertices[i] = multiplyVectorMatrix4(vertexData.worldVertices[i], projectionMatrix);
-    }    
+    }
+    return;
   }
 
   private double[] multiplyVectorMatrix4(double[] vector, double[][] matrix) {
@@ -51,7 +52,7 @@ public class RenderPipeline {
     if(w != 0) {
       x /= w; y /= w; z /= w; 
     }
-    return new double[] { x, y, z, w };
+    return new double[] { x, y, z, vector[2] };
   }
 
   public void computeSurfaceNormals() {
@@ -61,28 +62,30 @@ public class RenderPipeline {
       double[] v1 = vertexData.vertices[i+1];
       double[] v2 = vertexData.vertices[i+2];
 
-      double[] line2 = new double[] {
-        v1[0] - v0[0], v1[1] - v0[1], v1[2] - v0[2],
-      };
-      double[] line1 = new double[] {
-        v2[0] - v0[0], v2[1] - v0[1], v2[2] - v0[2],
-      };
-
-      double[] normal = new double[] {
-        line1[1] * line2[2] - line1[2] * line2[1],
-        line1[2] * line2[0] - line1[0] * line2[2],
-        line1[0] * line2[1] - line1[1] * line2[0]
-      };
-      
-      double l = Math.sqrt(normal[0]*normal[0] + normal[1]*normal[1] + normal[2]*normal[2]);
-
-      normal = new double[] {
-        normal[0]/l, normal[1]/l, normal[2]/l, l
-      };
-
-      vertexData.surfaceNormals[i/3] = normal;
+      vertexData.surfaceNormals[i/3] = computeNormalVector(v0, v1, v2);
     }
     //System.out.println(String.format("%f, %f, %f", vertexData.surfaceNormals[0][0], vertexData.surfaceNormals[0][1], vertexData.surfaceNormals[0][2]));
+  }
+
+  public double[] computeNormalVector(double[] v0, double[] v1, double[] v2) {
+    double[] line2 = new double[] {
+      v1[0] - v0[0], v1[1] - v0[1], v1[2] - v0[2],
+    };
+    double[] line1 = new double[] {
+      v2[0] - v0[0], v2[1] - v0[1], v2[2] - v0[2],
+    };
+
+    double[] normal = new double[] {
+      line1[1] * line2[2] - line1[2] * line2[1],
+      line1[2] * line2[0] - line1[0] * line2[2],
+      line1[0] * line2[1] - line1[1] * line2[0]
+    };
+    
+    double l = Math.sqrt(normal[0]*normal[0] + normal[1]*normal[1] + normal[2]*normal[2]);
+
+    return new double[] {
+      normal[0]/l, normal[1]/l, normal[2]/l, l
+    };
   }
 
   public void applyVertexTransformations(VertexTransform[] vertexTransforms) {
@@ -103,14 +106,27 @@ public class RenderPipeline {
       //TODO optimize to only check pixel inside of a triangle
       for(int x = 0; x < vertexData.width; x++) {
         for(int y = 0; y < vertexData.height; y++) {
+          double depth = 100;
           for(int i = 0; i < vertexData.vertices.length; i += 3) {
             if(vertexData.drawTriangles[i/3]) {
               double[] v0 = vertexData.vertices[i];
               double[] v1 = vertexData.vertices[i+1];
               double[] v2 = vertexData.vertices[i+2];
               if(PointInTriangle(new double[] { x, y }, v0, v1, v2)) {
-                double[] color = vertexData.surfaceColors[i/3];
-                frameBuffer[x][y] = color;
+                double[] A = new double[] { v0[0], v0[1], v0[3] };
+                double[] B = new double[] { v1[0], v1[1], v1[3] };
+                double[] C = new double[] { v2[0], v2[1], v2[3] };
+
+                double[] normal = computeNormalVector(
+                  A, B, C
+                );
+
+                double k = -(normal[0]*A[0] + normal[1]*A[1] + normal[2]*A[2]);
+                double z = (x*normal[0] + y*normal[1] + k);
+                if(z < depth) {
+                  frameBuffer[x][y] = vertexData.surfaceColors[i/3];
+                  depth = z;
+                }
               }
             }
           }
