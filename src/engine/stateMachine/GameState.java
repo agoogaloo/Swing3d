@@ -47,7 +47,7 @@ public class GameState implements State {
     public void start(State prevState) {
         startTime = System.currentTimeMillis();
         this.renderer = new Renderer();
-        shipMesh = loadObjectFromFile("VideoShip.obj");
+        shipMesh = loadObjectFromFile("axis.obj");
     }
 
     @Override
@@ -59,10 +59,10 @@ public class GameState implements State {
     public void render(BufferedImage image) {
         double elapsedTime = (System.currentTimeMillis() - startTime)/1000;
         Mesh cube = Mesh.copy(shipMesh);
-        cube.translate(new double[] { -0.5, -0.5, -0.5 });
-        cube.rotate(new double[] { Math.cos(elapsedTime % (3.14159*2))*150, Math.cos(elapsedTime % (3.14159*2))*100, Math.sin(elapsedTime % (3.14159*2))*75 });
+        // cube.translate(new double[] { -0.5, -0.5, -0.5 });
+        // cube.rotate(new double[] { Math.cos(elapsedTime % (3.14159*2))*150, Math.cos(elapsedTime % (3.14159*2))*100, Math.sin(elapsedTime % (3.14159*2))*75 });
         // cube.rotate(new double[] { 45, 45, 90 });
-        cube.translate(new double[] { 0, 0, 5 });
+        // cube.translate(new double[] { 0, 0, 5 });
 
         meshes = new Mesh[] {
             cube
@@ -102,7 +102,7 @@ public class GameState implements State {
             double[][][] trianglesArray = new double[triangles.size()][3][3];
             double[][] colors = new double[triangles.size()][4];
             for (int i = 0; i < trianglesArray.length; i++) {
-                colors[i] = new double[] { 1, 1, 0, 0 };
+                colors[i] = new double[] { 1, 1, 1, 1 };
                 trianglesArray[i] = triangles.get(i);
             }
             fileReader.close();
