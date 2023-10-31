@@ -40,7 +40,7 @@ public class Renderer {
     };
   }
 
-  public void render(BufferedImage frame, Mesh[] meshes, int vertexCount) {
+  public void render(BufferedImage frame, Mesh[] meshes, int vertexCount, double[] cameraPosition, double[] cameraDirection) {
     this.vertexPositions = new double[vertexCount][4];
     this.surfaceColors = new double[vertexCount/3][4];
     for(int i = 0; i < meshes.length; i++) {
@@ -56,7 +56,7 @@ public class Renderer {
       }
     }
     
-    renderPipeline.initialize(vertexPositions, surfaceColors, frame.getWidth(), frame.getHeight());
+    renderPipeline.initialize(vertexPositions, surfaceColors, cameraPosition, cameraDirection, frame.getWidth(), frame.getHeight());
     renderPipeline.computeSurfaceNormals();
     renderPipeline.applyVertexTransformations(preProjection);
     renderPipeline.projectVertices();

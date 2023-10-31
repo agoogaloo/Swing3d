@@ -13,6 +13,8 @@ public class GameState implements State {
     Renderer renderer;
     Mesh[] meshes;
     double startTime;
+    double[] cameraPosition = new double[] { 0, 0, 0 };
+    double[] cameraDirection = new double[] { 0, 0, 0 };
 
     Mesh unitCube = new Mesh(new double[][][] {
         {{ 0.0, 0.0, 0.0 }, { 0.0, 1.0, 0.0 }, { 1.0, 1.0, 0.0 }},
@@ -59,16 +61,16 @@ public class GameState implements State {
     public void render(BufferedImage image) {
         double elapsedTime = (System.currentTimeMillis() - startTime)/1000;
         Mesh cube = Mesh.copy(shipMesh);
-        // cube.translate(new double[] { -0.5, -0.5, -0.5 });
-        // cube.rotate(new double[] { Math.cos(elapsedTime % (3.14159*2))*150, Math.cos(elapsedTime % (3.14159*2))*100, Math.sin(elapsedTime % (3.14159*2))*75 });
-        // cube.rotate(new double[] { 45, 45, 90 });
-        // cube.translate(new double[] { 0, 0, 5 });
+        cube.translate(new double[] { -0.5, -0.5, -0.5 });
+        cube.rotate(new double[] { Math.cos(elapsedTime % (3.14159*2))*150, Math.cos(elapsedTime % (3.14159*2))*100, Math.sin(elapsedTime % (3.14159*2))*75 });
+        cube.rotate(new double[] { 90, 45, 90 });
+        cube.translate(new double[] { 0, 0, 3 });
 
         meshes = new Mesh[] {
             cube
         };
 
-        renderer.render(image, meshes, shipMesh.triangles.length*3);
+        renderer.render(image, meshes, shipMesh.triangles.length*3, cameraPosition, cameraDirection);
     }
 
     public Mesh loadObjectFromFile(String fileName) {

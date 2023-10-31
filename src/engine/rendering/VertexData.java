@@ -7,5 +7,6 @@ public class VertexData {
   public double[][] surfaceNormals;
   public double[][] surfaceColors;
   public double[] cameraPosition;
+  public double[] lookDirection;
   public boolean[] drawTriangles;
 }

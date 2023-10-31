@@ -11,7 +11,7 @@ public class RenderPipeline {
   VertexData vertexData;
   double[][][] frameBuffer;
   
-  public void initialize(double[][] vertices, double[][] surfaceColors, int width, int height) {
+  public void initialize(double[][] vertices, double[][] surfaceColors, double[] cameraPos, double[] cameraDirection, int width, int height) {
     vertexData = new VertexData();
     vertexData.worldVertices = vertices;
     vertexData.vertices = new double[vertices.length][4];
@@ -20,7 +20,8 @@ public class RenderPipeline {
     }
     vertexData.width = width;
     vertexData.height = height;
-    vertexData.cameraPosition = new double[] { 0, 0, 0 };
+    vertexData.cameraPosition = cameraPos;
+    vertexData.lookDirection = cameraDirection;
     vertexData.surfaceColors = surfaceColors;
   }
 
@@ -122,7 +123,7 @@ public class RenderPipeline {
                 );
 
                 double k = -(normal[0]*A[0] + normal[1]*A[1] + normal[2]*A[2]);
-                double z = (x*normal[0] + y*normal[1] + k);
+                double z = -(x*normal[0] + y*normal[1] + k)/normal[2];
                 if(z < depth) {
                   frameBuffer[x][y] = vertexData.surfaceColors[i/3];
                   depth = z;
