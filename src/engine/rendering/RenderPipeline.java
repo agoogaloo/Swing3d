@@ -39,8 +39,8 @@ public class RenderPipeline {
       { 0, 0, (-far * near)/(far-near), 0 },
     };
 
-    for(int i = 0; i < vertexData.worldVertices.length; i++) {
-      vertexData.vertices[i] = multiplyVectorMatrix4(vertexData.worldVertices[i], projectionMatrix);
+    for(int i = 0; i < vertexData.vertices.length; i++) {
+      vertexData.vertices[i] = multiplyVectorMatrix4(vertexData.vertices[i], projectionMatrix);
     }
     return;
   }

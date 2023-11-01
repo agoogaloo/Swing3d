@@ -1,6 +1,14 @@
 package engine.shapes;
 
 public class Vector {
+  public static double[] add(double[] A, double[] B) {
+    return new double[] {
+      A[0] + B[0],
+      A[1] + B[1],
+      A[2] + B[2],
+    };
+  }
+
   public static double[] subtract(double[] A, double[] B) {
     return new double[] {
       A[0] - B[0],
@@ -29,7 +37,7 @@ public class Vector {
     double l = Math.sqrt(vector[0]*vector[0] + vector[1]*vector[1] + vector[2]*vector[2]);
 
     return new double[] {
-      vector[0]/l, vector[1]/l, vector[2]/l, l
+      vector[0]/l, vector[1]/l, vector[2]/l
     };
   }
 

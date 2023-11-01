@@ -12,10 +12,10 @@ public class Matrix {
   
   public static double[] multiplyVectorMatrix444(double[] vector, double[][] matrix) {
     return new double[] { 
-      vector[0] * matrix[0][0] + vector[1] * matrix[1][0] + vector[2] * matrix[2][0] + vector[4] * matrix[3][0],
-      vector[0] * matrix[0][1] + vector[1] * matrix[1][1] + vector[2] * matrix[2][1] + vector[4] * matrix[3][1],
-      vector[0] * matrix[0][2] + vector[1] * matrix[1][2] + vector[2] * matrix[2][2] + vector[4] * matrix[3][2],
-      vector[0] * matrix[0][3] + vector[1] * matrix[1][3] + vector[2] * matrix[2][3] + vector[4] * matrix[3][3]
+      vector[0] * matrix[0][0] + vector[1] * matrix[1][0] + vector[2] * matrix[2][0] + vector[3] * matrix[3][0],
+      vector[0] * matrix[0][1] + vector[1] * matrix[1][1] + vector[2] * matrix[2][1] + vector[3] * matrix[3][1],
+      vector[0] * matrix[0][2] + vector[1] * matrix[1][2] + vector[2] * matrix[2][2] + vector[3] * matrix[3][2],
+      vector[0] * matrix[0][3] + vector[1] * matrix[1][3] + vector[2] * matrix[2][3] + vector[3] * matrix[3][3]
     };
   }
 
@@ -47,5 +47,15 @@ public class Matrix {
 		newMatrix[3][2] = -(matrix[3][0] * newMatrix[0][2] + matrix[3][1] * newMatrix[1][2] + matrix[3][2] * newMatrix[2][2]);
 		newMatrix[3][3] = 1.0f;
     return newMatrix;
+  }
+
+  public static double[][] makeRotationMatrixY(double angle) {
+    double yAngle = angle * 3.1415/180;
+    return new double[][] {
+      { Math.cos(yAngle), 0, Math.sin(yAngle), 0 },
+      { 0, 1, 0, 0 },
+      { -Math.sin(yAngle), 0, Math.cos(yAngle), 0 },
+      { 0, 0, 0, 0 },
+    };
   }
 }

@@ -7,6 +7,7 @@ import engine.rendering.Shaders.ExFragmentShader;
 import engine.rendering.Shaders.FragmentShader;
 import engine.rendering.Shaders.LinearLighting;
 import engine.rendering.Shaders.VertexShader;
+import engine.rendering.VertexTramsforms.CameraTransform;
 import engine.rendering.VertexTramsforms.CullTriangles;
 import engine.rendering.VertexTramsforms.NormalizeClipVertices;
 import engine.rendering.VertexTramsforms.VertexTransform;
@@ -26,7 +27,7 @@ public class Renderer {
     renderPipeline = new RenderPipeline();
 
     this.preProjection = new VertexTransform[] {
-      new CullTriangles(), 
+      new CullTriangles(), new CameraTransform()
     };
     this.postProjection = new VertexTransform[] {
       new NormalizeClipVertices(),
@@ -49,7 +50,7 @@ public class Renderer {
         double[][] triangle = mesh.triangles[j];
         for (int k = 0; k < triangle.length; k++) {
           this.vertexPositions[j*3+k] = new double[] {
-            triangle[k][0], triangle[k][1], triangle[k][2], 0
+            triangle[k][0], triangle[k][1], triangle[k][2], 1
           };
         }
         surfaceColors[j] = mesh.colors[j];

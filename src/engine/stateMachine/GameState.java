@@ -7,14 +7,16 @@ import java.util.ArrayList;
 import java.util.Scanner;
 
 import engine.rendering.Renderer;
+import engine.shapes.Matrix;
 import engine.shapes.Mesh;
+import engine.shapes.Vector;
 
 public class GameState implements State {
     Renderer renderer;
     Mesh[] meshes;
     double startTime;
-    double[] cameraPosition = new double[] { 0, 0, 0 };
-    double[] cameraDirection = new double[] { 0, 0, 0 };
+    double[] cameraPosition = new double[] { 0, 4, -5 };
+    double[] cameraDirection = new double[] { 0, 0, 1 };
 
     Mesh unitCube = new Mesh(new double[][][] {
         {{ 0.0, 0.0, 0.0 }, { 0.0, 1.0, 0.0 }, { 1.0, 1.0, 0.0 }},
@@ -50,6 +52,7 @@ public class GameState implements State {
         startTime = System.currentTimeMillis();
         this.renderer = new Renderer();
         shipMesh = loadObjectFromFile("axis.obj");
+        rotateCamera(-45);
     }
 
     @Override
@@ -62,15 +65,29 @@ public class GameState implements State {
         double elapsedTime = (System.currentTimeMillis() - startTime)/1000;
         Mesh cube = Mesh.copy(shipMesh);
         cube.translate(new double[] { -0.5, -0.5, -0.5 });
-        cube.rotate(new double[] { Math.cos(elapsedTime % (3.14159*2))*150, Math.cos(elapsedTime % (3.14159*2))*100, Math.sin(elapsedTime % (3.14159*2))*75 });
-        cube.rotate(new double[] { 90, 45, 90 });
-        cube.translate(new double[] { 0, 0, 3 });
+        // cube.rotate(new double[] { Math.cos(elapsedTime % (3.14159*2))*150, Math.cos(elapsedTime % (3.14159*2))*100, Math.sin(elapsedTime % (3.14159*2))*75 });
+        // // cube.rotate(new double[] { 90, 45, 90 });
+        cube.translate(new double[] { 0, 0, 10 });
+
+        cameraForward(-0.1);
+        // rotateCamera(-1);
+        // cameraPosition = new double[] { 1, 1, -elapsedTime };
 
         meshes = new Mesh[] {
             cube
         };
 
         renderer.render(image, meshes, shipMesh.triangles.length*3, cameraPosition, cameraDirection);
+    }
+
+    public void cameraForward(double amount) {
+        double[] forwardVector = Vector.scalarMultiple(cameraDirection, amount);
+        cameraPosition = Vector.add(cameraPosition, forwardVector);
+    }
+
+    public void rotateCamera(double angle) {
+        double[][] rotationMatrix = Matrix.makeRotationMatrixY(angle);
+        cameraDirection = Matrix.multiplyVectorMatrix344(cameraDirection, rotationMatrix);
     }
 
     public Mesh loadObjectFromFile(String fileName) {
