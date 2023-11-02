@@ -8,6 +8,7 @@ import engine.rendering.Shaders.FragmentShader;
 import engine.rendering.Shaders.LinearLighting;
 import engine.rendering.Shaders.VertexShader;
 import engine.rendering.VertexTramsforms.CameraTransform;
+import engine.rendering.VertexTramsforms.ClipTriangles;
 import engine.rendering.VertexTramsforms.CullTriangles;
 import engine.rendering.VertexTramsforms.NormalizeClipVertices;
 import engine.rendering.VertexTramsforms.VertexTransform;
@@ -27,7 +28,9 @@ public class Renderer {
     renderPipeline = new RenderPipeline();
 
     this.preProjection = new VertexTransform[] {
-      new CullTriangles(), new CameraTransform()
+      new CameraTransform(), 
+      new ClipTriangles(), 
+      new CullTriangles()
     };
     this.postProjection = new VertexTransform[] {
       new NormalizeClipVertices(),
@@ -63,7 +66,7 @@ public class Renderer {
     renderPipeline.projectVertices();
     renderPipeline.applyVertexTransformations(postProjection);
     renderPipeline.applyVertexShaders(vertexShaders);
-    renderPipeline.scan(false, true);
+    renderPipeline.scan(true, true);
     renderPipeline.applyFragmentShaders(fragmentShaders);
     renderPipeline.display(frame);
   }

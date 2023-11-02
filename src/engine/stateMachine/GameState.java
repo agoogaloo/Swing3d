@@ -15,27 +15,27 @@ public class GameState implements State {
     Renderer renderer;
     Mesh[] meshes;
     double startTime;
-    double[] cameraPosition = new double[] { 0, 4, -5 };
+    double[] cameraPosition = new double[] { 0, 0, 0 };
     double[] cameraDirection = new double[] { 0, 0, 1 };
 
     Mesh unitCube = new Mesh(new double[][][] {
-        {{ 0.0, 0.0, 0.0 }, { 0.0, 1.0, 0.0 }, { 1.0, 1.0, 0.0 }},
-		{{ 0.0, 0.0, 0.0 }, { 1.0, 1.0, 0.0 }, { 1.0, 0.0, 0.0 }},
+        {{ 0.0, 0.0, 0.0 }, { 1.0, 1.0, 0.0 }, { 0.0, 1.0, 0.0 }},
+		{{ 0.0, 0.0, 0.0 }, { 1.0, 0.0, 0.0 }, { 1.0, 1.0, 0.0 }},
 
-		{{ 1.0, 0.0, 0.0 }, { 1.0, 1.0, 0.0 }, { 1.0, 1.0, 1.0 }},
-		{{ 1.0, 0.0, 0.0 }, { 1.0, 1.0, 1.0 }, { 1.0, 0.0, 1.0 }},
+		{{ 1.0, 0.0, 0.0 }, { 1.0, 1.0, 1.0 }, { 1.0, 1.0, 0.0 }},
+		{{ 1.0, 0.0, 0.0 }, { 1.0, 0.0, 1.0 }, { 1.0, 1.0, 1.0 }},
 
-		{{ 1.0, 0.0, 1.0 }, { 1.0, 1.0, 1.0 }, { 0.0, 1.0, 1.0 }},
-		{{ 1.0, 0.0, 1.0 }, { 0.0, 1.0, 1.0 }, { 0.0, 0.0, 1.0 }},
+		{{ 1.0, 0.0, 1.0 }, { 0.0, 1.0, 1.0 }, { 1.0, 1.0, 1.0 }},
+		{{ 1.0, 0.0, 1.0 }, { 0.0, 0.0, 1.0 }, { 0.0, 1.0, 1.0 }},
 
-		{{ 0.0, 0.0, 1.0 }, { 0.0, 1.0, 1.0 }, { 0.0, 1.0, 0.0 }},
-		{{ 0.0, 0.0, 1.0 }, { 0.0, 1.0, 0.0 }, { 0.0, 0.0, 0.0 }},
+		{{ 0.0, 0.0, 1.0 }, { 0.0, 1.0, 0.0 }, { 0.0, 1.0, 1.0 }},
+		{{ 0.0, 0.0, 1.0 }, { 0.0, 0.0, 0.0 }, { 0.0, 1.0, 0.0 }},
 
-		{{ 0.0, 1.0, 0.0 }, { 0.0, 1.0, 1.0 }, { 1.0, 1.0, 1.0 }},
-		{{ 0.0, 1.0, 0.0 }, { 1.0, 1.0, 1.0 }, { 1.0, 1.0, 0.0 }},
+		{{ 0.0, 1.0, 0.0 }, { 1.0, 1.0, 1.0 }, { 0.0, 1.0, 1.0 }},
+		{{ 0.0, 1.0, 0.0 }, { 1.0, 1.0, 0.0 }, { 1.0, 1.0, 1.0 }},
 
-		{{ 1.0, 0.0, 1.0 }, { 0.0, 0.0, 1.0 }, { 0.0, 0.0, 0.0 }},
-		{{ 1.0, 0.0, 1.0 }, { 0.0, 0.0, 0.0 }, { 1.0, 0.0, 0.0 }},
+		{{ 1.0, 0.0, 1.0 }, { 0.0, 0.0, 0.0 }, { 0.0, 0.0, 1.0 }},
+		{{ 1.0, 0.0, 1.0 }, { 1.0, 0.0, 0.0 }, { 0.0, 0.0, 0.0 }},
     }, new double[][] {
         { 1, 1, 0, 0 }, { 1, 1, 0, 0 },
         { 1, 0, 1, 0 }, { 1, 0, 1, 0 },
@@ -52,7 +52,7 @@ public class GameState implements State {
         startTime = System.currentTimeMillis();
         this.renderer = new Renderer();
         shipMesh = loadObjectFromFile("axis.obj");
-        rotateCamera(-45);
+        // rotateCamera(-45);
     }
 
     @Override
@@ -65,11 +65,12 @@ public class GameState implements State {
         double elapsedTime = (System.currentTimeMillis() - startTime)/1000;
         Mesh cube = Mesh.copy(shipMesh);
         cube.translate(new double[] { -0.5, -0.5, -0.5 });
-        // cube.rotate(new double[] { Math.cos(elapsedTime % (3.14159*2))*150, Math.cos(elapsedTime % (3.14159*2))*100, Math.sin(elapsedTime % (3.14159*2))*75 });
+        cube.rotate(new double[] { Math.cos(elapsedTime % (3.14159*2))*150, Math.cos(elapsedTime % (3.14159*2))*100, Math.sin(elapsedTime % (3.14159*2))*75 });
         // // cube.rotate(new double[] { 90, 45, 90 });
-        cube.translate(new double[] { 0, 0, 10 });
+        // cube.rotate(new double[] { 0, 45, 0 });
+        cube.translate(new double[] { 0, 0, 3 });
 
-        cameraForward(-0.1);
+        // cameraForward(0.1);
         // rotateCamera(-1);
         // cameraPosition = new double[] { 1, 1, -elapsedTime };
 
@@ -77,7 +78,7 @@ public class GameState implements State {
             cube
         };
 
-        renderer.render(image, meshes, shipMesh.triangles.length*3, cameraPosition, cameraDirection);
+        renderer.render(image, meshes, meshes[0].triangles.length*3, cameraPosition, cameraDirection);
     }
 
     public void cameraForward(double amount) {

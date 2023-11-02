@@ -44,4 +44,21 @@ public class Vector {
   public static double dotProduct(double[] A, double[] B) {
     return A[0]*B[0] + A[1]*B[1] + A[2] * B[2];
   }
+
+  public static double[] planeIntersection(double[] planePoint, double[] planeNormal, double[] lineStart, double[] lineEnd) {
+    double[] normal = normalize(planeNormal);
+    
+    double d = dotProduct(normal, planePoint);
+    double ad = dotProduct(lineStart, normal);
+    double bd = dotProduct(lineEnd, normal);
+    double t = (d - ad) / (bd - ad);
+
+    double[] lineVector = subtract(lineEnd, lineStart);
+    double[] lineToIntersect = scalarMultiple(lineVector, t);
+    return add(lineStart, lineToIntersect);
+  }
+
+  public static double distToPlane(double[] normal, double[] planePoint, double[] point) {
+    return (dotProduct(normal, point) - dotProduct(normal, planePoint));
+  }
 }

@@ -9,17 +9,14 @@ public class CullTriangles extends VertexTransform {
     for(int i = 0; i < vertexData.vertices.length; i += 3) {
       double[] normal = vertexData.surfaceNormals[i/3];
       double[] vertex = vertexData.vertices[i];
-      if(vertexData.vertices[i][2] < 0 || vertexData.vertices[i+1][2] < 0 || vertexData.vertices[i+2][2] < 0) {
-        vertexData.drawTriangles[i/3] = false; //TODO would be better to do this per pixel rather than per triangle
-      } else {
-        double angle = (
-          (normal[0] * (vertex[0]-vertexData.cameraPosition[0])) +
-          (normal[1] * (vertex[1]-vertexData.cameraPosition[1])) +
-          (normal[2] * (vertex[2]-vertexData.cameraPosition[2]))
-        );
+      
+      double angle = (
+        (normal[0] * (vertex[0]-vertexData.cameraPosition[0])) +
+        (normal[1] * (vertex[1]-vertexData.cameraPosition[1])) +
+        (normal[2] * (vertex[2]-vertexData.cameraPosition[2]))
+      );
 
-        vertexData.drawTriangles[i/3] = (vertex[2] > 0) && (angle < 0);
-      }
+      vertexData.drawTriangles[i/3] = (angle < 0);
     }
   }
 }
