@@ -23,6 +23,7 @@ public class RenderPipeline {
     vertexData.cameraPosition = cameraPos;
     vertexData.lookDirection = cameraDirection;
     vertexData.surfaceColors = surfaceColors;
+    vertexData.drawTriangles = new boolean[vertexData.vertices.length/3];
   }
 
   public void projectVertices() {

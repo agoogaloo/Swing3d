@@ -8,6 +8,14 @@ public class Vector {
       A[2] + B[2],
     };
   }
+  public static double[] add4(double[] A, double[] B) {
+    return new double[] {
+      A[0] + B[0],
+      A[1] + B[1],
+      A[2] + B[2],
+      A[3],
+    };
+  }
 
   public static double[] subtract(double[] A, double[] B) {
     return new double[] {
@@ -16,12 +24,28 @@ public class Vector {
       A[2] - B[2],
     };
   }
+  public static double[] subtract4(double[] A, double[] B) {
+    return new double[] {
+      A[0] - B[0],
+      A[1] - B[1],
+      A[2] - B[2],
+      A[3],
+    };
+  }
 
   public static double[] scalarMultiple(double[] A, double k) {
     return new double[] {
       A[0]*k,
       A[1]*k,
       A[2]*k,
+    };
+  }
+  public static double[] scalarMultiple4(double[] A, double k) {
+    return new double[] {
+      A[0]*k,
+      A[1]*k,
+      A[2]*k,
+      A[3]
     };
   }
 
@@ -55,7 +79,7 @@ public class Vector {
 
     double[] lineVector = subtract(lineEnd, lineStart);
     double[] lineToIntersect = scalarMultiple(lineVector, t);
-    return add(lineStart, lineToIntersect);
+    return add4(lineStart, lineToIntersect);
   }
 
   public static double distToPlane(double[] normal, double[] planePoint, double[] point) {

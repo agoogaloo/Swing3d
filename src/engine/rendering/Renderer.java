@@ -21,6 +21,7 @@ public class Renderer {
   RenderPipeline renderPipeline;
   VertexTransform[] preProjection;
   VertexTransform[] postProjection;
+  VertexTransform[] screenClipping;
   VertexShader[] vertexShaders;
   FragmentShader[] fragmentShaders;
 
@@ -29,8 +30,8 @@ public class Renderer {
 
     this.preProjection = new VertexTransform[] {
       new CameraTransform(), 
-      new ClipTriangles(), 
-      new CullTriangles()
+      new CullTriangles(),
+      new ClipTriangles(new double[] { 0, 0, 1 }, new double[] { 0, 0, 0.1 } ),
     };
     this.postProjection = new VertexTransform[] {
       new NormalizeClipVertices(),
@@ -59,14 +60,22 @@ public class Renderer {
         surfaceColors[j] = mesh.colors[j];
       }
     }
+
+    this.screenClipping = new VertexTransform[] {
+      new ClipTriangles(new double[] { 0, 0, 0 }, new double[] { 0, 1, 0 } ),
+      new ClipTriangles(new double[] { 0, (double)frame.getHeight()-1, 0 }, new double[] { 0, -1, 0 } ),
+      new ClipTriangles(new double[] { 0, 0, 0 }, new double[] { 1, 0, 0 } ),
+      new ClipTriangles(new double[] { (double)frame.getWidth()-1, 0, 0 }, new double[] { -1, 0, 0 } ),
+    };
     
     renderPipeline.initialize(vertexPositions, surfaceColors, cameraPosition, cameraDirection, frame.getWidth(), frame.getHeight());
     renderPipeline.computeSurfaceNormals();
     renderPipeline.applyVertexTransformations(preProjection);
     renderPipeline.projectVertices();
     renderPipeline.applyVertexTransformations(postProjection);
+    renderPipeline.applyVertexTransformations(screenClipping);
     renderPipeline.applyVertexShaders(vertexShaders);
-    renderPipeline.scan(true, true);
+    renderPipeline.scan(false, true);
     renderPipeline.applyFragmentShaders(fragmentShaders);
     renderPipeline.display(frame);
   }
