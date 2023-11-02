@@ -10,6 +10,7 @@ import engine.shapes.Vector2;
 public class RenderPipeline {
   VertexData vertexData;
   double[][][] frameBuffer;
+  double[][] depthMap;
   
   public void initialize(double[][] vertices, double[][] surfaceColors, double[] cameraPos, double[] cameraDirection, int width, int height) {
     vertexData = new VertexData();
@@ -104,11 +105,13 @@ public class RenderPipeline {
 
   public void scan(boolean drawEdges, boolean fill) {
     frameBuffer = new double[vertexData.width][vertexData.height][4];
+    depthMap = new double[vertexData.width][vertexData.height];
+    double maxDepth = 0;
     if(fill) {
       //TODO optimize to only check pixel inside of a triangle
       for(int x = 0; x < vertexData.width; x++) {
         for(int y = 0; y < vertexData.height; y++) {
-          double depth = 100;
+          double depth = 50;
           for(int i = 0; i < vertexData.vertices.length; i += 3) {
             if(vertexData.drawTriangles[i/3]) {
               double[] v0 = vertexData.vertices[i];
@@ -128,13 +131,22 @@ public class RenderPipeline {
                 if(z < depth) {
                   frameBuffer[x][y] = vertexData.surfaceColors[i/3];
                   depth = z;
+                  if(z > maxDepth) {
+                    maxDepth = z;
+                  }
                 }
               }
             }
           }
+          depthMap[x][y] = depth/50;
         }
       }
     }
+    // for(int x = 0; x < vertexData.width; x++) {
+    //   for(int y = 0; y < vertexData.height; y++) {
+    //     System.out.println(depthMap[x][y]);
+    //   }
+    // }
     if(drawEdges) {
       for(int i = 0; i < vertexData.vertices.length; i += 3) {
         if(vertexData.drawTriangles[i/3]) {
@@ -203,7 +215,7 @@ public class RenderPipeline {
 
   public void applyFragmentShaders(FragmentShader[] fragmentShaders) {
     for (FragmentShader shader : fragmentShaders) {
-      this.frameBuffer = shader.compute(this.frameBuffer, vertexData.width, vertexData.height);
+      this.frameBuffer = shader.compute(frameBuffer, depthMap, vertexData.width, vertexData.height);
     }
   }
 

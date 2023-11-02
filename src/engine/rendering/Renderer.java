@@ -3,6 +3,7 @@ package engine.rendering;
 import java.awt.Image;
 import java.awt.image.BufferedImage;
 
+import engine.rendering.Shaders.DepthShader;
 import engine.rendering.Shaders.ExFragmentShader;
 import engine.rendering.Shaders.FragmentShader;
 import engine.rendering.Shaders.LinearLighting;
@@ -41,7 +42,8 @@ public class Renderer {
       new LinearLighting()
     };
     this.fragmentShaders = new FragmentShader[] {
-      //new ExFragmentShader()
+      //new ExFragmentShader(),
+      new DepthShader()
     };
   }
 
