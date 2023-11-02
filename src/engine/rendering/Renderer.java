@@ -32,7 +32,7 @@ public class Renderer {
     this.preProjection = new VertexTransform[] {
       new CameraTransform(), 
       new CullTriangles(),
-      new ClipTriangles(new double[] { 0, 0, 1 }, new double[] { 0, 0, 0.1 } ),
+      new ClipTriangles(new double[] { 0, 0, 0.1 }, new double[] { 0, 0, 1 } ),
     };
     this.postProjection = new VertexTransform[] {
       new NormalizeClipVertices(),

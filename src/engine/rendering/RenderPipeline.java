@@ -5,6 +5,7 @@ import java.awt.image.BufferedImage;
 import engine.rendering.Shaders.FragmentShader;
 import engine.rendering.Shaders.VertexShader;
 import engine.rendering.VertexTramsforms.VertexTransform;
+import engine.shapes.Vector;
 import engine.shapes.Vector2;
 
 public class RenderPipeline {
@@ -128,7 +129,7 @@ public class RenderPipeline {
               if(PointInTriangle(new double[] { x, y }, v0, v1, v2)) {
                 double[] normal = computeNormalVector(v0, v1, v2);
                 double k = -(normal[0]*v0[0] + normal[1]*v0[1] + normal[2]*v0[2]);
-                double z = (-(x*normal[0] + y*normal[1] + k)/normal[2])/25;
+                double z = -(x*normal[0] + y*normal[1] + k)/normal[2];
                 if(z < depthMap[x][y]) {
                   frameBuffer[x][y] = vertexData.surfaceColors[i/3];
                   depthMap[x][y] = z;
