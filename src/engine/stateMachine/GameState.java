@@ -51,7 +51,7 @@ public class GameState implements State {
     public void start(State prevState) {
         startTime = System.currentTimeMillis();
         this.renderer = new Renderer();
-        shipMesh = loadObjectFromFile("VideoShip.obj");
+        shipMesh = loadObjectFromFile("axis.obj");
         // rotateCamera(-45);
     }
 
@@ -63,12 +63,13 @@ public class GameState implements State {
     @Override
     public void render(BufferedImage image) {
         double elapsedTime = (System.currentTimeMillis() - startTime)/1000;
-        Mesh cube = Mesh.copy(unitCube);
+        Mesh cube = Mesh.copy(shipMesh);
         cube.translate(new double[] { -0.5, -0.5, -0.5 });
         cube.rotate(new double[] { Math.cos(elapsedTime % (3.14159*2))*150, Math.cos(elapsedTime % (3.14159*2))*100, Math.sin(elapsedTime % (3.14159*2))*75 });
         // // cube.rotate(new double[] { 90, 45, 90 });
         // cube.rotate(new double[] { 0, 45, 0 });
-        cube.translate(new double[] { 0, 0, 2 });
+        cube.translate(new double[] { 0, 0, 3 });
+        // cube.translate(new double[] { 0, 0, 5-elapsedTime });
 
         // cameraForward(0.1);
         // rotateCamera(-1);

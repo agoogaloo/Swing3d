@@ -106,47 +106,39 @@ public class RenderPipeline {
   public void scan(boolean drawEdges, boolean fill) {
     frameBuffer = new double[vertexData.width][vertexData.height][4];
     depthMap = new double[vertexData.width][vertexData.height];
-    double maxDepth = 0;
+    for(int x = 0; x < vertexData.width; x++) {
+      for(int y = 0; y < vertexData.height; y++) {
+        depthMap[x][y] = 1;
+      }
+    }
     if(fill) {
-      //TODO optimize to only check pixel inside of a triangle
-      for(int x = 0; x < vertexData.width; x++) {
-        for(int y = 0; y < vertexData.height; y++) {
-          double depth = 50;
-          for(int i = 0; i < vertexData.vertices.length; i += 3) {
-            if(vertexData.drawTriangles[i/3]) {
-              double[] v0 = vertexData.vertices[i];
-              double[] v1 = vertexData.vertices[i+1];
-              double[] v2 = vertexData.vertices[i+2];
+      for(int i = 0; i < vertexData.vertices.length; i += 3) {
+        if(vertexData.drawTriangles[i/3]) {
+          double[] v0 = vertexData.vertices[i];
+          double[] v1 = vertexData.vertices[i+1];
+          double[] v2 = vertexData.vertices[i+2];
+          
+          int minX = (int)Math.max(Math.min(v0[0],Math.min(v1[0],v2[0]))-1, (double)0);
+          int minY = (int)Math.max(Math.min(v0[1],Math.min(v1[1],v2[1]))-1, (double)0);
+          int maxX = (int)Math.min(Math.max(v0[0],Math.max(v1[0],v2[0]))+1, vertexData.width);
+          int maxY = (int)Math.min(Math.max(v0[1],Math.max(v1[1],v2[1]))+1, vertexData.width);
+
+          for(int x = minX; x < maxX; x++) {
+            for(int y = minY; y < maxY; y++) {
               if(PointInTriangle(new double[] { x, y }, v0, v1, v2)) {
-                double[] A = new double[] { v0[0], v0[1], v0[3] };
-                double[] B = new double[] { v1[0], v1[1], v1[3] };
-                double[] C = new double[] { v2[0], v2[1], v2[3] };
-
-                double[] normal = computeNormalVector(
-                  A, B, C
-                );
-
-                double k = -(normal[0]*A[0] + normal[1]*A[1] + normal[2]*A[2]);
-                double z = -(x*normal[0] + y*normal[1] + k)/normal[2];
-                if(z < depth) {
+                double[] normal = computeNormalVector(v0, v1, v2);
+                double k = -(normal[0]*v0[0] + normal[1]*v0[1] + normal[2]*v0[2]);
+                double z = (-(x*normal[0] + y*normal[1] + k)/normal[2])/25;
+                if(z < depthMap[x][y]) {
                   frameBuffer[x][y] = vertexData.surfaceColors[i/3];
-                  depth = z;
-                  if(z > maxDepth) {
-                    maxDepth = z;
-                  }
+                  depthMap[x][y] = z;
                 }
               }
             }
           }
-          depthMap[x][y] = depth/50;
         }
       }
     }
-    // for(int x = 0; x < vertexData.width; x++) {
-    //   for(int y = 0; y < vertexData.height; y++) {
-    //     System.out.println(depthMap[x][y]);
-    //   }
-    // }
     if(drawEdges) {
       for(int i = 0; i < vertexData.vertices.length; i += 3) {
         if(vertexData.drawTriangles[i/3]) {
