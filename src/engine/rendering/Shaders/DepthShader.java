@@ -1,12 +1,14 @@
 package engine.rendering.Shaders;
 
+import engine.rendering.VertexData;
+import engine.rendering.FrameData;
+
 public class DepthShader extends FragmentShader {
-  public double[][][] compute(double[][][] frameBuffer, double[][] depthBuffer, int width, int height) {
-    double[][][] updatedFrame = new double[width][height][4];
-    for(int px = 0; px < width; px++) {
-      for(int py = 0; py < height; py++) {
-        double[] pixel = frameBuffer[px][py];
-        double depth = (depthBuffer[px][py]);
+  public void compute() {
+    for(int px = 0; px < FrameData.width; px++) {
+      for(int py = 0; py < FrameData.height; py++) {
+        double[] pixel = FrameData.frameBuffer[px][py];
+        double depth = (FrameData.depthMap[px][py]);
         if(depth < 1) {
           double fogDistance = 3;      
           if(depth > 1-(fogDistance/100)) {
@@ -14,16 +16,11 @@ public class DepthShader extends FragmentShader {
             depth = depth*depth*depth;
           }
 
-          updatedFrame[px][py] = new double[] {
+          FrameData.frameBuffer[px][py] = new double[] {
             pixel[0]*depth, pixel[1], pixel[2], pixel[3],
-          };
-        } else {
-          updatedFrame[px][py] = new double[] {
-            0, 0, 0, 0,
           };
         }
       }
     }
-    return updatedFrame;
   }
 }

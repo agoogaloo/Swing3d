@@ -8,24 +8,21 @@ import engine.rendering.VertexTramsforms.VertexTransform;
 import engine.shapes.Vector;
 import engine.shapes.Vector2;
 
-public class RenderPipeline {
-  VertexData vertexData;
-  double[][][] frameBuffer;
-  double[][] depthMap;
-  
-  public void initialize(double[][] vertices, double[][] surfaceColors, double[] cameraPos, double[] cameraDirection, int width, int height) {
-    vertexData = new VertexData();
-    vertexData.worldVertices = vertices;
-    vertexData.vertices = new double[vertices.length][4];
-    for(int i = 0; i < vertexData.worldVertices.length; i++) {
-      vertexData.vertices[i] = vertexData.worldVertices[i];
+public class RenderPipeline {  
+  public void initialize(double[][] vertices, double[][] surfaceColors, double[] cameraPos, double[] cameraDirection, int width, int height, double[] lightPosition, double[] lightDirection) {
+    VertexData.worldVertices = vertices;
+    VertexData.vertices = new double[vertices.length][4];
+    for(int i = 0; i < VertexData.worldVertices.length; i++) {
+      VertexData.vertices[i] = VertexData.worldVertices[i];
     }
-    vertexData.width = width;
-    vertexData.height = height;
-    vertexData.cameraPosition = cameraPos;
-    vertexData.lookDirection = cameraDirection;
-    vertexData.surfaceColors = surfaceColors;
-    vertexData.drawTriangles = new boolean[vertexData.vertices.length/3];
+    FrameData.width = width;
+    FrameData.height = height;
+    VertexData.cameraPosition = cameraPos;
+    VertexData.lookDirection = cameraDirection;
+    VertexData.surfaceColors = surfaceColors;
+    VertexData.drawTriangles = new boolean[VertexData.vertices.length/3];
+    VertexData.lightPosition = lightPosition;
+    VertexData.lightDirection = lightDirection;
   }
 
   public void projectVertices() {
@@ -33,7 +30,7 @@ public class RenderPipeline {
     double far = 1000;
     double fovRad = 90/2 * (3.1415/180);
     double fov = 1/Math.tan(fovRad);
-    double aspectRatio = (double)vertexData.height/(double)vertexData.width;
+    double aspectRatio = (double)FrameData.height/(double)FrameData.width;
 
     double[][] projectionMatrix = new double[][] {
       { aspectRatio * fov, 0, 0, 0 },
@@ -42,10 +39,10 @@ public class RenderPipeline {
       { 0, 0, (-far * near)/(far-near), 0 },
     };
 
-    for(int i = 0; i < vertexData.vertices.length; i++) {
-      vertexData.vertices[i] = multiplyVectorMatrix4(vertexData.vertices[i], projectionMatrix);
+    for(int i = 0; i < VertexData.vertices.length; i++) {
+      VertexData.vertices[i] = multiplyVectorMatrix4(VertexData.vertices[i], projectionMatrix);
     }
-    return;
+    VertexData.lightPosition = multiplyVectorMatrix4(VertexData.lightPosition, projectionMatrix);
   }
 
   private double[] multiplyVectorMatrix4(double[] vector, double[][] matrix) {
@@ -60,15 +57,15 @@ public class RenderPipeline {
   }
 
   public void computeSurfaceNormals() {
-    vertexData.surfaceNormals = new double[vertexData.vertices.length/3][4];
-    for(int i = 0; i < vertexData.vertices.length; i += 3) {
-      double[] v0 = vertexData.vertices[i];
-      double[] v1 = vertexData.vertices[i+1];
-      double[] v2 = vertexData.vertices[i+2];
+    VertexData.surfaceNormals = new double[VertexData.vertices.length/3][4];
+    for(int i = 0; i < VertexData.vertices.length; i += 3) {
+      double[] v0 = VertexData.vertices[i];
+      double[] v1 = VertexData.vertices[i+1];
+      double[] v2 = VertexData.vertices[i+2];
 
-      vertexData.surfaceNormals[i/3] = computeNormalVector(v0, v1, v2);
+      VertexData.surfaceNormals[i/3] = computeNormalVector(v0, v1, v2);
     }
-    //System.out.println(String.format("%f, %f, %f", vertexData.surfaceNormals[0][0], vertexData.surfaceNormals[0][1], vertexData.surfaceNormals[0][2]));
+    //System.out.println(String.format("%f, %f, %f", VertexData.surfaceNormals[0][0], VertexData.surfaceNormals[0][1], VertexData.surfaceNormals[0][2]));
   }
 
   public double[] computeNormalVector(double[] v0, double[] v1, double[] v2) {
@@ -94,35 +91,36 @@ public class RenderPipeline {
 
   public void applyVertexTransformations(VertexTransform[] vertexTransforms) {
     for (VertexTransform vertexTransform : vertexTransforms) {
-      vertexTransform.compute(vertexData);
+      vertexTransform.compute();
     }
   }
 
   public void applyVertexShaders(VertexShader[] vertexShaders) {
     for (VertexShader shader : vertexShaders) {
-      shader.compute(vertexData);
+      shader.compute();
     }
   }
 
   public void scan(boolean drawEdges, boolean fill) {
-    frameBuffer = new double[vertexData.width][vertexData.height][4];
-    depthMap = new double[vertexData.width][vertexData.height];
-    for(int x = 0; x < vertexData.width; x++) {
-      for(int y = 0; y < vertexData.height; y++) {
-        depthMap[x][y] = 1;
+    FrameData.frameBuffer = new double[FrameData.width][FrameData.height][4];
+    FrameData.depthMap = new double[FrameData.width][FrameData.height];
+    FrameData.triangleAtPixel = new int[FrameData.width][FrameData.height];
+    for(int x = 0; x < FrameData.width; x++) {
+      for(int y = 0; y < FrameData.height; y++) {
+        FrameData.depthMap[x][y] = 1;
       }
     }
     if(fill) {
-      for(int i = 0; i < vertexData.vertices.length; i += 3) {
-        if(vertexData.drawTriangles[i/3]) {
-          double[] v0 = vertexData.vertices[i];
-          double[] v1 = vertexData.vertices[i+1];
-          double[] v2 = vertexData.vertices[i+2];
+      for(int i = 0; i < VertexData.vertices.length; i += 3) {
+        if(VertexData.drawTriangles[i/3]) {
+          double[] v0 = VertexData.vertices[i];
+          double[] v1 = VertexData.vertices[i+1];
+          double[] v2 = VertexData.vertices[i+2];
           
           int minX = (int)Math.max(Math.min(v0[0],Math.min(v1[0],v2[0]))-1, (double)0);
           int minY = (int)Math.max(Math.min(v0[1],Math.min(v1[1],v2[1]))-1, (double)0);
-          int maxX = (int)Math.min(Math.max(v0[0],Math.max(v1[0],v2[0]))+1, vertexData.width);
-          int maxY = (int)Math.min(Math.max(v0[1],Math.max(v1[1],v2[1]))+1, vertexData.width);
+          int maxX = (int)Math.min(Math.max(v0[0],Math.max(v1[0],v2[0]))+1, FrameData.width);
+          int maxY = (int)Math.min(Math.max(v0[1],Math.max(v1[1],v2[1]))+1, FrameData.width);
 
           for(int x = minX; x < maxX; x++) {
             for(int y = minY; y < maxY; y++) {
@@ -130,9 +128,10 @@ public class RenderPipeline {
                 double[] normal = computeNormalVector(v0, v1, v2);
                 double k = -(normal[0]*v0[0] + normal[1]*v0[1] + normal[2]*v0[2]);
                 double z = -(x*normal[0] + y*normal[1] + k)/normal[2];
-                if(z < depthMap[x][y]) {
-                  frameBuffer[x][y] = vertexData.surfaceColors[i/3];
-                  depthMap[x][y] = z;
+                if(z < FrameData.depthMap[x][y]) {
+                  FrameData.frameBuffer[x][y] = VertexData.surfaceColors[i/3];
+                  FrameData.depthMap[x][y] = z;
+                  FrameData.triangleAtPixel[x][y] = i/3;
                 }
               }
             }
@@ -141,15 +140,15 @@ public class RenderPipeline {
       }
     }
     if(drawEdges) {
-      for(int i = 0; i < vertexData.vertices.length; i += 3) {
-        if(vertexData.drawTriangles[i/3]) {
-          double[] v0 = vertexData.vertices[i];
-          double[] v1 = vertexData.vertices[i+1];
-          double[] v2 = vertexData.vertices[i+2];
+      for(int i = 0; i < VertexData.vertices.length; i += 3) {
+        if(VertexData.drawTriangles[i/3]) {
+          double[] v0 = VertexData.vertices[i];
+          double[] v1 = VertexData.vertices[i+1];
+          double[] v2 = VertexData.vertices[i+2];
   
-          drawLine(v1, v0, frameBuffer);
-          drawLine(v2, v1, frameBuffer);
-          drawLine(v0, v2, frameBuffer);
+          drawLine(v1, v0, FrameData.frameBuffer);
+          drawLine(v2, v1, FrameData.frameBuffer);
+          drawLine(v0, v2, FrameData.frameBuffer);
         }
       }
     }
@@ -167,7 +166,7 @@ public class RenderPipeline {
       int error = dx + dy;
 
       while(true) {
-          if(v0.x < vertexData.width && v0.y < vertexData.height && v0.x >= 0 && v0.y >= 0) {
+          if(v0.x < FrameData.width && v0.y < FrameData.height && v0.x >= 0 && v0.y >= 0) {
             frameBuffer[v0.x][v0.y] = new double[] {
               1, 0, 0, 1
             };
@@ -208,16 +207,16 @@ public class RenderPipeline {
 
   public void applyFragmentShaders(FragmentShader[] fragmentShaders) {
     for (FragmentShader shader : fragmentShaders) {
-      this.frameBuffer = shader.compute(frameBuffer, depthMap, vertexData.width, vertexData.height);
+      shader.compute();
     }
   }
 
   public void display(BufferedImage frame) {
-    int[] stackedFrame = new int[vertexData.width*vertexData.height];
-    for(int x = 0; x < vertexData.width; x++) {
-      for(int y = 0; y < vertexData.height; y++) {
-        double[] color = frameBuffer[x][y];
-        stackedFrame[y*vertexData.width+x] = getIntFromColor(
+    int[] stackedFrame = new int[FrameData.width*FrameData.height];
+    for(int x = 0; x < FrameData.width; x++) {
+      for(int y = 0; y < FrameData.height; y++) {
+        double[] color = FrameData.frameBuffer[x][y];
+        stackedFrame[y*FrameData.width+x] = getIntFromColor(
           (int)(Math.min(color[0],1)*255), 
           (int)(Math.min(color[1],1)*255), 
           (int)(Math.min(color[2],1)*255), 
@@ -225,7 +224,7 @@ public class RenderPipeline {
         );
       }
     }
-    frame.setRGB(0, 0, vertexData.width, vertexData.height, stackedFrame, 0, vertexData.width);
+    frame.setRGB(0, 0, FrameData.width, FrameData.height, stackedFrame, 0, FrameData.width);
   }
 
   int getIntFromColor(int alpha, int red, int green, int blue){

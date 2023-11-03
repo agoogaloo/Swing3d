@@ -1,12 +1,13 @@
 package engine.rendering;
 
 public class VertexData {
-  public int width, height;
-  public double[][] worldVertices;
-  public double[][] vertices;
-  public double[][] surfaceNormals;
-  public double[][] surfaceColors;
-  public double[] cameraPosition;
-  public double[] lookDirection;
-  public boolean[] drawTriangles;
+  public static double[][] worldVertices;
+  public static double[][] vertices;
+  public static double[][] surfaceNormals;
+  public static double[][] surfaceColors;
+  public static boolean[] drawTriangles;
+  public static double[] cameraPosition;
+  public static double[] lookDirection;
+  public static double[] lightPosition;
+  public static double[] lightDirection;
 }

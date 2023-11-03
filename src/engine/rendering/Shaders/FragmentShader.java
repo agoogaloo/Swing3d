@@ -1,9 +1,11 @@
 package engine.rendering.Shaders;
 
+import engine.rendering.VertexData;
+
 public abstract class FragmentShader {
   //TODO use vertexData
   //TODO make shaders write to vertex data instead of returning
-  public abstract double[][][] compute(double[][][] frameBuffer, double[][] depthBuffer, int width, int height);
+  public abstract void compute();
 
   double lerp(double a, double b, double t) {
     return a + (b-a)*t;

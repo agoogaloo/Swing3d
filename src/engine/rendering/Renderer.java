@@ -70,7 +70,12 @@ public class Renderer {
       new ClipTriangles(new double[] { (double)frame.getWidth()-1, 0, 0 }, new double[] { -1, 0, 0 } ),
     };
     
-    renderPipeline.initialize(vertexPositions, surfaceColors, cameraPosition, cameraDirection, frame.getWidth(), frame.getHeight());
+    renderPipeline.initialize(
+      vertexPositions, surfaceColors, 
+      cameraPosition, cameraDirection, 
+      frame.getWidth(), frame.getHeight(), 
+      new double[] { 0, 0, 0, 1 }, new double[] { 0, 0, 1, 1 }
+    );
     renderPipeline.computeSurfaceNormals();
     renderPipeline.applyVertexTransformations(preProjection);
     renderPipeline.projectVertices();
