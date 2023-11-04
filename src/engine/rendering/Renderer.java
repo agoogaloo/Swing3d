@@ -15,6 +15,7 @@ import engine.rendering.VertexTramsforms.NormalizeClipVertices;
 import engine.rendering.VertexTramsforms.VertexTransform;
 import engine.rendering.VertexTramsforms.WindowTransform;
 import engine.shapes.Mesh;
+import engine.shapes.Vector;
 
 public class Renderer {
   double[][] vertexPositions;
@@ -39,9 +40,10 @@ public class Renderer {
       new WindowTransform()
     };
     this.vertexShaders = new VertexShader[] {
-      new LinearLighting()
+
     };
     this.fragmentShaders = new FragmentShader[] {
+      new LinearLighting(),
       //new ExFragmentShader(),
       new DepthShader()
     };
@@ -74,7 +76,7 @@ public class Renderer {
       vertexPositions, surfaceColors, 
       cameraPosition, cameraDirection, 
       frame.getWidth(), frame.getHeight(), 
-      new double[] { 0, 0, 0, 1 }, new double[] { 0, 0, 1, 1 }
+      new double[][] { { 0, 0, 0, 1 }, { 0, 1, 0, 1 }, { 1, 0, 0, 1 }, }
     );
     renderPipeline.computeSurfaceNormals();
     renderPipeline.applyVertexTransformations(preProjection);

@@ -8,8 +8,10 @@ public class NormalizeClipVertices extends VertexTransform {
       VertexData.vertices[i] = new double[] {
         (VertexData.vertices[i][0]+1)/2, (VertexData.vertices[i][1]+1)/2, VertexData.vertices[i][2], VertexData.vertices[i][3]
       };
-      VertexData.lightPosition = new double[] {
-        (VertexData.lightDirection[0]+1)/2, (VertexData.lightDirection[1]+1)/2, VertexData.lightDirection[2], VertexData.lightDirection[3]
+    }
+    for(int i = 0; i < VertexData.lightPlane.length; i++) {
+      VertexData.lightPlane[i] = new double[] {
+        (VertexData.lightPlane[i][0]+1)/2, (VertexData.lightPlane[i][1]+1)/2, VertexData.lightPlane[i][2], VertexData.lightPlane[i][3]
       };
     }
   }

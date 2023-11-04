@@ -15,6 +15,8 @@ public class CameraTransform extends VertexTransform {
     for(int i = 0; i < VertexData.vertices.length; i++) {
       VertexData.vertices[i] = Matrix.multiplyVectorMatrix444(VertexData.vertices[i], viewMatrix);
     }
-    VertexData.lightPosition = Matrix.multiplyVectorMatrix444(VertexData.lightPosition, viewMatrix);
+    VertexData.lightPlane[0] = Matrix.multiplyVectorMatrix444(VertexData.lightPlane[0], viewMatrix);
+    VertexData.lightPlane[1] = Matrix.multiplyVectorMatrix444(VertexData.lightPlane[1], viewMatrix);
+    VertexData.lightPlane[2] = Matrix.multiplyVectorMatrix444(VertexData.lightPlane[2], viewMatrix);
   }
 }

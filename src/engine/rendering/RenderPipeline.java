@@ -9,7 +9,7 @@ import engine.shapes.Vector;
 import engine.shapes.Vector2;
 
 public class RenderPipeline {  
-  public void initialize(double[][] vertices, double[][] surfaceColors, double[] cameraPos, double[] cameraDirection, int width, int height, double[] lightPosition, double[] lightDirection) {
+  public void initialize(double[][] vertices, double[][] surfaceColors, double[] cameraPos, double[] cameraDirection, int width, int height, double[][] lightPlane) {
     VertexData.worldVertices = vertices;
     VertexData.vertices = new double[vertices.length][4];
     for(int i = 0; i < VertexData.worldVertices.length; i++) {
@@ -21,8 +21,7 @@ public class RenderPipeline {
     VertexData.lookDirection = cameraDirection;
     VertexData.surfaceColors = surfaceColors;
     VertexData.drawTriangles = new boolean[VertexData.vertices.length/3];
-    VertexData.lightPosition = lightPosition;
-    VertexData.lightDirection = lightDirection;
+    VertexData.lightPlane = lightPlane;
   }
 
   public void projectVertices() {
@@ -42,7 +41,9 @@ public class RenderPipeline {
     for(int i = 0; i < VertexData.vertices.length; i++) {
       VertexData.vertices[i] = multiplyVectorMatrix4(VertexData.vertices[i], projectionMatrix);
     }
-    VertexData.lightPosition = multiplyVectorMatrix4(VertexData.lightPosition, projectionMatrix);
+    VertexData.lightPlane[0] = multiplyVectorMatrix4(VertexData.lightPlane[0], projectionMatrix);
+    VertexData.lightPlane[1] = multiplyVectorMatrix4(VertexData.lightPlane[1], projectionMatrix);
+    VertexData.lightPlane[2] = multiplyVectorMatrix4(VertexData.lightPlane[2], projectionMatrix);
   }
 
   private double[] multiplyVectorMatrix4(double[] vector, double[][] matrix) {
@@ -65,6 +66,7 @@ public class RenderPipeline {
 
       VertexData.surfaceNormals[i/3] = computeNormalVector(v0, v1, v2);
     }
+    VertexData.lightDirection = computeNormalVector(VertexData.lightPlane[0], VertexData.lightPlane[1], VertexData.lightPlane[2]);
     //System.out.println(String.format("%f, %f, %f", VertexData.surfaceNormals[0][0], VertexData.surfaceNormals[0][1], VertexData.surfaceNormals[0][2]));
   }
 
@@ -108,6 +110,7 @@ public class RenderPipeline {
     for(int x = 0; x < FrameData.width; x++) {
       for(int y = 0; y < FrameData.height; y++) {
         FrameData.depthMap[x][y] = 1;
+        FrameData.triangleAtPixel[x][y] = -1;
       }
     }
     if(fill) {
