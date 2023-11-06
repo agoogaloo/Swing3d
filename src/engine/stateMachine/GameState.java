@@ -6,10 +6,12 @@ import java.io.FileNotFoundException;
 import java.util.ArrayList;
 import java.util.Scanner;
 
+import engine.rendering.GameObject;
 import engine.rendering.Renderer;
 import engine.shapes.Matrix;
 import engine.shapes.Mesh;
 import engine.shapes.Vector;
+import engine.shapes.Vector3;
 
 public class GameState implements State {
     Renderer renderer;
@@ -47,6 +49,8 @@ public class GameState implements State {
 
     Mesh shipMesh, cube, axisMesh;
 
+    GameObject cubeObject;
+
     @Override
     public void start(State prevState) {
         startTime = System.currentTimeMillis();
@@ -54,31 +58,25 @@ public class GameState implements State {
         shipMesh = loadObjectFromFile("VideoShip.obj");
         axisMesh = loadObjectFromFile("axis.obj");
 
-        shipMesh.rotate(new double[] { 0, 45, 45 });
-        cube.translate(new double[] { 0, 0, 2 });
-        shipMesh.translate(new double[] { 0, 0, 8 });
-        axisMesh.translate(new double[] { -3, 0, 0 });
-
-        meshes = new Mesh[] {
-            cube,
-            shipMesh,
-        };
+        cubeObject = new GameObject(shipMesh);
+        cubeObject.transform.translate(new Vector3(0, 0, 8));
 
         this.renderer = new Renderer();
     }
 
     @Override
     public void update() {
+        double elapsedTime = (System.currentTimeMillis() - startTime)/1000;
 
+        cubeObject.transform.translate(new Vector3(0, 0, -0.01));
+        cubeObject.transform.rotate(new Vector3(1, 1, 1));
     }
 
     @Override
     public void render(BufferedImage image) {
-        double elapsedTime = (System.currentTimeMillis() - startTime)/1000;
-        cube.translate(new double[] { -0.5, -0.5, -2.5 });
-        cube.rotate(new double[] { Math.cos(elapsedTime % (3.14159*2)), Math.cos(elapsedTime % (3.14159*2)), Math.sin(elapsedTime % (3.14159*2)) });
-        cube.translate(new double[] { 0.5, 0.5, 2.5 });
-        shipMesh.rotate(new double[] { 0, 0, 1 });
+        meshes = new Mesh[] {
+            cubeObject.getWorldMesh()
+        };
 
         renderer.render(image, meshes, cameraPosition, cameraDirection);
     }

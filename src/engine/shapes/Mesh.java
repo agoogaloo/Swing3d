@@ -9,21 +9,21 @@ public class Mesh {
     this.colors = colors;
   }
 
-  public void translate(double[] distance) {
+  public void translate(Vector3 distance) {
     for(int j = 0; j < triangles.length; j++) {
       double[][] triangle = triangles[j];
       for (int k = 0; k < triangle.length; k++) {
-        triangle[k][0] += distance[0];
-        triangle[k][1] += distance[1];
-        triangle[k][2] += distance[2];
+        triangle[k][0] += distance.x;
+        triangle[k][1] += distance.y;
+        triangle[k][2] += distance.z;
       }
     }
   }
 
-  public void rotate(double[] angles) {
-    double xAngle = angles[0] * 3.1415/180;
-    double yAngle = angles[1] * 3.1415/180;
-    double zAngle = angles[2] * 3.1415/180;
+  public void rotate(Vector3 angles) {
+    double xAngle = angles.x * 3.1415/180;
+    double yAngle = angles.y * 3.1415/180;
+    double zAngle = angles.z * 3.1415/180;
 
     double[][] xRotationMatrix = new double[][] {
       { 1, 0, 0, 0 },
