@@ -49,19 +49,26 @@ public class Renderer {
     };
   }
 
-  public void render(BufferedImage frame, Mesh[] meshes, int vertexCount, double[] cameraPosition, double[] cameraDirection) {
+  public void render(BufferedImage frame, Mesh[] meshes, double[] cameraPosition, double[] cameraDirection) {
+
+    int vertexCount = 0;
+    for(int i = 0; i < meshes.length; i++) {
+      vertexCount += meshes[i].triangles.length*3;
+    }
     this.vertexPositions = new double[vertexCount][4];
     this.surfaceColors = new double[vertexCount/3][4];
+    int vertex = 0;
     for(int i = 0; i < meshes.length; i++) {
       Mesh mesh = meshes[i];
       for(int j = 0; j < mesh.triangles.length; j++) {
         double[][] triangle = mesh.triangles[j];
         for (int k = 0; k < triangle.length; k++) {
-          this.vertexPositions[j*3+k] = new double[] {
+          this.vertexPositions[vertex] = new double[] {
             triangle[k][0], triangle[k][1], triangle[k][2], 1
           };
+          vertex++;
         }
-        surfaceColors[j] = mesh.colors[j];
+        surfaceColors[(vertex-1)/3] = mesh.colors[j];
       }
     }
 

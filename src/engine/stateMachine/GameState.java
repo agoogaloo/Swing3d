@@ -45,14 +45,26 @@ public class GameState implements State {
         { 1, 0, 0, 1 }, { 1, 0, 0, 1 },
     });
 
-    Mesh shipMesh;
+    Mesh shipMesh, cube, axisMesh;
 
     @Override
     public void start(State prevState) {
         startTime = System.currentTimeMillis();
-        this.renderer = new Renderer();
+        cube = Mesh.copy(unitCube);
         shipMesh = loadObjectFromFile("VideoShip.obj");
-        // shipMesh = loadObjectFromFile("axis.obj");
+        axisMesh = loadObjectFromFile("axis.obj");
+
+        shipMesh.rotate(new double[] { 0, 45, 45 });
+        cube.translate(new double[] { 0, 0, 2 });
+        shipMesh.translate(new double[] { 0, 0, 8 });
+        axisMesh.translate(new double[] { -3, 0, 0 });
+
+        meshes = new Mesh[] {
+            cube,
+            shipMesh,
+        };
+
+        this.renderer = new Renderer();
     }
 
     @Override
@@ -63,23 +75,12 @@ public class GameState implements State {
     @Override
     public void render(BufferedImage image) {
         double elapsedTime = (System.currentTimeMillis() - startTime)/1000;
-        Mesh cube = Mesh.copy(shipMesh);
-        cube.translate(new double[] { -0.5, -0.5, -0.5 });
-        cube.rotate(new double[] { Math.cos(elapsedTime % (3.14159*2))*150, Math.cos(elapsedTime % (3.14159*2))*100, Math.sin(elapsedTime % (3.14159*2))*75 });
-        // // cube.rotate(new double[] { 90, 45, 90 });
-        // cube.rotate(new double[] { 90, 45, 90 });
-        // cube.translate(new double[] { 0, 1, 3-elapsedTime });
-        cube.translate(new double[] { 0, 0, 5+elapsedTime });
+        cube.translate(new double[] { -0.5, -0.5, -2.5 });
+        cube.rotate(new double[] { Math.cos(elapsedTime % (3.14159*2)), Math.cos(elapsedTime % (3.14159*2)), Math.sin(elapsedTime % (3.14159*2)) });
+        cube.translate(new double[] { 0.5, 0.5, 2.5 });
+        shipMesh.rotate(new double[] { 0, 0, 1 });
 
-        // cameraForward(0.1);
-        // rotateCamera(-1);
-        // cameraPosition = new double[] { 1, 1, -elapsedTime };
-
-        meshes = new Mesh[] {
-            cube
-        };
-
-        renderer.render(image, meshes, meshes[0].triangles.length*3, cameraPosition, cameraDirection);
+        renderer.render(image, meshes, cameraPosition, cameraDirection);
     }
 
     public void cameraForward(double amount) {
