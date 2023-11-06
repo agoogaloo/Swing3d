@@ -43,7 +43,7 @@ public class Renderer {
 
     };
     this.fragmentShaders = new FragmentShader[] {
-      new LinearLighting(),
+      //new LinearLighting(),
       //new ExFragmentShader(),
       new DepthShader()
     };

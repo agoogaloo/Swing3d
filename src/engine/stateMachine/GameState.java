@@ -49,7 +49,7 @@ public class GameState implements State {
 
     Mesh shipMesh, cube, axisMesh;
 
-    GameObject cubeObject;
+    GameObject cubeObject, ground;
 
     @Override
     public void start(State prevState) {
@@ -58,8 +58,15 @@ public class GameState implements State {
         shipMesh = loadObjectFromFile("VideoShip.obj");
         axisMesh = loadObjectFromFile("axis.obj");
 
-        cubeObject = new GameObject(shipMesh);
-        cubeObject.transform.translate(new Vector3(0, 0, 8));
+        cubeObject = new GameObject(cube);
+        ground = new GameObject(cube);
+
+        cubeObject.transform.translate(new Vector3(0, -2, 2));
+        cubeObject.velocity = new Vector3(0, 0.05, 0);
+        
+        ground.transform.translate(new Vector3(0, 1, 4));
+        ground.transform.setScale(new Vector3(10, 1, 10));
+        ground.transform.rotate(new Vector3(0, 0, 0));
 
         this.renderer = new Renderer();
     }
@@ -68,14 +75,18 @@ public class GameState implements State {
     public void update() {
         double elapsedTime = (System.currentTimeMillis() - startTime)/1000;
 
-        cubeObject.transform.translate(new Vector3(0, 0, -0.01));
-        cubeObject.transform.rotate(new Vector3(1, 1, 1));
+        // cubeObject.transform.rotate(new Vector3(1, 1, 1));
+        // ground.transform.rotate(new Vector3(1, 1, 1));
+
+        cubeObject.update();
+        ground.update();
     }
 
     @Override
     public void render(BufferedImage image) {
         meshes = new Mesh[] {
-            cubeObject.getWorldMesh()
+            cubeObject.getWorldMesh(),
+            ground.getWorldMesh()
         };
 
         renderer.render(image, meshes, cameraPosition, cameraDirection);

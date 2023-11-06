@@ -20,6 +20,17 @@ public class Mesh {
     }
   }
 
+  public void scale(Vector3 scale) {
+    for(int j = 0; j < triangles.length; j++) {
+      double[][] triangle = triangles[j];
+      for (int k = 0; k < triangle.length; k++) {
+        triangle[k][0] *= scale.x;
+        triangle[k][1] *= scale.y;
+        triangle[k][2] *= scale.z;
+      }
+    }
+  }
+
   public void rotate(Vector3 angles) {
     double xAngle = angles.x * 3.1415/180;
     double yAngle = angles.y * 3.1415/180;
