@@ -8,6 +8,7 @@ import java.util.Scanner;
 
 import engine.rendering.GameObject;
 import engine.rendering.Renderer;
+import engine.rendering.Components.Rigidbody;
 import engine.shapes.Matrix;
 import engine.shapes.Mesh;
 import engine.shapes.Vector;
@@ -60,6 +61,11 @@ public class GameState implements State {
 
         cubeObject = new GameObject(cube);
         ground = new GameObject(cube);
+
+        cubeObject.addComponent(new Rigidbody());
+
+        Rigidbody rb = (Rigidbody)cubeObject.getComponent(Rigidbody.class);
+        rb.velocity = new Vector3(0, 0.1, 0);
 
         cubeObject.transform.translate(new Vector3(0, -2, 2));
         cubeObject.velocity = new Vector3(0, 0.05, 0);

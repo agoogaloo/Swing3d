@@ -33,6 +33,15 @@ public class GameObject {
     component.gameObject = this;
   }
 
+  public Component getComponent(Class<?> type) {
+    for (Component component : components) {
+      if(component.getClass() == type) {
+        return component;
+      }
+    }
+    return new Component();
+  }
+
   public void update() {
     for (Component component : components) {
       component.update();
