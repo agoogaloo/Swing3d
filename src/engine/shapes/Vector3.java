@@ -21,4 +21,8 @@ public class Vector3 {
   public Vector3 negative() {
     return new Vector3(-x, -y, -z);
   }
+
+  public double[] toDouble() {
+    return new double[] { x, y, z };
+  }
 }

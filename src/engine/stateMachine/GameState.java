@@ -6,6 +6,8 @@ import java.io.FileNotFoundException;
 import java.util.ArrayList;
 import java.util.Scanner;
 
+import engine.CollisionData;
+import engine.Debug;
 import engine.rendering.GameObject;
 import engine.rendering.Renderer;
 import engine.rendering.Components.Rigidbody;
@@ -16,7 +18,6 @@ import engine.shapes.Vector3;
 
 public class GameState implements State {
     Renderer renderer;
-    Mesh[] meshes;
     double startTime;
     double[] cameraPosition = new double[] { 0, 0, 0 };
     double[] cameraDirection = new double[] { 0, 0, 1 };
@@ -65,16 +66,22 @@ public class GameState implements State {
         cubeObject.addComponent(new Rigidbody());
 
         Rigidbody rb = (Rigidbody)cubeObject.getComponent(Rigidbody.class);
-        rb.velocity = new Vector3(0, 0.1, 0);
+        rb.velocity = new Vector3(0.01, 0.05, -0.025);
 
         cubeObject.transform.translate(new Vector3(0, -2, 2));
-        cubeObject.velocity = new Vector3(0, 0.05, 0);
+        cubeObject.transform.rotate(new Vector3(0, 45, 45));
+        cubeObject.transform.setScale(new Vector3(0.5, 0.5, 0.5));
         
         ground.transform.translate(new Vector3(0, 1, 4));
         ground.transform.setScale(new Vector3(10, 1, 10));
         ground.transform.rotate(new Vector3(0, 0, 0));
 
         this.renderer = new Renderer();
+
+        CollisionData.meshes = new Mesh[] {
+            cubeObject.getWorldMesh(),
+            ground.getWorldMesh()
+        };
     }
 
     @Override
@@ -90,12 +97,13 @@ public class GameState implements State {
 
     @Override
     public void render(BufferedImage image) {
-        meshes = new Mesh[] {
+        CollisionData.meshes = new Mesh[] {
             cubeObject.getWorldMesh(),
             ground.getWorldMesh()
         };
 
-        renderer.render(image, meshes, cameraPosition, cameraDirection);
+        renderer.render(image, CollisionData.meshes, cameraPosition, cameraDirection);
+        Debug.clearPoints();
     }
 
     public void cameraForward(double amount) {

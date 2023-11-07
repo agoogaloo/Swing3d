@@ -12,7 +12,7 @@ public class GameObject {
   public Transform transform;
   public ArrayList<Component> components = new ArrayList<Component>();
   public Mesh mesh;
-  public Vector3 velocity;
+  public Mesh worldMesh;
 
   public GameObject(Mesh mesh) {
     this(mesh, new Vector3(0, 0, 0), new Vector3(0, 0, 0));
@@ -25,7 +25,6 @@ public class GameObject {
   public GameObject(Mesh mesh, Vector3 position, Vector3 rotation) {
     this.transform = new Transform(this, position, rotation);
     this.mesh = mesh;
-    this.velocity = new Vector3(0, 0, 0);
   }
 
   public void addComponent(Component component) {
@@ -49,13 +48,13 @@ public class GameObject {
   }
 
   public Mesh getWorldMesh() {
-    Mesh outputMesh = Mesh.copy(mesh);
-    outputMesh.translate(Vector3.halfUnit.negative());
-    outputMesh.scale(transform.scale);
-    outputMesh.rotate(transform.rotation);
-    outputMesh.translate(Vector3.halfUnit);
-    outputMesh.translate(transform.position);
+    worldMesh = Mesh.copy(mesh);
+    worldMesh.translate(Vector3.halfUnit.negative());
+    worldMesh.scale(transform.scale);
+    worldMesh.rotate(transform.rotation);
+    worldMesh.translate(Vector3.halfUnit);
+    worldMesh.translate(transform.position);
 
-    return outputMesh;
+    return worldMesh;
   }
 }
