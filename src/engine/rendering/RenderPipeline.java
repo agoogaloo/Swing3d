@@ -2,6 +2,7 @@ package engine.rendering;
 
 import java.awt.image.BufferedImage;
 
+import engine.Debug;
 import engine.rendering.Shaders.FragmentShader;
 import engine.rendering.Shaders.VertexShader;
 import engine.rendering.VertexTramsforms.VertexTransform;
@@ -44,6 +45,10 @@ public class RenderPipeline {
     VertexData.lightPlane[0] = multiplyVectorMatrix4(VertexData.lightPlane[0], projectionMatrix);
     VertexData.lightPlane[1] = multiplyVectorMatrix4(VertexData.lightPlane[1], projectionMatrix);
     VertexData.lightPlane[2] = multiplyVectorMatrix4(VertexData.lightPlane[2], projectionMatrix);
+
+    for(int i = 0; i < Debug.points.size(); i++) {
+      Debug.points.set(i, multiplyVectorMatrix4(Debug.points.get(i), projectionMatrix));
+    }
   }
 
   private double[] multiplyVectorMatrix4(double[] vector, double[][] matrix) {
@@ -103,7 +108,7 @@ public class RenderPipeline {
     }
   }
 
-  public void scan(boolean drawEdges, boolean fill) {
+  public void scan(boolean drawEdges, boolean fill, boolean debug) {
     FrameData.frameBuffer = new double[FrameData.width][FrameData.height][4];
     FrameData.depthMap = new double[FrameData.width][FrameData.height];
     FrameData.triangleAtPixel = new int[FrameData.width][FrameData.height];
@@ -152,6 +157,14 @@ public class RenderPipeline {
           drawLine(v1, v0, FrameData.frameBuffer);
           drawLine(v2, v1, FrameData.frameBuffer);
           drawLine(v0, v2, FrameData.frameBuffer);
+        }
+      }
+    }
+    if(debug) {
+      for (double[] point : Debug.points) {
+        int x = (int)point[0]; int y = (int)point[1];
+        if(x >= 0 && x < FrameData.width && y >= 0 && y < FrameData.height) {
+          FrameData.frameBuffer[(int)point[0]][(int)point[1]] = new double[] { 1, 0, 1, 0.75 };
         }
       }
     }

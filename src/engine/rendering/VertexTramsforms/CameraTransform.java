@@ -1,5 +1,8 @@
 package engine.rendering.VertexTramsforms;
 
+import java.util.ArrayList;
+
+import engine.Debug;
 import engine.rendering.VertexData;
 import engine.shapes.Matrix;
 import engine.shapes.Vector;
@@ -18,5 +21,10 @@ public class CameraTransform extends VertexTransform {
     VertexData.lightPlane[0] = Matrix.multiplyVectorMatrix444(VertexData.lightPlane[0], viewMatrix);
     VertexData.lightPlane[1] = Matrix.multiplyVectorMatrix444(VertexData.lightPlane[1], viewMatrix);
     VertexData.lightPlane[2] = Matrix.multiplyVectorMatrix444(VertexData.lightPlane[2], viewMatrix);
+
+    Debug.points = new ArrayList<double[]>();
+    for(int i = 0; i < Debug.worldPoints.size(); i++) {
+      Debug.points.add(Matrix.multiplyVectorMatrix444(Debug.worldPoints.get(i), viewMatrix));
+    }
   }
 }

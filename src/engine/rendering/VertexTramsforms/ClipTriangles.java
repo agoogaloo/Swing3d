@@ -51,14 +51,14 @@ public class ClipTriangles extends VertexTransform {
         triangleCount++;
       } else if(insideCount == 1) {
         outputVertices[triangleCount*3] = insidePoints[0];
-        outputVertices[triangleCount*3+1] = Vector.planeIntersection(planePoint, planeNormal, insidePoints[0], outsidePoints[0]);
-        outputVertices[triangleCount*3+2] = Vector.planeIntersection(planePoint, planeNormal, insidePoints[0], outsidePoints[1]);
+        outputVertices[triangleCount*3+1] = Vector.planeIntersection(planePoint, planeNormal, insidePoints[0], outsidePoints[0], false);
+        outputVertices[triangleCount*3+2] = Vector.planeIntersection(planePoint, planeNormal, insidePoints[0], outsidePoints[1], false);
         outputNormals[triangleCount] = VertexData.surfaceNormals[i/3];
         outputColors[triangleCount] = VertexData.surfaceColors[i/3];
         outputTemp[triangleCount] = VertexData.drawTriangles[i/3];
         triangleCount++;     
       } else {
-        v2 = Vector.planeIntersection(planePoint, planeNormal, insidePoints[0], outsidePoints[0]);
+        v2 = Vector.planeIntersection(planePoint, planeNormal, insidePoints[0], outsidePoints[0], false);
         outputVertices[triangleCount*3] = insidePoints[0];
         outputVertices[triangleCount*3+1] = insidePoints[1];
         outputVertices[triangleCount*3+2] = v2;
@@ -68,7 +68,7 @@ public class ClipTriangles extends VertexTransform {
         triangleCount++;        
         outputVertices[triangleCount*3] = insidePoints[1];
         outputVertices[triangleCount*3+1] = v2;
-        outputVertices[triangleCount*3+2] = Vector.planeIntersection(planePoint, planeNormal, insidePoints[1], outsidePoints[0]);
+        outputVertices[triangleCount*3+2] = Vector.planeIntersection(planePoint, planeNormal, insidePoints[1], outsidePoints[0], false);
         outputNormals[triangleCount] = VertexData.surfaceNormals[i/3];
         outputColors[triangleCount] = VertexData.surfaceColors[i/3];
         outputTemp[triangleCount] = VertexData.drawTriangles[i/3];

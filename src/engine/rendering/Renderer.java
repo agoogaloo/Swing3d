@@ -91,7 +91,7 @@ public class Renderer {
     renderPipeline.applyVertexTransformations(postProjection);
     renderPipeline.applyVertexTransformations(screenClipping);
     renderPipeline.applyVertexShaders(vertexShaders);
-    renderPipeline.scan(false, true);
+    renderPipeline.scan(false, true, true);
     renderPipeline.applyFragmentShaders(fragmentShaders);
     renderPipeline.display(frame);
   }
