@@ -1,13 +1,15 @@
 package engine.rendering.Components;
 
+import engine.rendering.GameObject;
 import engine.shapes.Vector3;
 
-public class Transform {
+public class Transform extends Component {
   public Vector3 position;
   public Vector3 rotation;
   public Vector3 scale;
 
-  public Transform(Vector3 position, Vector3 rotation) {
+  public Transform(GameObject gameObject, Vector3 position, Vector3 rotation) {
+    this.gameObject = gameObject;
     this.position = position;
     this.rotation = rotation;
     this.scale = new Vector3(1, 1, 1);

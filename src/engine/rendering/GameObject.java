@@ -1,11 +1,16 @@
 package engine.rendering;
 
+
+import java.util.ArrayList;
+
+import engine.rendering.Components.Component;
 import engine.rendering.Components.Transform;
 import engine.shapes.Mesh;
 import engine.shapes.Vector3;
 
 public class GameObject {
   public Transform transform;
+  public ArrayList<Component> components = new ArrayList<Component>();
   public Mesh mesh;
   public Vector3 velocity;
 
@@ -18,13 +23,20 @@ public class GameObject {
   }
   
   public GameObject(Mesh mesh, Vector3 position, Vector3 rotation) {
-    this.transform = new Transform(position, rotation);
+    this.transform = new Transform(this, position, rotation);
     this.mesh = mesh;
     this.velocity = new Vector3(0, 0, 0);
   }
 
+  public void addComponent(Component component) {
+    components.add(component);
+    component.gameObject = this;
+  }
+
   public void update() {
-    this.transform.translate(velocity);
+    for (Component component : components) {
+      component.update();
+    }
   }
 
   public Mesh getWorldMesh() {
