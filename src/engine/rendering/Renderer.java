@@ -1,10 +1,8 @@
 package engine.rendering;
 
-import java.awt.Image;
 import java.awt.image.BufferedImage;
 
 import engine.rendering.Shaders.DepthShader;
-import engine.rendering.Shaders.ExFragmentShader;
 import engine.rendering.Shaders.FragmentShader;
 import engine.rendering.Shaders.LinearLighting;
 import engine.rendering.Shaders.VertexShader;
@@ -15,7 +13,6 @@ import engine.rendering.VertexTramsforms.NormalizeClipVertices;
 import engine.rendering.VertexTramsforms.VertexTransform;
 import engine.rendering.VertexTramsforms.WindowTransform;
 import engine.shapes.Mesh;
-import engine.shapes.Vector;
 
 public class Renderer {
   double[][] vertexPositions;
@@ -45,7 +42,8 @@ public class Renderer {
     this.fragmentShaders = new FragmentShader[] {
       //new LinearLighting(),
       //new ExFragmentShader(),
-      new DepthShader()
+      new DepthShader(),
+      //new PalletinatorShader()
     };
   }
 
