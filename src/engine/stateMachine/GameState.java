@@ -8,6 +8,7 @@ import java.util.Scanner;
 
 import engine.CollisionData;
 import engine.Debug;
+import engine.input.InputManager;
 import engine.rendering.GameObject;
 import engine.rendering.Renderer;
 import engine.rendering.Components.Rigidbody;
@@ -66,7 +67,7 @@ public class GameState implements State {
         cubeObject.addComponent(new Rigidbody());
 
         Rigidbody rb = (Rigidbody)cubeObject.getComponent(Rigidbody.class);
-        rb.velocity = new Vector3(0.01, 0.05, -0.025);
+        rb.velocity = new Vector3(0.0, -0.01, 0);
 
         cubeObject.transform.translate(new Vector3(0, -2, 2));
         cubeObject.transform.rotate(new Vector3(0, 45, 45));
@@ -90,6 +91,15 @@ public class GameState implements State {
 
         // cubeObject.transform.rotate(new Vector3(1, 1, 1));
         // ground.transform.rotate(new Vector3(1, 1, 1));
+        
+            
+        Rigidbody rb = (Rigidbody)cubeObject.getComponent(Rigidbody.class);
+        rb.velocity.y+=0.004;
+        
+        if (InputManager.jump.pressed){
+            System.out.println("jump!");
+            rb.velocity.y-=0.3;
+        }
 
         cubeObject.update();
         ground.update();

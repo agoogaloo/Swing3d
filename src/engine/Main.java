@@ -1,5 +1,6 @@
 package engine;
 
+import engine.input.InputManager;
 import engine.stateMachine.GameState;
 import engine.stateMachine.StateManager;
 import engine.window.Window;
@@ -13,14 +14,18 @@ public class Main {
 		final int FPS = 60, DELAY = 1000000000 / FPS;
 
 		window = new Window(WIDTH, HEIGHT);
+		InputManager.addInputListeners(window.getFrame());
 		StateManager.setCurrentState(new GameState());
 
 		while (running) {
 			double startTime = System.nanoTime();// getting the time at the start of the frame
 
+			
 			// updating
 			StateManager.update();
 			window.render();
+			InputManager.update();
+			
 
 			double endTime = System.nanoTime();// the time at the end of the frame
 			double delta = endTime - startTime;// how long the frame took
