@@ -21,9 +21,10 @@ public class Display extends JPanel {
 	 * a display which is then added onto the window, because you aren't supposed to
 	 * draw directly onto it
 	 */
-	private int width, height, scale;
+	private int width, height;
+	private double scale;
 
-	public Display(int width, int height, int scale) {
+	public Display(int width, int height, double scale) {
 		// setting the proper size so that the window will pack properly
 		// the display is scaled up to look 8-bit so the
 		// resolution is actually 1/3 of the screen width
@@ -31,7 +32,7 @@ public class Display extends JPanel {
 		this.width = width;
 		this.height = height;
 
-		this.setPreferredSize(new Dimension(width * scale, height * scale));
+		this.setPreferredSize(new Dimension((int)(width * scale), (int)(height * scale)));
 
 		// setting the preferred size to the inputed one so that the pack method will
 		// work
@@ -45,14 +46,13 @@ public class Display extends JPanel {
 		g.setColor(StateManager.getBgColour());
 		g.fillRect(0, 0, Main.getWindow().getWindowWidth(), Main.getWindow().getWindowHeight());
 		BufferedImage image = new BufferedImage(width, height, BufferedImage.TYPE_INT_ARGB);
-		Graphics2D g2d = (Graphics2D) image.getGraphics();
-		g2d.setRenderingHint(RenderingHints.KEY_STROKE_CONTROL, RenderingHints.VALUE_STROKE_PURE);
+		
 		// doing the rendering
-		StateManager.render(g2d);
+		StateManager.render(image);
 
 		// putting the image onto the display and scaling it
-		g.drawImage(image, Main.getWindow().getxOffset(), Main.getWindow().getyOffset(),
-				width * Main.getWindow().getScale(), height * Main.getWindow().getScale(), null);
+		g.drawImage(image, (int)Main.getWindow().getxOffset(), (int)Main.getWindow().getyOffset(),
+				(int)(width * Main.getWindow().getScale()), (int)(height * Main.getWindow().getScale()), null);
 
 	}
 
@@ -66,6 +66,6 @@ public class Display extends JPanel {
 
 	// getters
 	public int getScale() {
-		return scale;
+		return (int)scale;
 	}
 }
