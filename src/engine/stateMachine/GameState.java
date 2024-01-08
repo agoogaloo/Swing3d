@@ -12,31 +12,29 @@ import engine.input.InputManager;
 import engine.input.Keybind;
 import engine.rendering.*;
 import engine.rendering.Components.*;
+import engine.rendering.Components.Custom.CameraController;
 import engine.shapes.*;
 
 public class GameState implements State {
     Renderer renderer;
     double startTime;
-    double[] cameraAngle = new double[] { 0, 0, 0 };
-    double[] cameraPosition = new double[] { 0, 0, 0 };
-    double[] cameraDirection = new double[] { 0, 0, 1 };
-
+    
     Mesh unitCube = new Mesh(new double[][][] {
         {{ 0.0, 0.0, 0.0 }, { 1.0, 1.0, 0.0 }, { 0.0, 1.0, 0.0 }},
 		{{ 0.0, 0.0, 0.0 }, { 1.0, 0.0, 0.0 }, { 1.0, 1.0, 0.0 }},
-
+        
 		{{ 1.0, 0.0, 0.0 }, { 1.0, 1.0, 1.0 }, { 1.0, 1.0, 0.0 }},
 		{{ 1.0, 0.0, 0.0 }, { 1.0, 0.0, 1.0 }, { 1.0, 1.0, 1.0 }},
-
+        
 		{{ 1.0, 0.0, 1.0 }, { 0.0, 1.0, 1.0 }, { 1.0, 1.0, 1.0 }},
 		{{ 1.0, 0.0, 1.0 }, { 0.0, 0.0, 1.0 }, { 0.0, 1.0, 1.0 }},
-
+        
 		{{ 0.0, 0.0, 1.0 }, { 0.0, 1.0, 0.0 }, { 0.0, 1.0, 1.0 }},
 		{{ 0.0, 0.0, 1.0 }, { 0.0, 0.0, 0.0 }, { 0.0, 1.0, 0.0 }},
-
+        
 		{{ 0.0, 1.0, 0.0 }, { 1.0, 1.0, 1.0 }, { 0.0, 1.0, 1.0 }},
 		{{ 0.0, 1.0, 0.0 }, { 1.0, 1.0, 0.0 }, { 1.0, 1.0, 1.0 }},
-
+        
 		{{ 1.0, 0.0, 1.0 }, { 0.0, 0.0, 0.0 }, { 0.0, 0.0, 1.0 }},
 		{{ 1.0, 0.0, 1.0 }, { 1.0, 0.0, 0.0 }, { 0.0, 0.0, 0.0 }},
     }, new double[][] {
@@ -47,13 +45,15 @@ public class GameState implements State {
         { 1, 0, 0, 1 }, { 1, 0, 0, 1 },
         { 1, 0, 0, 1 }, { 1, 0, 0, 1 },
     });
-
+    
     Mesh shipMesh, cube, axisMesh;
-
+    
     GameObject cubeObject, ground;
-
+    
     @Override
     public void start(State prevState) {
+        Scene.mainCamera = new Camera();
+
         startTime = System.currentTimeMillis();
         cube = Mesh.copy(unitCube);
         shipMesh = loadObjectFromFile("VideoShip.obj");
@@ -63,6 +63,7 @@ public class GameState implements State {
         ground = new GameObject(cube);
 
         cubeObject.addComponent(new Rigidbody());
+        cubeObject.addComponent(new CameraController());
 
         Rigidbody rb = (Rigidbody)cubeObject.getComponent(Rigidbody.class);
         rb.velocity = new Vector3(0.0, -0.01, 0);
@@ -98,32 +99,6 @@ public class GameState implements State {
         //     System.out.println("jump!");
         //     rb.velocity.y-=0.3;
         // }
-        double velX = 0, velY = 0;
-        Vector2 mouseSpeed = InputManager.mouseSpeed();
-        if(InputManager.held(Keybind.FORWARD)) {
-            velX = 0.1;
-        }
-        if(InputManager.held(Keybind.BACK)) {
-            velX = -0.1;
-        }
-        if(InputManager.held(Keybind.LEFT)) {
-            velY = -0.1;
-        }
-        if(InputManager.held(Keybind.RIGHT)) {
-            velY = 0.1;
-        }
-        if(InputManager.held(Keybind.JUMP)) {
-            cameraPosition[1] += 0.1;
-        }
-        if(InputManager.held(Keybind.DOWN)) {
-            cameraPosition[1] -= 0.1;
-        }
-        if(!mouseSpeed.zero()) {
-            rotateCamera(new double[] { -mouseSpeed.x, -mouseSpeed.y, 0 });
-        }
-        if(velX != 0 || velY != 0) {
-            cameraMove(velX, velY);
-        }
 
         cubeObject.update();
         ground.update();
@@ -136,34 +111,8 @@ public class GameState implements State {
             ground.getWorldMesh()
         };
 
-        renderer.render(image, CollisionData.meshes, cameraPosition, cameraDirection);
+        renderer.render(image, CollisionData.meshes, Scene.mainCamera.cameraPosition, Scene.mainCamera.cameraDirection);
         Debug.clearPoints();
-    }
-
-    public void cameraForward(double amount) {
-        double[] forwardVector = Vector.scalarMultiple(cameraDirection, amount);
-        cameraPosition = Vector.add(cameraPosition, forwardVector);
-    }
-
-    public void cameraMove(double x, double y) {
-        double angle = cameraAngle[0]*3.14159/180;
-        double xDist = Math.cos(-angle) * x + Math.sin(angle) * y;
-        double yDist = Math.sin(-angle) * x + Math.cos(angle) * y;
-
-        cameraPosition[2] += xDist;
-        cameraPosition[0] += yDist;
-    }
-
-    public void rotateCamera(double[] angle) {
-        cameraAngle = Vector.add(cameraAngle, angle);
-        if(cameraAngle[0] >= -90 && cameraAngle[0] <= 90 && cameraAngle[1] >= -90 && cameraAngle[1] <= 90) {
-            double[][] rotationMatrix = Matrix.makeRotationMatrixY(angle[0]);
-            cameraDirection = Matrix.multiplyVectorMatrix344(cameraDirection, rotationMatrix);
-            rotationMatrix = Matrix.makeRotationMatrixX(angle[1]);
-            cameraDirection = Matrix.multiplyVectorMatrix344(cameraDirection, rotationMatrix);
-        } else {
-            cameraAngle = Vector.subtract(cameraAngle, angle);
-        }
     }
 
     public Mesh loadObjectFromFile(String fileName) {
