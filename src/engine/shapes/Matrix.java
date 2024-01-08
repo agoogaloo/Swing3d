@@ -58,4 +58,13 @@ public class Matrix {
       { 0, 0, 0, 0 },
     };
   }
+  public static double[][] makeRotationMatrixX(double angle) {
+    double xAngle = angle * 3.1415/180;
+    return new double[][] {
+      { 1, 0, 0, 0 },
+      { 0, Math.cos(xAngle), Math.sin(xAngle), 0 },
+      { 0, -Math.sin(xAngle), Math.cos(xAngle), 0 },
+      { 0, 0, 0, 0 },
+    };
+  }
 }

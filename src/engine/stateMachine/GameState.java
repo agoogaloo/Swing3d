@@ -10,17 +10,14 @@ import engine.CollisionData;
 import engine.Debug;
 import engine.input.InputManager;
 import engine.input.Keybind;
-import engine.rendering.GameObject;
-import engine.rendering.Renderer;
-import engine.rendering.Components.Rigidbody;
-import engine.shapes.Matrix;
-import engine.shapes.Mesh;
-import engine.shapes.Vector;
-import engine.shapes.Vector3;
+import engine.rendering.*;
+import engine.rendering.Components.*;
+import engine.shapes.*;
 
 public class GameState implements State {
     Renderer renderer;
     double startTime;
+    double[] cameraAngle = new double[] { 0, 0, 0 };
     double[] cameraPosition = new double[] { 0, 0, 0 };
     double[] cameraDirection = new double[] { 0, 0, 1 };
 
@@ -97,22 +94,35 @@ public class GameState implements State {
         Rigidbody rb = (Rigidbody)cubeObject.getComponent(Rigidbody.class);
         rb.velocity.y+=0.004;
         
-        if (InputManager.pressed(Keybind.JUMP)){
-            System.out.println("jump!");
-            rb.velocity.y-=0.3;
-        }
-
+        // if (InputManager.pressed(Keybind.JUMP)){
+        //     System.out.println("jump!");
+        //     rb.velocity.y-=0.3;
+        // }
+        double velX = 0, velY = 0;
+        Vector2 mouseSpeed = InputManager.mouseSpeed();
         if(InputManager.held(Keybind.FORWARD)) {
-            cameraForward(0.1);
+            velX = 0.1;
         }
         if(InputManager.held(Keybind.BACK)) {
-            cameraForward(-0.1);
+            velX = -0.1;
         }
         if(InputManager.held(Keybind.LEFT)) {
-            rotateCamera(1);
+            velY = -0.1;
         }
         if(InputManager.held(Keybind.RIGHT)) {
-            rotateCamera(-1);
+            velY = 0.1;
+        }
+        if(InputManager.held(Keybind.JUMP)) {
+            cameraPosition[1] += 0.1;
+        }
+        if(InputManager.held(Keybind.DOWN)) {
+            cameraPosition[1] -= 0.1;
+        }
+        if(!mouseSpeed.zero()) {
+            rotateCamera(new double[] { -mouseSpeed.x, -mouseSpeed.y, 0 });
+        }
+        if(velX != 0 || velY != 0) {
+            cameraMove(velX, velY);
         }
 
         cubeObject.update();
@@ -135,9 +145,25 @@ public class GameState implements State {
         cameraPosition = Vector.add(cameraPosition, forwardVector);
     }
 
-    public void rotateCamera(double angle) {
-        double[][] rotationMatrix = Matrix.makeRotationMatrixY(angle);
-        cameraDirection = Matrix.multiplyVectorMatrix344(cameraDirection, rotationMatrix);
+    public void cameraMove(double x, double y) {
+        double angle = cameraAngle[0]*3.14159/180;
+        double xDist = Math.sin(angle) * x + Math.cos(angle) * y;
+        double yDist = Math.cos(angle) * x + Math.sin(angle) * y;
+
+        cameraPosition[2] += yDist;
+        cameraPosition[0] += xDist;
+    }
+
+    public void rotateCamera(double[] angle) {
+        cameraAngle = Vector.add(cameraAngle, angle);
+        if(cameraAngle[0] >= -90 && cameraAngle[0] <= 90 && cameraAngle[1] >= -90 && cameraAngle[1] <= 90) {
+            double[][] rotationMatrix = Matrix.makeRotationMatrixY(angle[0]);
+            cameraDirection = Matrix.multiplyVectorMatrix344(cameraDirection, rotationMatrix);
+            rotationMatrix = Matrix.makeRotationMatrixX(angle[1]);
+            cameraDirection = Matrix.multiplyVectorMatrix344(cameraDirection, rotationMatrix);
+        } else {
+            cameraAngle = Vector.subtract(cameraAngle, angle);
+        }
     }
 
     public Mesh loadObjectFromFile(String fileName) {

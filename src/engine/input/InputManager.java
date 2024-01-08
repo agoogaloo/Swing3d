@@ -4,11 +4,14 @@ import java.util.HashMap;
 
 import javax.swing.JFrame;
 
+import engine.shapes.Vector2;
+
 public class InputManager {
     private static HashMap<Keybind, ButtonInput> keyInputs;
     private static HashMap<Keybind, Integer> keyCodes;
 
     private static KeyHandler keyHandler;
+    private static MouseMotionHandler mouseMotionHandler;
 
     public static void addInputListeners(JFrame jFrame) {
         keyInputs = new HashMap<Keybind, ButtonInput>();
@@ -20,11 +23,14 @@ public class InputManager {
 		}
 
         keyHandler = new KeyHandler(keyInputs, keyCodes);
+        mouseMotionHandler = new MouseMotionHandler();
         jFrame.addKeyListener(keyHandler);
+        jFrame.addMouseMotionListener(mouseMotionHandler);
     }
 
     public static void update(){
         keyHandler.updateKeys();
+        mouseMotionHandler.update();
     }
 
     public static boolean pressed(Keybind keybind) {
@@ -35,5 +41,12 @@ public class InputManager {
     }
     public static boolean held(Keybind keybind) {
         return keyInputs.get(keybind).held;
+    }
+
+    public static Vector2 mousePosition() {
+        return mouseMotionHandler.currentPos;
+    }
+    public static Vector2 mouseSpeed() {
+        return mouseMotionHandler.speed;
     }
 }
