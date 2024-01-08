@@ -9,6 +9,7 @@ import java.util.Scanner;
 import engine.CollisionData;
 import engine.Debug;
 import engine.input.InputManager;
+import engine.input.Keybind;
 import engine.rendering.GameObject;
 import engine.rendering.Renderer;
 import engine.rendering.Components.Rigidbody;
@@ -96,9 +97,22 @@ public class GameState implements State {
         Rigidbody rb = (Rigidbody)cubeObject.getComponent(Rigidbody.class);
         rb.velocity.y+=0.004;
         
-        if (InputManager.jump.pressed){
+        if (InputManager.pressed(Keybind.JUMP)){
             System.out.println("jump!");
             rb.velocity.y-=0.3;
+        }
+
+        if(InputManager.held(Keybind.FORWARD)) {
+            cameraForward(0.1);
+        }
+        if(InputManager.held(Keybind.BACK)) {
+            cameraForward(-0.1);
+        }
+        if(InputManager.held(Keybind.LEFT)) {
+            rotateCamera(1);
+        }
+        if(InputManager.held(Keybind.RIGHT)) {
+            rotateCamera(-1);
         }
 
         cubeObject.update();
