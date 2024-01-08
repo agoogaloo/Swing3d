@@ -147,11 +147,11 @@ public class GameState implements State {
 
     public void cameraMove(double x, double y) {
         double angle = cameraAngle[0]*3.14159/180;
-        double xDist = Math.sin(angle) * x + Math.cos(angle) * y;
-        double yDist = Math.cos(angle) * x + Math.sin(angle) * y;
+        double xDist = Math.cos(-angle) * x + Math.sin(angle) * y;
+        double yDist = Math.sin(-angle) * x + Math.cos(angle) * y;
 
-        cameraPosition[2] += yDist;
-        cameraPosition[0] += xDist;
+        cameraPosition[2] += xDist;
+        cameraPosition[0] += yDist;
     }
 
     public void rotateCamera(double[] angle) {
