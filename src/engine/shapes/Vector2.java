@@ -12,4 +12,18 @@ public class Vector2 {
         this.x = vector.x;
         this.y = vector.y;
     }
+
+    public boolean zero() {
+        return (x == 0 && y == 0);
+    }
+
+    public void add(Vector2 vector) {
+        x += vector.x;
+        y += vector.y;
+    }
+
+    @Override
+    public String toString() {
+        return "(" + x + ", " + y + ")";
+    }
 }

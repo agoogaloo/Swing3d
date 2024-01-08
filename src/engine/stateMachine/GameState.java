@@ -9,36 +9,32 @@ import java.util.Scanner;
 import engine.CollisionData;
 import engine.Debug;
 import engine.input.InputManager;
-import engine.rendering.GameObject;
-import engine.rendering.Renderer;
-import engine.rendering.Components.Rigidbody;
-import engine.shapes.Matrix;
-import engine.shapes.Mesh;
-import engine.shapes.Vector;
-import engine.shapes.Vector3;
+import engine.input.Keybind;
+import engine.rendering.*;
+import engine.rendering.Components.*;
+import engine.rendering.Components.Custom.CameraController;
+import engine.shapes.*;
 
 public class GameState implements State {
     Renderer renderer;
     double startTime;
-    double[] cameraPosition = new double[] { 0, 0, 0 };
-    double[] cameraDirection = new double[] { 0, 0, 1 };
-
+    
     Mesh unitCube = new Mesh(new double[][][] {
         {{ 0.0, 0.0, 0.0 }, { 1.0, 1.0, 0.0 }, { 0.0, 1.0, 0.0 }},
 		{{ 0.0, 0.0, 0.0 }, { 1.0, 0.0, 0.0 }, { 1.0, 1.0, 0.0 }},
-
+        
 		{{ 1.0, 0.0, 0.0 }, { 1.0, 1.0, 1.0 }, { 1.0, 1.0, 0.0 }},
 		{{ 1.0, 0.0, 0.0 }, { 1.0, 0.0, 1.0 }, { 1.0, 1.0, 1.0 }},
-
+        
 		{{ 1.0, 0.0, 1.0 }, { 0.0, 1.0, 1.0 }, { 1.0, 1.0, 1.0 }},
 		{{ 1.0, 0.0, 1.0 }, { 0.0, 0.0, 1.0 }, { 0.0, 1.0, 1.0 }},
-
+        
 		{{ 0.0, 0.0, 1.0 }, { 0.0, 1.0, 0.0 }, { 0.0, 1.0, 1.0 }},
 		{{ 0.0, 0.0, 1.0 }, { 0.0, 0.0, 0.0 }, { 0.0, 1.0, 0.0 }},
-
+        
 		{{ 0.0, 1.0, 0.0 }, { 1.0, 1.0, 1.0 }, { 0.0, 1.0, 1.0 }},
 		{{ 0.0, 1.0, 0.0 }, { 1.0, 1.0, 0.0 }, { 1.0, 1.0, 1.0 }},
-
+        
 		{{ 1.0, 0.0, 1.0 }, { 0.0, 0.0, 0.0 }, { 0.0, 0.0, 1.0 }},
 		{{ 1.0, 0.0, 1.0 }, { 1.0, 0.0, 0.0 }, { 0.0, 0.0, 0.0 }},
     }, new double[][] {
@@ -49,13 +45,15 @@ public class GameState implements State {
         { 1, 0, 0, 1 }, { 1, 0, 0, 1 },
         { 1, 0, 0, 1 }, { 1, 0, 0, 1 },
     });
-
+    
     Mesh shipMesh, cube, axisMesh;
-
+    
     GameObject cubeObject, ground;
-
+    
     @Override
     public void start(State prevState) {
+        Scene.mainCamera = new Camera();
+
         startTime = System.currentTimeMillis();
         cube = Mesh.copy(unitCube);
         shipMesh = loadObjectFromFile("VideoShip.obj");
@@ -65,6 +63,7 @@ public class GameState implements State {
         ground = new GameObject(cube);
 
         cubeObject.addComponent(new Rigidbody());
+        cubeObject.addComponent(new CameraController());
 
         Rigidbody rb = (Rigidbody)cubeObject.getComponent(Rigidbody.class);
         rb.velocity = new Vector3(0.0, -0.01, 0);
@@ -96,10 +95,10 @@ public class GameState implements State {
         Rigidbody rb = (Rigidbody)cubeObject.getComponent(Rigidbody.class);
         rb.velocity.y+=0.004;
         
-        if (InputManager.jump.pressed){
-            System.out.println("jump!");
-            rb.velocity.y-=0.3;
-        }
+        // if (InputManager.pressed(Keybind.JUMP)){
+        //     System.out.println("jump!");
+        //     rb.velocity.y-=0.3;
+        // }
 
         cubeObject.update();
         ground.update();
@@ -112,18 +111,8 @@ public class GameState implements State {
             ground.getWorldMesh()
         };
 
-        renderer.render(image, CollisionData.meshes, cameraPosition, cameraDirection);
+        renderer.render(image, CollisionData.meshes, Scene.mainCamera.cameraPosition, Scene.mainCamera.cameraDirection);
         Debug.clearPoints();
-    }
-
-    public void cameraForward(double amount) {
-        double[] forwardVector = Vector.scalarMultiple(cameraDirection, amount);
-        cameraPosition = Vector.add(cameraPosition, forwardVector);
-    }
-
-    public void rotateCamera(double angle) {
-        double[][] rotationMatrix = Matrix.makeRotationMatrixY(angle);
-        cameraDirection = Matrix.multiplyVectorMatrix344(cameraDirection, rotationMatrix);
     }
 
     public Mesh loadObjectFromFile(String fileName) {

@@ -5,33 +5,36 @@ import java.awt.event.KeyListener;
 import java.util.HashMap;
 
 public class KeyHandler implements KeyListener {
-    private HashMap<Integer, ButtonInput> keyInputs;
+    private HashMap<Keybind, ButtonInput> keyInputs;
+    private HashMap<Keybind, Integer> keyCodes;
 
-    public KeyHandler(ButtonInput forward, ButtonInput back, ButtonInput left, ButtonInput right, ButtonInput jump) {
-        keyInputs = new HashMap<Integer, ButtonInput>();
-        keyInputs.put(87, forward);
-        keyInputs.put(83, back);
-        keyInputs.put(65, left);
-        keyInputs.put(68, right);
-        keyInputs.put(32, jump);
+    public KeyHandler(HashMap<Keybind, ButtonInput> keyInputs, HashMap<Keybind, Integer> keyCodes) {
+        this.keyInputs = keyInputs;
+        this.keyCodes = keyCodes;
     }
 
     @Override
     public void keyPressed(KeyEvent e) {
-        // System.out.println("pressed " + String.valueOf(e.getKeyCode()));
-        if (keyInputs.containsKey(e.getKeyCode())) {
-            keyInputs.get(e.getKeyCode()).press();
-        }
-
+        for (Keybind keybind : Keybind.values()) {
+			if(e.getKeyCode() == keyCodes.get(keybind)) {
+				keyInputs.get(keybind).press();
+			}
+		}
     }
-
+    
     @Override
     public void keyReleased(KeyEvent e) {
-        // System.out.println("released " + String.valueOf(e.getKeyCode()));
-        if (keyInputs.containsKey(e.getKeyCode())) {
-            keyInputs.get(e.getKeyCode()).release();
+        for (Keybind keybind : Keybind.values()) {
+            if(e.getKeyCode() == keyCodes.get(keybind)) {
+                keyInputs.get(keybind).release();
+            }
         }
-
+    }
+    
+    public void updateKeys() {
+        for (Keybind keybind : Keybind.values()) {
+            keyInputs.get(keybind).update();
+        }
     }
 
     @Override
