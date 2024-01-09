@@ -5,6 +5,9 @@ import engine.rendering.GameObject;
 public class Component {
   public GameObject gameObject;
 
+  public void start()  {
+    
+  }
   public void update()  {
     
   }

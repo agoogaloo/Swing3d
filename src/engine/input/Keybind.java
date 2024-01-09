@@ -7,6 +7,7 @@ public enum Keybind {
   RIGHT(68),
   JUMP(32),
   DOWN(16),
+  ESCAPE(27),
   ;
 
   public int default_bind;

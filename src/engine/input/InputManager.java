@@ -29,8 +29,8 @@ public class InputManager {
     }
 
     public static void update(){
-        keyHandler.updateKeys();
         mouseMotionHandler.update();
+        keyHandler.updateKeys();
     }
 
     public static boolean pressed(Keybind keybind) {
