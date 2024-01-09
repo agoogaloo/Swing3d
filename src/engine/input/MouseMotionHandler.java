@@ -7,7 +7,10 @@ import java.awt.event.*;
 import engine.shapes.Vector2;
 
 public class MouseMotionHandler implements MouseMotionListener {
-  Vector2 previousPos = new Vector2(0, 0);
+  Vector2 previousPos = new Vector2(300, 300);
+  Vector2 home;
+  boolean detected = false;
+  boolean enable = true;
   Robot robot;
 
   public Vector2 currentPos = new Vector2(0, 0);
@@ -23,29 +26,38 @@ public class MouseMotionHandler implements MouseMotionListener {
 
   }
 
-
   public void mouseMoved(MouseEvent e) {
-    setPosition(new Vector2(e.getX(), e.getY()));
-    // System.out.println("Mouse moved" + e);
+    setPosition(e);
   }
   
   public void mouseDragged(MouseEvent e) {
-    setPosition(new Vector2(e.getX(), e.getY()));
-    // System.out.println("Mouse dragged" + e);
+    setPosition(e);
   }
   
-  public void setPosition(Vector2 newPos) {
-    // robot.mouseMove(previousPos.x, previousPos.y);
-    previousPos = currentPos;
+  public void setPosition(MouseEvent e) {
+    Vector2 newPos = new Vector2(e.getX(), e.getY());
     currentPos = newPos;
+    if(!detected) {
+      int distX = 300 - newPos.x;
+      int distY = 300 - newPos.y;
+      
+      home = new Vector2(e.getXOnScreen() + distX, e.getYOnScreen() + distY);
+      detected = true;
+    }
   }
-
-  public void update() {
-    speed = new Vector2(
-      currentPos.x - previousPos.x,
-      currentPos.y - previousPos.y
-    );
   
-    previousPos = currentPos;
+  public void update() {
+    if(detected && enable) {
+      speed = new Vector2(
+        currentPos.x - previousPos.x,
+        currentPos.y - previousPos.y
+      );
+      robot.mouseMove(home.x, home.y);
+    }
+    if(InputManager.pressed(Keybind.ESCAPE)) {
+      enable = !enable;
+      detected = false;
+      speed = new Vector2(0, 0);
+    }
   }
 }
