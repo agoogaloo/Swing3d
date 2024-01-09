@@ -13,6 +13,7 @@ public class GameObject {
   public ArrayList<Component> components = new ArrayList<Component>();
   public Mesh mesh;
   public Mesh worldMesh;
+  public String id;
 
   public GameObject(Mesh mesh) {
     this(mesh, new Vector3(0, 0, 0), new Vector3(0, 0, 0));
@@ -24,7 +25,9 @@ public class GameObject {
   
   public GameObject(Mesh mesh, Vector3 position, Vector3 rotation) {
     this.transform = new Transform(this, position, rotation);
-    this.mesh = mesh;
+    this.mesh = Mesh.copy(mesh);
+    this.id = this.toString();
+    this.mesh.id = this.id;
   }
 
   public void addComponent(Component component) {
