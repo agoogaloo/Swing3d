@@ -3,6 +3,7 @@ package engine.rendering.Components.Custom;
 import engine.rendering.GameObject;
 import engine.rendering.Scene;
 import engine.rendering.Components.*;
+import engine.rendering.Components.Custom.*;
 import engine.shapes.Mesh;
 import engine.shapes.Vector3;
 
@@ -34,36 +35,36 @@ public class Startup extends Component {
     { 1, 0, 0, 1 }, { 1, 0, 0, 1 },
   });
 
-  GameObject cubeObject;
+  GameObject player;
 
   public void start() {
     Mesh cube = Mesh.copy(unitCube);
     // shipMesh = loadObjectFromFile("VideoShip.obj");
     // axisMesh = loadObjectFromFile("axis.obj");
 
-    cubeObject = new GameObject(cube);
+    player = new GameObject(cube);
     GameObject ground = new GameObject(cube);
 
-    cubeObject.addComponent(new Rigidbody());
-    cubeObject.addComponent(new CameraController());
+    player.addComponent(new Rigidbody());
+    player.addComponent(new PlayerController());
+    player.addComponent(new CameraFollow());
 
-    Rigidbody rb = (Rigidbody)cubeObject.getComponent(Rigidbody.class);
-    rb.velocity = new Vector3(0.0, -0.01, 0);
+    Rigidbody rb = (Rigidbody)player.getComponent(Rigidbody.class);
+    // rb.velocity = new Vector3(0.0, -0.01, 0);
     
-    cubeObject.transform.translate(new Vector3(0, -2, 2));
-    cubeObject.transform.rotate(new Vector3(0, 45, 45));
-    cubeObject.transform.setScale(new Vector3(0.5, 0.5, 0.5));
+    player.transform.translate(new Vector3(0, -2, 2));
+    // player.transform.rotate(new Vector3(0, 45, 45));
+    player.transform.setScale(new Vector3(0.5, 1, 0.5));
     
     ground.transform.translate(new Vector3(0, 1, 4));
     ground.transform.setScale(new Vector3(10, 1, 10));
     ground.transform.rotate(new Vector3(0, 0, 0));
     
-    Scene.addGameObject(cubeObject);
+    Scene.addGameObject(player);
     Scene.addGameObject(ground);
   }
 
   public void update() {
-    Rigidbody rb = (Rigidbody)cubeObject.getComponent(Rigidbody.class);
-    rb.velocity.y+=0.004;
+    
   }
 }

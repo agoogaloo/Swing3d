@@ -24,13 +24,26 @@ public class Camera {
 
   public void rotateCamera(double[] angles) {
     rotation = Vector.add(rotation, angles);
-    if(rotation[0] >= -90 && rotation[0] <= 90 && rotation[1] >= -90 && rotation[1] <= 90) {
-        double[][] rotationMatrix = Matrix.makeRotationMatrixY(angles[0]);
+    double[][] rotationMatrix;
+    // if(rotation[0] >= -90 && rotation[0] <= 90 && rotation[1] >= -90 && rotation[1] <= 90) {
+      if(angles[0] != 0) {
+        rotationMatrix = Matrix.makeRotationMatrixX(angles[0]);
         cameraDirection = Matrix.multiplyVectorMatrix344(cameraDirection, rotationMatrix);
-        rotationMatrix = Matrix.makeRotationMatrixX(angles[1]);
+      }
+      if(angles[1] != 0) {
+        rotationMatrix = Matrix.makeRotationMatrixY(angles[1]);
         cameraDirection = Matrix.multiplyVectorMatrix344(cameraDirection, rotationMatrix);
-    } else {
-        rotation = Vector.subtract(rotation, angles);
-    }
+      }
+    // } else {
+    //     rotation = Vector.subtract(rotation, angles);
+    // }
+  }
+
+  public void setRotation(double[] angles) {
+    rotateCamera(new double[] { 
+      angles[0] - rotation[0],
+      angles[1] - rotation[1],
+      angles[2] - rotation[2],
+    });
   }
 }
