@@ -41,6 +41,12 @@ public class GameObject {
     return new Component();
   }
 
+  public void start() {
+    for (Component component : components) {
+      component.start();
+    }
+  }
+  
   public void update() {
     for (Component component : components) {
       component.update();
