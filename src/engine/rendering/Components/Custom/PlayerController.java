@@ -23,32 +23,43 @@ public class PlayerController extends Component {
   
   public void update()  {
     double velX = 0, velZ = 0;
-    Vector2 mouseSpeed = InputManager.mouseSpeed();
+    // Vector2 mouseSpeed = InputManager.mouseSpeed();
+    Vector2 mouseSpeed = new Vector2(0, 0);
+
     if(InputManager.held(Keybind.FORWARD)) {
-      velX = speed/100;
-      // Scene.mainCamera.rotateCamera(new double[] { 1, 0, 0 });
+      // velZ = speed/100;
+      mouseSpeed = new Vector2(1, 0);
     }
     if(InputManager.held(Keybind.BACK)) {
-      velX = -speed/100;
-      // Scene.mainCamera.rotateCamera(new double[] { -1, 0, 0 });
+      // velZ = -speed/100;
+      mouseSpeed = new Vector2(-1, 0);
     }
     if(InputManager.held(Keybind.LEFT)) {
-      velZ = -speed/100;
-      // Scene.mainCamera.rotateCamera(new double[] { 0, 1, 0 });
+      // velX = -speed/100;
+      mouseSpeed = new Vector2(0, -1);
     }
     if(InputManager.held(Keybind.RIGHT)) {
-      velZ = speed/100;
-      // Scene.mainCamera.rotateCamera(new double[] { 0, -1, 0 });
+      // velX = speed/100;
+      mouseSpeed = new Vector2(0, 1);
     }
     if(InputManager.held(Keybind.JUMP) && !jumping) {
       rb.velocity.y = -jumpHeight/100;
       jumping = true;
     }
 
-    // if(!mouseSpeed.zero()) {
+    double xAngle = -mouseSpeed.x * sensitivity;
+    double yAngle = -mouseSpeed.y * sensitivity;
+    // System.out.println(Scene.mainCamera.rotation[1]);
+    if(Scene.mainCamera.rotation[1] + yAngle >= 90) { yAngle = 90 - Scene.mainCamera.rotation[1]; }
+    if(Scene.mainCamera.rotation[1] + yAngle <= -90) { yAngle = -90 - Scene.mainCamera.rotation[1]; }
+    Scene.mainCamera.rotateCamera(new double[] { xAngle, yAngle, 0 });
 
-    rb.velocity.x = velZ;
-    rb.velocity.z = velX;
+    double angle = (Scene.mainCamera.rotation[1])*3.14159/180;
+    double relativeVX = Math.cos(angle) * velX + Math.sin(-angle) * velZ;
+    double relativeVZ = Math.sin(angle) * velX + Math.cos(-angle) * velZ;
+
+    rb.velocity.x = relativeVX;
+    rb.velocity.z = relativeVZ;
     rb.velocity.y += gravity/1000;
 
     if(rb.colliding) {
