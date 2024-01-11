@@ -32,7 +32,7 @@ public class CameraController extends Component {
       Scene.mainCamera.cameraPosition[1] += speed;
     }
     if(!mouseSpeed.zero()) {
-      Scene.mainCamera.rotateCamera(new double[] { -mouseSpeed.x * sensitivity, -mouseSpeed.y * sensitivity, 0 });
+      // Scene.mainCamera.rotateCamera(new double[] { -mouseSpeed.x * sensitivity, -mouseSpeed.y * sensitivity, 0 });
     }
     if(velX != 0 || velY != 0) {
       // Scene.mainCamera.cameraMove(velX, velY);

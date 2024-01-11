@@ -67,4 +67,14 @@ public class Matrix {
       { 0, 0, 0, 0 },
     };
   }
+  public static double[][] makeRotationMatrixZ(double angle) {
+    double zAngle = angle * 3.1415/180;
+
+    return new double[][] {
+      { Math.cos(zAngle), Math.sin(zAngle), 0, 0 },
+      { -Math.sin(zAngle), Math.cos(zAngle), 0, 0 },
+      { 0, 0, 1, 0 },
+      { 0, 0, 0, 0 },
+    };
+  }
 }
