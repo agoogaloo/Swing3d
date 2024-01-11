@@ -29,12 +29,16 @@ public class Rigidbody extends Component {
         double[] point1 = gameObject.getWorldMesh().triangles[t][i];
         double[] point2 = Vector.add(point1, velocity.toDouble());
         for (Mesh mesh : CollisionData.meshes) {
-          if(!mesh.id.equals(gameObject.mesh.id)) {
-            for (double[][] triangle : mesh.triangles) {
-              if(Vector.lineIntersectsTriangle(triangle[0], triangle[1], triangle[2], point1, point2)) {
-                return false;
+          try {
+            if(!mesh.id.equals(gameObject.mesh.id)) {
+              for (double[][] triangle : mesh.triangles) {
+                if(Vector.lineIntersectsTriangle(triangle[0], triangle[1], triangle[2], point1, point2)) {
+                  return false;
+                }
               }
             }
+          } catch(NullPointerException e) {
+            System.out.println("Missing collision mesh");
           }
         }
       }
