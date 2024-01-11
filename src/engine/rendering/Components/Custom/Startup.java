@@ -3,7 +3,6 @@ package engine.rendering.Components.Custom;
 import engine.rendering.GameObject;
 import engine.rendering.Scene;
 import engine.rendering.Components.*;
-import engine.rendering.Components.Custom.*;
 import engine.shapes.Mesh;
 import engine.shapes.Vector3;
 
