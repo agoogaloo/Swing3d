@@ -7,7 +7,7 @@ import engine.rendering.Shaders.FragmentShader;
 import engine.rendering.Shaders.VertexShader;
 import engine.rendering.VertexTramsforms.VertexTransform;
 import engine.shapes.Vector;
-import engine.shapes.Vector2;
+import engine.shapes.integer.Vector2;
 
 public class RenderPipeline {  
   public void initialize(double[][] vertices, double[][] surfaceColors, double[] cameraPos, double[] cameraDirection, int width, int height, double[][] lightPlane) {

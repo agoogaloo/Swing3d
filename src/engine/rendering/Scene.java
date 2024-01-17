@@ -21,11 +21,13 @@ public class Scene {
   }
   public static void addScript(Component component) {
     scripts.add(component);
-    component.start();
   }
 
   public static void start() {
     startTime = System.currentTimeMillis();
+    for (Component script : scripts) {
+      script.start();
+    }
   }
 
   public static void preRender() {

@@ -38,8 +38,8 @@ public class MouseMotionHandler implements MouseMotionListener {
     Vector2 newPos = new Vector2(e.getX(), e.getY());
     currentPos = newPos;
     if(!detected) {
-      int distX = 300 - newPos.x;
-      int distY = 300 - newPos.y;
+      double distX = 300 - newPos.x;
+      double distY = 300 - newPos.y;
       
       home = new Vector2(e.getXOnScreen() + distX, e.getYOnScreen() + distY);
       detected = true;
@@ -52,7 +52,7 @@ public class MouseMotionHandler implements MouseMotionListener {
         currentPos.x - previousPos.x,
         currentPos.y - previousPos.y
       );
-      robot.mouseMove(home.x, home.y);
+      // robot.mouseMove(home.x, home.y);
     }
     if(InputManager.pressed(Keybind.ESCAPE)) {
       enable = !enable;

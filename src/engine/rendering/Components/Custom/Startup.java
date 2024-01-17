@@ -47,6 +47,7 @@ public class Startup extends Component {
     player.addComponent(new Rigidbody());
     player.addComponent(new PlayerController());
     player.addComponent(new CameraFollow());
+    Scene.mainCamera.setRotation(new double[] { -30, 0, 0 });
 
     Rigidbody rb = (Rigidbody)player.getComponent(Rigidbody.class);
     // rb.velocity = new Vector3(0.0, -0.01, 0);
@@ -61,6 +62,11 @@ public class Startup extends Component {
     
     Scene.addGameObject(player);
     Scene.addGameObject(ground);
+
+    GameObject platform = new GameObject(cube);
+    platform.addComponent(new Rigidbody());
+    platform.addComponent(new FallingPlatform(new Vector3(0, 0, 10), new Vector3(1, 0.5, 1)));
+    Scene.addGameObject(platform);
   }
 
   public void update() {

@@ -32,7 +32,7 @@ public class GameState implements State {
     public void update() {
         Scene.update();
     }
-
+    
     @Override
     public void render(BufferedImage image) {
         Scene.preRender();
