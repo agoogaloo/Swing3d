@@ -64,5 +64,7 @@ public class PlayerController extends Component {
       gameObject.transform.position.y -= 0.0001;
       rb.velocity.y = 0;
     }
+
+    Debug.drawPoint(new double[] { gameObject.transform.position.x, gameObject.transform.position.y, gameObject.transform.position.z });
   }
 }

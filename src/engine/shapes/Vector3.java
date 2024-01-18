@@ -22,7 +22,31 @@ public class Vector3 {
     return new Vector3(-x, -y, -z);
   }
 
+  public boolean between(Vector3 min, Vector3 max) {
+    return (
+      x <= max.x && x >= min.x &&
+      y <= max.y && y >= min.y &&
+      z <= max.z && z >= min.z
+    );
+  }
+
   public double[] toDouble() {
     return new double[] { x, y, z };
+  }
+
+  public static Vector3 add(Vector3 a, Vector3 b) {
+    return new Vector3(
+      a.x + b.x,
+      a.y + b.y,
+      a.z + b.z
+    );
+  }
+  
+  public static Vector3 scalarMultiply(Vector3 a, double b) {
+    return new Vector3(
+      a.x * b,
+      a.y * b,
+      a.z * b
+    );
   }
 }

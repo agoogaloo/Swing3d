@@ -1,5 +1,6 @@
 package engine.rendering.Components.Custom;
 
+import engine.rendering.Components.BoxCollider;
 import engine.rendering.Components.Component;
 import engine.rendering.Components.Rigidbody;
 import engine.shapes.Vector3;
@@ -14,6 +15,7 @@ public class FallingPlatform extends Component {
   public void start() {
     gameObject.transform.translate(pos);
     gameObject.transform.setScale(size);
+    gameObject.setCollider(new BoxCollider(size));
   }
 
   public void update() {

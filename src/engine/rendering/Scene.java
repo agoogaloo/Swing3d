@@ -10,14 +10,18 @@ public class Scene {
   public static Camera mainCamera;
   public static ArrayList<GameObject> objects = new ArrayList<GameObject>();
   public static ArrayList<Component> scripts = new ArrayList<Component>();
+  public static Mesh[] meshes;
 
   static double startTime;
   public static double elapsedTime;
 
   public static void addGameObject(GameObject object) {
-    objects.add(object);
-    preRender();
     object.start();
+    objects.add(object);
+    if(object.collider != null) {
+      CollisionData.colliders.add(object.collider);
+    }
+    preRender();
   }
   public static void addScript(Component component) {
     scripts.add(component);
@@ -31,10 +35,10 @@ public class Scene {
   }
 
   public static void preRender() {
-    CollisionData.meshes = new Mesh[objects.size()];
+    meshes = new Mesh[objects.size()];
 
     for (int i = 0; i < objects.size(); i++) {
-      CollisionData.meshes[i] = objects.get(i).getWorldMesh();
+      meshes[i] = objects.get(i).getWorldMesh();
     }
   }
 

@@ -3,7 +3,6 @@ package engine.shapes;
 public class Mesh {
   public double[][][] triangles;
   public double[][] colors;
-  public String id;
 
   public Mesh(double[][][] triangles, double[][] colors) {
     this.triangles = triangles;
@@ -11,11 +10,6 @@ public class Mesh {
   }
   public Mesh(double[][][] triangles, double[][] colors, String id) {
     this(triangles, colors);
-    setID(id);
-  }
-
-  public void setID(String id) {
-    this.id = id;
   }
 
   public void translate(Vector3 distance) {
@@ -90,6 +84,6 @@ public class Mesh {
       }
       colorsCopy[j] = mesh.colors[j];
     }
-    return new Mesh(trianglesCopy, colorsCopy, mesh.id);
+    return new Mesh(trianglesCopy, colorsCopy);
   }
 }

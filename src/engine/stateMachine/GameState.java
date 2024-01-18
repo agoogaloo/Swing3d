@@ -37,7 +37,7 @@ public class GameState implements State {
     public void render(BufferedImage image) {
         Scene.preRender();
 
-        renderer.render(image, CollisionData.meshes, Scene.mainCamera.cameraPosition, Scene.mainCamera.cameraDirection);
+        renderer.render(image, Scene.meshes, Scene.mainCamera.cameraPosition, Scene.mainCamera.cameraDirection);
         Debug.clearPoints();
     }
 

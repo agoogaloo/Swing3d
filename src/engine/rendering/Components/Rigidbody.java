@@ -15,32 +15,23 @@ public class Rigidbody extends Component {
   
   @Override
   public void update() {
+    gameObject.transform.translate(velocity);
     colliding = !canMove();
-    if(!colliding) {
-      gameObject.transform.translate(velocity);
-    } else {
+    if(colliding) {
+      gameObject.transform.translate(velocity.negative());
       velocity = new Vector3(0, 0, 0);
     }
   }
 
   boolean canMove() {
-    for(int t = 0; t < gameObject.mesh.triangles.length; t++) {
-      for (int i = 0; i < 3; i++) {
-        double[] point1 = gameObject.getWorldMesh().triangles[t][i];
-        double[] point2 = Vector.add(point1, velocity.toDouble());
-        for (Mesh mesh : CollisionData.meshes) {
-          try {
-            if(!mesh.id.equals(gameObject.mesh.id)) {
-              for (double[][] triangle : mesh.triangles) {
-                if(Vector.lineIntersectsTriangle(triangle[0], triangle[1], triangle[2], point1, point2)) {
-                  return false;
-                }
-              }
-            }
-          } catch(NullPointerException e) {
-            System.out.println("Missing collision mesh");
-          }
+    if(gameObject.collider == null) { return true; }
+    for (Collider collider : CollisionData.colliders) {
+      try {
+        if(!collider.id.equals(gameObject.collider.id)) {
+          if(collider.intersectsCollider(gameObject.collider)) { return false; }
         }
+      } catch(NullPointerException e) {
+        System.out.println("Collider not found");
       }
     }
     return true;

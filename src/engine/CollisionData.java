@@ -1,7 +1,9 @@
 package engine;
 
-import engine.shapes.Mesh;
+import java.util.ArrayList;
+
+import engine.rendering.Components.Collider;
 
 public class CollisionData {
-  public static Mesh[] meshes;
+  public static ArrayList<Collider> colliders = new ArrayList<Collider>();
 }
