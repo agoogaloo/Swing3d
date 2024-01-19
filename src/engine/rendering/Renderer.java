@@ -4,6 +4,7 @@ import java.awt.image.BufferedImage;
 
 import engine.rendering.Shaders.DepthShader;
 import engine.rendering.Shaders.FragmentShader;
+import engine.rendering.Shaders.HueShiftShader;
 import engine.rendering.Shaders.LinearLighting;
 import engine.rendering.Shaders.VertexShader;
 import engine.rendering.VertexTramsforms.CameraTransform;
@@ -44,6 +45,7 @@ public class Renderer {
       //new ExFragmentShader(),
       new DepthShader(),
       //new PalletinatorShader()
+      new HueShiftShader()
     };
   }
 

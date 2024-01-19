@@ -1,5 +1,6 @@
 package engine.rendering.Shaders;
 
+import engine.rendering.Time;
 import engine.rendering.VertexData;
 
 public abstract class FragmentShader {
@@ -18,5 +19,9 @@ public abstract class FragmentShader {
     if(t < min) { return min; }
     if(t > max) { return max; }
     return t;
+  }
+
+  double elapsedTime() {
+    return Time.elapsedTime;
   }
 }

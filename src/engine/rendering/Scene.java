@@ -45,7 +45,7 @@ public class Scene {
   }
 
   public static void update() {
-    elapsedTime = (System.currentTimeMillis() - startTime)/1000;
+    Time.elapsedTime = (System.currentTimeMillis() - startTime)/1000;
 
     for (GameObject object : objects) {
       object.update();
