@@ -48,25 +48,26 @@ public class BoxCollider extends Collider {
     if(other instanceof BoxCollider) {
       BoxCollider box = (BoxCollider)other;
 
-      Vector3[] points = box.getCorners();
-      Vector3 min = getMin();
-      Vector3 max = getMax();
-      for (Vector3 point : points) {
-        if(point.between(min, max)) { return true; }
-      }
-
-      points = this.getCorners();
-      min = box.getMin();
-      max = box.getMax();
-      for (Vector3 point : points) {
-        if(point.between(min, max)) { return true; }
-      }
+      return intersectsBoxCollider(box);
     }
     return false;
   }
 
+  boolean intersectsBoxCollider(BoxCollider other) {
+    Vector3 min = this.getMin();
+    Vector3 max = this.getMax();
+    Vector3 min2 = other.getMin();
+    Vector3 max2 = other.getMax();
+
+    return (
+      (max.x >= min2.x && min.x <= max2.x) &&
+      (max.y >= min2.y && min.y <= max2.y) &&
+      (max.z >= min2.z && min.z <= max2.z)
+    );
+  }
+
   public void update() {
-    debug();
+    // debug();
   }
 
   public void debug() {

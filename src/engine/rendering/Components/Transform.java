@@ -16,7 +16,7 @@ public class Transform extends Component {
   }
 
   public void translate(Vector3 distance) {
-    position.translate(distance);
+    position.translate(new Vector3(distance.x, -distance.y, distance.z));
   }
 
   public void setPosition(Vector3 position) {
