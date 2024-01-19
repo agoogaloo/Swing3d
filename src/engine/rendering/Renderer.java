@@ -6,6 +6,7 @@ import engine.rendering.Shaders.DepthShader;
 import engine.rendering.Shaders.FragmentShader;
 import engine.rendering.Shaders.HueShiftShader;
 import engine.rendering.Shaders.LinearLighting;
+import engine.rendering.Shaders.NormalMap;
 import engine.rendering.Shaders.VertexShader;
 import engine.rendering.VertexTramsforms.CameraTransform;
 import engine.rendering.VertexTramsforms.ClipTriangles;
@@ -41,11 +42,12 @@ public class Renderer {
 
     };
     this.fragmentShaders = new FragmentShader[] {
-      //new LinearLighting(),
+      // new LinearLighting(),
       //new ExFragmentShader(),
       new DepthShader(),
-      //new PalletinatorShader()
-      new HueShiftShader()
+      //new PalletinatorShader(),
+      new HueShiftShader(),
+      // new NormalMap()
     };
   }
 

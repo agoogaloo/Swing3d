@@ -1,5 +1,7 @@
 package engine.rendering.Components.Custom;
 
+import java.util.ArrayList;
+
 import engine.rendering.GameObject;
 import engine.rendering.Scene;
 import engine.rendering.Components.*;
@@ -47,20 +49,25 @@ public class Startup extends Component {
     player.addComponent(new Rigidbody());
     player.addComponent(new PlayerController());
     player.addComponent(new CameraFollow());
-    Scene.mainCamera.setRotation(new double[] { -30, 0, 0 });
-    
-    ground.addComponent(new BoxCollider(new Vector3(10, 10, 10), 0));
-    ground.transform.translate(new Vector3(0, 5, 4));
-    ground.transform.setScale(new Vector3(10, 10, 10));
-    ground.transform.rotate(new Vector3(0, 0, 0));
+    Scene.mainCamera.setRotation(new double[] { 0, 0, 0 });
     
     Scene.addGameObject(player);
-    Scene.addGameObject(ground);
     
-    GameObject platform = new GameObject(cube);
-    platform.addComponent(new Rigidbody());
-    platform.addComponent(new Platform(new Vector3(0, -10, 0), new Vector3(1, 10, 1)));
-    Scene.addGameObject(platform);
+    Platform[] platforms = new Platform[] {
+      new Platform(new Vector3(0, 0, 4), new Vector3(10, 1, 10)),
+      new Platform(new Vector3(0, 1, 13), new Vector3(2, 0.5, 2)),
+      new Platform(new Vector3(4, 4, 22), new Vector3(0.5, 5, 10)),
+      new Platform(new Vector3(0, 2, 8), new Vector3(5, 1, 5)),
+      // new Platform(new Vector3(0, 0, 0), new Vector3(0, 0, 0)),
+    };
+
+    for (Platform platform : platforms) {
+      GameObject platformObject = new GameObject(cube);
+      platformObject.addComponent(platform);
+
+      Scene.addGameObject(platformObject);
+    }
+    
   }
 
   public void update() {

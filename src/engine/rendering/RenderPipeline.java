@@ -110,6 +110,8 @@ public class RenderPipeline {
 
   public void scan(boolean drawEdges, boolean fill, boolean debug) {
     FrameData.frameBuffer = new double[FrameData.width][FrameData.height][4];
+    FrameData.normalMap = new double[FrameData.width][FrameData.height][4];
+    FrameData.UVW = new double[FrameData.width][FrameData.height][4];
     FrameData.depthMap = new double[FrameData.width][FrameData.height];
     FrameData.triangleAtPixel = new int[FrameData.width][FrameData.height];
     for(int x = 0; x < FrameData.width; x++) {
@@ -130,14 +132,15 @@ public class RenderPipeline {
           int maxX = (int)Math.min(Math.max(v0[0],Math.max(v1[0],v2[0]))+1, FrameData.width);
           int maxY = (int)Math.min(Math.max(v0[1],Math.max(v1[1],v2[1]))+1, FrameData.width);
 
+          double[] normal = computeNormalVector(v0, v1, v2);
+          double k = -(normal[0]*v0[0] + normal[1]*v0[1] + normal[2]*v0[2]);
           for(int x = minX; x < maxX; x++) {
             for(int y = minY; y < maxY; y++) {
               if(PointInTriangle(new double[] { x, y }, v0, v1, v2)) {
-                double[] normal = computeNormalVector(v0, v1, v2);
-                double k = -(normal[0]*v0[0] + normal[1]*v0[1] + normal[2]*v0[2]);
                 double z = -(x*normal[0] + y*normal[1] + k)/normal[2];
                 if(z < FrameData.depthMap[x][y]) {
                   FrameData.frameBuffer[x][y] = VertexData.surfaceColors[i/3];
+                  FrameData.normalMap[x][y] = VertexData.surfaceNormals[i/3];
                   FrameData.depthMap[x][y] = z;
                   FrameData.triangleAtPixel[x][y] = i/3;
                 }
