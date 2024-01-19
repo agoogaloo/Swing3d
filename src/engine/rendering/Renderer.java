@@ -42,12 +42,11 @@ public class Renderer {
 
     };
     this.fragmentShaders = new FragmentShader[] {
-      // new LinearLighting(),
-      //new ExFragmentShader(),
+      new LinearLighting(),
+      // new NormalMap(),
       new DepthShader(),
       //new PalletinatorShader(),
       new HueShiftShader(),
-      // new NormalMap()
     };
   }
 
@@ -85,7 +84,7 @@ public class Renderer {
       vertexPositions, surfaceColors, 
       cameraPosition, cameraDirection, 
       frame.getWidth(), frame.getHeight(), 
-      new double[][] { { 0, 0, 0, 1 }, { 0, 1, 0, 1 }, { 1, 0, 0, 1 }, }
+      new double[][] { { 0, 0, 0, 1 }, { 0, -1, 1, 1 }, { 1, -1, 1, 1 }, }
     );
     renderPipeline.computeSurfaceNormals();
     renderPipeline.applyVertexTransformations(preProjection);

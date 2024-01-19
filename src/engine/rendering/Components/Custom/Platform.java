@@ -2,7 +2,6 @@ package engine.rendering.Components.Custom;
 
 import engine.rendering.Components.BoxCollider;
 import engine.rendering.Components.Component;
-import engine.rendering.Components.Rigidbody;
 import engine.shapes.Vector3;
 
 public class Platform extends Component {
@@ -19,6 +18,5 @@ public class Platform extends Component {
   }
 
   public void update() {
-
   }
 }
