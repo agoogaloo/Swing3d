@@ -14,7 +14,7 @@ public class Platform extends Component {
   public void start() {
     gameObject.transform.translate(pos);
     gameObject.transform.setScale(size);
-    gameObject.addComponent(new BoxCollider(size, 0));
+    gameObject.addComponent(new BoxCollider(size, new Vector3(0, 0, 0), 0));
   }
 
   public void update() {

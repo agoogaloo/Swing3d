@@ -14,24 +14,26 @@ public class PlayerController extends Component {
   double speed = 10;
   double gravity = 4, wallGravity = 1;
   double jumpHeight = 10; 
-  double sensitivity = 0.5;
+  double sensitivity = 0.35;
 
   double velX = 0, velY = 0, velZ = 0;
 
   boolean canJump = false, grounded = false, onWall = false;
 
-  Collider groundCollider, wallCollider, jumpCollider;
+  Collider groundCollider, roofCollider, wallCollider, jumpCollider;
 
   public void start() {
-    groundCollider = new BoxCollider(new Vector3(0.4, 1, 0.4), 0);
-    wallCollider = new BoxCollider(new Vector3(0.5, 0.95, 0.5), 1);
-    jumpCollider = new BoxCollider(new Vector3(0.75, 1.25, 0.75), 2);
+    groundCollider = new BoxCollider(new Vector3(0.5, 0.25, 0.5), new Vector3(0, 0.375, 0), 0);
+    roofCollider = new BoxCollider(new Vector3(0.5, 0.25, 0.5), new Vector3(0, -0.375, 0), 0);
+    wallCollider = new BoxCollider(new Vector3(0.5, 0.95, 0.5), new Vector3(0, 0, 0), 1);
+    jumpCollider = new BoxCollider(new Vector3(1, 2, 1), new Vector3(0, -0.375, 0), 2);
     
-    gameObject.transform.setScale(new Vector3(0.01, 0.11, 0.01));
+    gameObject.transform.setScale(new Vector3(0.5, 1, 0.5));
 
     gameObject.addComponent(groundCollider);
     gameObject.addComponent(wallCollider);
     gameObject.addComponent(jumpCollider);
+    gameObject.addComponent(roofCollider);
   }
   
   public void update()  {
@@ -42,12 +44,18 @@ public class PlayerController extends Component {
         gameObject.transform.position.y -= 0.001;
       }
     }
+    if(roofCollider.colliding()) {
+      velY = 0;
+      while(roofCollider.colliding()) {
+        gameObject.transform.position.y += 0.001;
+      }
+    }
 
     velX = 0; velZ = 0;
     canJump = jumpCollider.colliding();
 
-    Vector2 mouseSpeed = InputManager.mouseSpeed();
-    // Vector2 mouseSpeed = new Vector2(0, 0);
+    // Vector2 mouseSpeed = InputManager.mouseSpeed();
+    Vector2 mouseSpeed = new Vector2(0, 0);
 
     if(InputManager.held(Keybind.FORWARD)) {
       velZ = speed/100;
@@ -94,7 +102,8 @@ public class PlayerController extends Component {
     } else {
       velY -= gravity/1000;
     }
-
-    // System.out.println(canJump);
+    if(gameObject.transform.position.y >= 10) {
+      gameObject.transform.position = new Vector3(0, 0, 0);
+    }
   }
 }

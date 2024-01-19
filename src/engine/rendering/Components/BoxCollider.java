@@ -5,10 +5,12 @@ import engine.shapes.Vector3;
 
 public class BoxCollider extends Collider {
   public Vector3 size;
+  public Vector3 offset;
 
-  public BoxCollider(Vector3 size, int layer) {
+  public BoxCollider(Vector3 size, Vector3 offset, int layer) {
     super(layer);
     this.size = size;
+    this.offset = offset;
   }
 
   public boolean containsPoint(Vector3 point) {
@@ -37,11 +39,17 @@ public class BoxCollider extends Collider {
   }
   
   public Vector3 getMin() {
-    return Vector3.add(gameObject.transform.position, Vector3.scalarMultiply(size, 0.5).negative());
+    return Vector3.add(
+      Vector3.add(gameObject.transform.position, Vector3.scalarMultiply(size, 0.5).negative()),
+      offset
+    );
   }
 
   public Vector3 getMax() {
-    return Vector3.add(gameObject.transform.position, Vector3.scalarMultiply(size, 0.5));
+    return Vector3.add(
+      Vector3.add(gameObject.transform.position, Vector3.scalarMultiply(size, 0.5)),
+      offset
+    );
   }
 
   public boolean intersectsCollider(Collider other) {
@@ -67,7 +75,7 @@ public class BoxCollider extends Collider {
   }
 
   public void update() {
-    // debug();
+    debug();
   }
 
   public void debug() {
