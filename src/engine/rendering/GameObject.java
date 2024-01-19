@@ -13,7 +13,6 @@ public class GameObject {
   public Transform transform;
   public ArrayList<Component> components = new ArrayList<Component>();
   public Mesh mesh;
-  public Collider collider;
   public Mesh worldMesh;
   public String id;
 
@@ -34,12 +33,7 @@ public class GameObject {
   public void addComponent(Component component) {
     components.add(component);
     component.gameObject = this;
-  }
-
-  public void setCollider(Collider collider) {
-    this.collider = collider;
-    collider.gameObject = this;
-    collider.id = this.id;
+    component.start();
   }
 
   public Component getComponent(Class<?> type) {
@@ -50,20 +44,21 @@ public class GameObject {
     }
     return new Component();
   }
+  public ArrayList<Component> getComponents(Class<?> type) {
+    ArrayList<Component> components = new ArrayList<Component>();
+    for (Component component : components) {
+      if(component.getClass() == type) {
+        components.add(component);
+      }
+    }
+    return components;
+  }
 
   public void start() {
-    if(collider != null) {
-      collider.start();
-    }
-    for (Component component : components) {
-      component.start();
-    }
+
   }
   
   public void update() {
-    if(collider != null) {
-      collider.update();
-    }
     for (Component component : components) {
       component.update();
     }

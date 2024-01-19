@@ -6,7 +6,8 @@ import engine.shapes.Vector3;
 public class BoxCollider extends Collider {
   public Vector3 size;
 
-  public BoxCollider(Vector3 size) {
+  public BoxCollider(Vector3 size, int layer) {
+    super(layer);
     this.size = size;
   }
 
@@ -65,7 +66,7 @@ public class BoxCollider extends Collider {
   }
 
   public void update() {
-    // debug();
+    debug();
   }
 
   public void debug() {

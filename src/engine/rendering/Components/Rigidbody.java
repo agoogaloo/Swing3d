@@ -24,16 +24,16 @@ public class Rigidbody extends Component {
   }
 
   boolean canMove() {
-    if(gameObject.collider == null) { return true; }
-    for (Collider collider : CollisionData.colliders) {
-      try {
-        if(!collider.id.equals(gameObject.collider.id)) {
-          if(collider.intersectsCollider(gameObject.collider)) { return false; }
-        }
-      } catch(NullPointerException e) {
-        System.out.println("Collider not found");
-      }
-    }
+  //   if(gameObject.collider == null) { return true; }
+  //   for (Collider collider : CollisionData.colliders) {
+  //     try {
+  //       if(!collider.id.equals(gameObject.collider.id)) {
+  //         if(collider.intersectsCollider(gameObject.collider)) { return false; }
+  //       }
+  //     } catch(NullPointerException e) {
+  //       System.out.println("Collider not found");
+  //     }
+  //   }
     return true;
   }
 }

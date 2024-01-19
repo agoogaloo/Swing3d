@@ -52,7 +52,7 @@ public class MouseMotionHandler implements MouseMotionListener {
         currentPos.x - previousPos.x,
         currentPos.y - previousPos.y
       );
-      // robot.mouseMove(home.x, home.y);
+      robot.mouseMove((int)home.x, (int)home.y);
     }
     if(InputManager.pressed(Keybind.ESCAPE)) {
       enable = !enable;
