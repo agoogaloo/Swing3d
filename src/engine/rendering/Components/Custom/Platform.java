@@ -7,22 +7,22 @@ import engine.shapes.Vector3;
 
 public class Platform extends Component {
   Vector3 pos, size;
-  boolean hazard;
+  int layer;
 
-  public Platform(Vector3 position, Vector3 size, boolean hazard) {
-    this.pos = position; this.size = size; this.hazard = hazard;
+  public Platform(Vector3 position, Vector3 size, int layer) {
+    this.pos = position; this.size = size; this.layer = layer;
   }
   
   public void start() {
     gameObject.transform.translate(pos);
     gameObject.transform.setScale(size);
-    int layer = 0;
-    if(hazard) { 
-      layer = 1; 
-      gameObject.mesh.colors = MeshColors.red;
-    } else {
+    if(layer == 0) { 
       gameObject.mesh.colors = MeshColors.blue;
-    }
+    } else if(layer == 1) { 
+      gameObject.mesh.colors = MeshColors.red;
+    } else if(layer == 2) { 
+      gameObject.mesh.colors = MeshColors.green;
+    } 
 
     gameObject.addComponent(new BoxCollider(size, new Vector3(0, 0, 0), layer));
   }

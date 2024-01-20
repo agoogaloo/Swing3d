@@ -14,7 +14,7 @@ public class PlayerController extends Component {
   double speed = 10;
   double gravity = 4;
   double jumpHeight = 10; 
-  double sensitivity = 0.35;
+  double sensitivity = 0.2;
 
   double velX = 0, velY = 0, velZ = 0;
 
@@ -34,6 +34,8 @@ public class PlayerController extends Component {
     gameObject.addComponent(wallCollider);
     gameObject.addComponent(jumpCollider);
     gameObject.addComponent(roofCollider);
+
+    respawn();
   }
   
   public void update()  {
@@ -122,5 +124,6 @@ public class PlayerController extends Component {
   
   void respawn() {
     gameObject.transform.position = new Vector3(0, -1, 0);
+    velX = 0; velY = 0; velZ = 0;
   }
 }
