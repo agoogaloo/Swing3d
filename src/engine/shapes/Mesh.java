@@ -71,6 +71,9 @@ public class Mesh {
   }
 
   public static Mesh copy(Mesh mesh) {
+    return copy(mesh, mesh.colors);
+  }
+  public static Mesh copy(Mesh mesh, double[][] colors) {
     double[][][] trianglesCopy = new double[mesh.triangles.length][3][3];
     double[][] colorsCopy = new double[mesh.triangles.length][4];
     for(int j = 0; j < mesh.triangles.length; j++) {
@@ -82,7 +85,7 @@ public class Mesh {
           triangle[k][2],
         };
       }
-      colorsCopy[j] = mesh.colors[j];
+      colorsCopy[j] = colors[j];
     }
     return new Mesh(trianglesCopy, colorsCopy);
   }

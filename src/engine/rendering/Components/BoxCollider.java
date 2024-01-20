@@ -75,7 +75,7 @@ public class BoxCollider extends Collider {
   }
 
   public void update() {
-    debug();
+    // debug();
   }
 
   public void debug() {

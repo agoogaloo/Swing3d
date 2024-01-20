@@ -6,6 +6,7 @@ import engine.rendering.GameObject;
 import engine.rendering.Scene;
 import engine.rendering.Components.*;
 import engine.shapes.Mesh;
+import engine.shapes.MeshColors;
 import engine.shapes.Vector3;
 
 public class Startup extends Component {
@@ -27,14 +28,7 @@ public class Startup extends Component {
         
     {{ 1.0, 0.0, 1.0 }, { 0.0, 0.0, 0.0 }, { 0.0, 0.0, 1.0 }},
     {{ 1.0, 0.0, 1.0 }, { 1.0, 0.0, 0.0 }, { 0.0, 0.0, 0.0 }},
-  }, new double[][] {
-    { 1, 1, 0, 0 }, { 1, 1, 0, 0 },
-    { 1, 0, 1, 0 }, { 1, 0, 1, 0 },
-    { 1, 1, 0, 0 }, { 1, 1, 0, 0 },
-    { 1, 0, 1, 0 }, { 1, 0, 1, 0 },
-    { 1, 0, 0, 1 }, { 1, 0, 0, 1 },
-    { 1, 0, 0, 1 }, { 1, 0, 0, 1 },
-  });
+  }, MeshColors.defaultColor);
 
   GameObject player;
 
@@ -54,11 +48,15 @@ public class Startup extends Component {
     Scene.addGameObject(player);
     
     Platform[] platforms = new Platform[] {
-      new Platform(new Vector3(0, 0, 0), new Vector3(10, 1, 10)),
-      new Platform(new Vector3(0, 1, 13), new Vector3(2, 0.5, 2)),
-      new Platform(new Vector3(4, 4, 22), new Vector3(0.5, 5, 10)),
-      new Platform(new Vector3(0, 3, 4), new Vector3(5, 1, 5)),
-      // new Platform(new Vector3(0, 0, 0), new Vector3(0, 0, 0)),
+      new Platform(new Vector3(0, 0, 4), new Vector3(10, 1, 10), false),
+      new Platform(new Vector3(0, 1, 13), new Vector3(2, 0.5, 2), false),
+      new Platform(new Vector3(4, 4, 22), new Vector3(0.5, 5, 10), false),
+      new Platform(new Vector3(4.2, 4, 22), new Vector3(0.5, 5.5, 10.5), true),
+      new Platform(new Vector3(-1, 3, 30), new Vector3(0.5, 3, 5), false),
+      new Platform(new Vector3(-1.1, 3, 29.25), new Vector3(0.5, 3.5, 5.5), true),
+      new Platform(new Vector3(0, 16, 38), new Vector3(4, 30, 4), true),
+      new Platform(new Vector3(2, 6, 35), new Vector3(0.5, 8, 5), true),
+      new Platform(new Vector3(-2, 5, 38), new Vector3(0.5, 4, 4.5), false),
     };
 
     for (Platform platform : platforms) {

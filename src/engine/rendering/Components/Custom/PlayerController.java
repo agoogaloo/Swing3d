@@ -12,7 +12,7 @@ import engine.shapes.Vector3;
 
 public class PlayerController extends Component {
   double speed = 10;
-  double gravity = 4, wallGravity = 1;
+  double gravity = 4;
   double jumpHeight = 10; 
   double sensitivity = 0.35;
 
@@ -25,10 +25,10 @@ public class PlayerController extends Component {
   public void start() {
     groundCollider = new BoxCollider(new Vector3(0.5, 0.25, 0.5), new Vector3(0, 0.375, 0), 0);
     roofCollider = new BoxCollider(new Vector3(0.5, 0.25, 0.5), new Vector3(0, -0.375, 0), 0);
-    wallCollider = new BoxCollider(new Vector3(0.5, 0.95, 0.5), new Vector3(0, 0, 0), 1);
-    jumpCollider = new BoxCollider(new Vector3(1, 2, 1), new Vector3(0, -0.375, 0), 2);
+    wallCollider = new BoxCollider(new Vector3(0.5, 0.95, 0.5), new Vector3(0, 0, 0), 0);
+    jumpCollider = new BoxCollider(new Vector3(1, 2, 1), new Vector3(0, -0.375, 0), 0);
     
-    gameObject.transform.setScale(new Vector3(0.5, 1, 0.5));
+    gameObject.transform.setScale(new Vector3(0.1, 0.1, 0.1));
 
     gameObject.addComponent(groundCollider);
     gameObject.addComponent(wallCollider);
@@ -37,16 +37,16 @@ public class PlayerController extends Component {
   }
   
   public void update()  {
-    grounded = groundCollider.colliding();
+    grounded = groundCollider.colliding(0);
     if(grounded) {
       velY = 0;
-      while(groundCollider.colliding()) {
+      while(groundCollider.colliding(0)) {
         gameObject.transform.position.y -= 0.001;
       }
     }
-    if(roofCollider.colliding()) {
+    if(roofCollider.colliding(0)) {
       velY = 0;
-      while(roofCollider.colliding()) {
+      while(roofCollider.colliding(0)) {
         gameObject.transform.position.y += 0.001;
       }
     }
@@ -54,8 +54,8 @@ public class PlayerController extends Component {
     velX = 0; velZ = 0;
     canJump = jumpCollider.colliding();
 
-    // Vector2 mouseSpeed = InputManager.mouseSpeed();
-    Vector2 mouseSpeed = new Vector2(0, 0);
+    Vector2 mouseSpeed = InputManager.mouseSpeed();
+    // Vector2 mouseSpeed = new Vector2(0, 0);
 
     if(InputManager.held(Keybind.FORWARD)) {
       velZ = speed/100;
@@ -86,24 +86,41 @@ public class PlayerController extends Component {
 
     velX = relativeVX;
     velZ = relativeVZ;
+    
+    onWall = false;
 
     gameObject.transform.position.x += velX;
+    if(wallCollider.colliding(0)) {
+      onWall = true;
+      gameObject.transform.position.x -= velX;
+    }
+    
     gameObject.transform.position.z += velZ;
+    if(wallCollider.colliding(0)) {
+      onWall = true;
+      gameObject.transform.position.z -= velZ;
+    }
+
     gameObject.transform.position.y -= velY;
 
-    onWall = wallCollider.colliding();
+    if(wallCollider.colliding(1)) {
+      respawn();
+    }
+
     if(onWall) {
-      gameObject.transform.position.x -= velX;
-      gameObject.transform.position.z -= velZ;
       if(!canJump && velY < 0) {
         velY = 0;
       }
-      velY -= wallGravity/2000;
-    } else {
-      velY -= gravity/1000;
     }
+
+    velY -= gravity/1000;
+    
     if(gameObject.transform.position.y >= 10) {
-      gameObject.transform.position = new Vector3(0, 0, 0);
+      respawn();
     }
+  }
+  
+  void respawn() {
+    gameObject.transform.position = new Vector3(0, -1, 0);
   }
 }

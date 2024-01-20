@@ -21,7 +21,10 @@ public abstract class Collider extends Component {
   public abstract boolean intersectsCollider(Collider other);
   public abstract void debug();
 
-  public boolean colliding() {
+  public boolean colliding() { 
     return CollisionData.isColliding(this);
+  }
+  public boolean colliding(int mask) {
+    return CollisionData.isColliding(this, mask);
   }
 }

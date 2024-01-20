@@ -46,7 +46,7 @@ public class Renderer {
       // new NormalMap(),
       new DepthShader(),
       //new PalletinatorShader(),
-      new HueShiftShader(),
+      // new HueShiftShader(),
     };
   }
 
