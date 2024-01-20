@@ -32,8 +32,8 @@ public class LinearLighting extends FragmentShader {
           double luminance = triangleLuminance[index];
   
           FrameData.frameBuffer[px][py] = new double[] {
-            pixel[0]*luminance, 
-            pixel[1], pixel[2], pixel[3],
+            pixel[0]*luminance,
+            pixel[1], pixel[2], pixel[3], 
           };
         }
       }

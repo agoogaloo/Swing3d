@@ -2,18 +2,8 @@ package engine.rendering;
 
 import java.awt.image.BufferedImage;
 
-import engine.rendering.Shaders.DepthShader;
-import engine.rendering.Shaders.FragmentShader;
-import engine.rendering.Shaders.HueShiftShader;
-import engine.rendering.Shaders.LinearLighting;
-import engine.rendering.Shaders.NormalMap;
-import engine.rendering.Shaders.VertexShader;
-import engine.rendering.VertexTramsforms.CameraTransform;
-import engine.rendering.VertexTramsforms.ClipTriangles;
-import engine.rendering.VertexTramsforms.CullTriangles;
-import engine.rendering.VertexTramsforms.NormalizeClipVertices;
-import engine.rendering.VertexTramsforms.VertexTransform;
-import engine.rendering.VertexTramsforms.WindowTransform;
+import engine.rendering.Shaders.*;
+import engine.rendering.VertexTramsforms.*;
 import engine.shapes.Mesh;
 
 public class Renderer {
@@ -45,6 +35,8 @@ public class Renderer {
       new LinearLighting(),
       // new NormalMap(),
       new DepthShader(),
+      new FunkyBackground(),
+      // new LowQualityColor(),
       //new PalletinatorShader(),
       // new HueShiftShader(),
     };
@@ -84,7 +76,7 @@ public class Renderer {
       vertexPositions, surfaceColors, 
       cameraPosition, cameraDirection, 
       frame.getWidth(), frame.getHeight(), 
-      new double[][] { { 0, 0, 0, 1 }, { 0, -1, 1, 1 }, { 1, -1, 1, 1 }, }
+      new double[][] { { 0, 0, 0, 1 }, { 0, -1, 1.5, 1 }, { 1, -1, 1.75, 1 }, }
     );
     renderPipeline.computeSurfaceNormals();
     renderPipeline.applyVertexTransformations(preProjection);
