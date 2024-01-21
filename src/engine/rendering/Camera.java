@@ -43,8 +43,8 @@ public class Camera {
   }
   
   public void pitchCamera(double angle) {
-    double xAngle = Math.cos(yaw*3.14159/180)*angle;
-    double zAngle = Math.sin(yaw*3.14159/180)*angle;
+    double xAngle = Math.cos(yaw*Math.PI/180)*angle;
+    double zAngle = Math.sin(yaw*Math.PI/180)*angle;
     
     double[][] rotationMatrix;
     

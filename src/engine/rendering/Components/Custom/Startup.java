@@ -50,15 +50,15 @@ public class Startup extends Component {
       new Platform(new Vector3(0, 0, 4), new Vector3(10, 1, 10), 0),
       new Platform(new Vector3(0, 1, 13), new Vector3(2, 0.5, 2), 0),
 
-      new Platform(new Vector3(4, 4, 22), new Vector3(0.5, 5, 10), 0),
-      new Platform(new Vector3(4.2, 4, 22), new Vector3(0.5, 5.5, 10.5), 1),
-      new Platform(new Vector3(-1, 4, 30), new Vector3(0.5, 3, 5), 0),
-      new Platform(new Vector3(-1.1, 4, 29.25), new Vector3(0.5, 3.5, 5.5), 1),
+      new Platform(new Vector3(4, 4, 22), new Vector3(0.5, 5, 9.5), 0),
+      new Platform(new Vector3(4.2, 4, 22), new Vector3(0.5, 5.5, 10), 1),
+      new Platform(new Vector3(-1, 4.5, 30.25), new Vector3(0.5, 3, 4), 0),
+      new Platform(new Vector3(-1.1, 4.5, 29.75), new Vector3(0.5, 3.25, 4), 1),
 
       new Platform(new Vector3(0, 8, 38), new Vector3(4, 10, 4), 1),
       new Platform(new Vector3(1.75, 7, 35), new Vector3(0.5, 8, 5), 1),
-      new Platform(new Vector3(-2, 6, 38), new Vector3(0.5, 4, 3.9), 0),
-      new Platform(new Vector3(0, 8, 42.5), new Vector3(4, 3, 0.5), 0),
+      new Platform(new Vector3(-1.9, 6, 38), new Vector3(0.35, 4, 4.1), 0),
+      new Platform(new Vector3(0, 7.5, 42.5), new Vector3(4, 2.5, 0.5), 0),
       new Platform(new Vector3(2, 8, 38), new Vector3(4, 0.5, 1.5), 0),
       new Platform(new Vector3(4, 11.5, 34), new Vector3(2, 4, 0.5), 0),
       new Platform(new Vector3(0, 13, 38), new Vector3(3.5, 0.5, 3.5), 0),
@@ -66,7 +66,7 @@ public class Startup extends Component {
       new Platform(new Vector3(0, 14, 43), new Vector3(0.5, 0.1, 0.5), 0),
       new Platform(new Vector3(-2, 14.5, 48), new Vector3(0.5, 0.1, 0.5), 0),
       new Platform(new Vector3(2, 15.25, 52), new Vector3(0.5, 0.1, 0.5), 0),
-      new Platform(new Vector3(2, 15.5, 52), new Vector3(0.5, 0.1, 0.5), 1),
+      new Platform(new Vector3(2, 15.5, 52), new Vector3(0.45, 0.1, 0.45), 1),
       new Platform(new Vector3(7.5, 14, 54), new Vector3(0.5, 0.1, 0.5), 0),
       new Platform(new Vector3(10, 15, 54), new Vector3(1, 3, 1), 1),
       new Platform(new Vector3(12, 14, 54), new Vector3(0.5, 0.1, 0.5), 0),
@@ -102,7 +102,6 @@ public class Startup extends Component {
 
       Scene.addGameObject(platformObject);
     }
-    
   }
 
   public void update() {

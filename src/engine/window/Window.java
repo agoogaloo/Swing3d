@@ -1,8 +1,10 @@
 package engine.window;
 
 import java.awt.Component;
+import java.awt.Point;
 import java.awt.event.ComponentAdapter;
 import java.awt.event.ComponentEvent;
+import java.awt.image.BufferedImage;
 
 import javax.swing.JFrame;
 
@@ -55,7 +57,11 @@ public class Window {
 		// frame.setResizable(false);// not letting you resize the window so it doesn't
 		// mess things up when rendering
 		display = new Display(width, height, scale);// making the display
-		frame.setTitle("Cool name");
+		frame.setTitle("Super jumping on abstract shapes in a vaguely constructed void 64");
+		frame.setCursor(frame.getToolkit().createCustomCursor(
+			new BufferedImage( 1, 1, BufferedImage.TYPE_INT_ARGB ),
+			new Point(),
+			null ) );
 		frame.add(display);// adding the display to the window so it can actually show it
 		frame.pack();// making the window fit the panel perfectly
 		frame.setLocationRelativeTo(null);// centers the window

@@ -50,7 +50,7 @@ public class Matrix {
   }
 
   public static double[][] makeRotationMatrixY(double angle) {
-    double yAngle = angle * 3.1415/180;
+    double yAngle = angle * Math.PI/180;
     return new double[][] {
       { Math.cos(yAngle), 0, Math.sin(yAngle), 0 },
       { 0, 1, 0, 0 },

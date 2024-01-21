@@ -44,9 +44,9 @@ public class InputManager {
     }
 
     public static Vector2 mousePosition() {
-        return mouseMotionHandler.currentPos;
+        return mouseMotionHandler.position();
     }
     public static Vector2 mouseSpeed() {
-        return mouseMotionHandler.speed;
+        return mouseMotionHandler.speed();
     }
 }

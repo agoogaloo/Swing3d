@@ -14,9 +14,13 @@ public class PlayerController extends Component {
   double speed = 10;
   double gravity = 4;
   double jumpHeight = 10; 
-  double sensitivity = 0.2;
+
+  double sensitivity = 80;
+  double smoothing = 1.25;
+  double maxAngle = 85;
 
   double velX = 0, velY = 0, velZ = 0;
+  Vector2 cameraTarget = new Vector2(0, 0);
 
   boolean canJump = false, grounded = false, onWall = false;
 
@@ -57,7 +61,7 @@ public class PlayerController extends Component {
     canJump = jumpCollider.colliding();
 
     Vector2 mouseSpeed = InputManager.mouseSpeed();
-    // Vector2 mouseSpeed = new Vector2(0, 0);
+    // Vector2 mouseSpeed = new Vector2(0.02, 0);
 
     if(InputManager.held(Keybind.FORWARD)) {
       velZ = speed/100;
@@ -74,15 +78,25 @@ public class PlayerController extends Component {
     if(InputManager.pressed(Keybind.JUMP) && canJump) {
       velY = jumpHeight/100;
     }
+    
+    cameraTarget.x -= mouseSpeed.x * sensitivity;
+    cameraTarget.y -= mouseSpeed.y * sensitivity;
 
-    double xAngle = -mouseSpeed.y * sensitivity;
-    double yAngle = -mouseSpeed.x * sensitivity;
-    Scene.mainCamera.rotateCameraY(yAngle);
-    if(Scene.mainCamera.pitch + xAngle <= 70 && Scene.mainCamera.pitch + xAngle >= -70) {
-      Scene.mainCamera.pitchCamera(xAngle);
+    if(cameraTarget.y >= maxAngle) {
+      cameraTarget.y = maxAngle;
+    } else if(cameraTarget.y <= -maxAngle) {
+      cameraTarget.y = -maxAngle;
     }
 
-    double angle = (Scene.mainCamera.rotation[1])*3.14159/180;
+    Vector2 cameraSpeed = new Vector2(
+      (cameraTarget.x - Scene.mainCamera.yaw)/smoothing,
+      (cameraTarget.y - Scene.mainCamera.pitch)/smoothing
+    );
+
+    Scene.mainCamera.rotateCameraY(cameraSpeed.x);
+    Scene.mainCamera.pitchCamera(cameraSpeed.y);    
+
+    double angle = (Scene.mainCamera.yaw)*Math.PI/180;
     double relativeVX = Math.cos(angle) * velX + Math.sin(-angle) * velZ;
     double relativeVZ = Math.sin(angle) * velX + Math.cos(-angle) * velZ;
 
@@ -125,5 +139,11 @@ public class PlayerController extends Component {
   void respawn() {
     gameObject.transform.position = new Vector3(0, -1, 0);
     velX = 0; velY = 0; velZ = 0;
+  }
+
+  double clamp(double min, double max, double t) {
+    if(t < min) { return min; }
+    if(t > max) { return max; }
+    return t;
   }
 }
