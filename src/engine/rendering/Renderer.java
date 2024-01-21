@@ -39,6 +39,8 @@ public class Renderer {
       // new LowQualityColor(),
       //new PalletinatorShader(),
       // new HueShiftShader(),
+      new Retical(),
+      // new InvertColors(),
     };
   }
 
