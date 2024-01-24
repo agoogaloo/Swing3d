@@ -64,19 +64,20 @@ public class PlayerController extends Component {
   
   public void update()  {
     frame++;
+    textUpdate();
 
-    float[] HSV = new float[3];
-    Color.RGBtoHSB(0, 255, 0, HSV);
-    float offset = (float)Time.elapsedTime/20f;
-    Color newColor = new Color(Color.HSBtoRGB(
-      (float)(HSV[0] + offset), 
-      HSV[1], HSV[2]
-    ));
-    timer.setColor(newColor);
-    bestTimer.setColor(newColor);
-    timer.setText(String.format("%.4f", frame/60.0));
-    
     grounded = groundCollider.colliding(0);
+    velX = 0; velZ = 0;
+    canJump = jumpCollider.colliding();
+
+    verticalCollision();
+    updateCamera();
+    updateMovement();
+    movePlayer();
+    triggerCollisions();
+  }
+
+  void verticalCollision() {
     if(grounded) {
       velY = 0;
       while(groundCollider.colliding(0)) {
@@ -89,34 +90,24 @@ public class PlayerController extends Component {
         gameObject.transform.position.y += 0.001;
       }
     }
+  }
 
-    velX = 0; velZ = 0;
-    canJump = jumpCollider.colliding();
+  void textUpdate() {
+    float[] HSV = new float[3];
+    Color.RGBtoHSB(0, 255, 0, HSV);
+    float offset = (float)Time.elapsedTime/20f;
+    Color newColor = new Color(Color.HSBtoRGB(
+      (float)(HSV[0] + offset), 
+      HSV[1], HSV[2]
+    ));
+    timer.setColor(newColor);
+    bestTimer.setColor(newColor);
+    timer.setText(String.format("%.4f", frame/60.0));
+  }
 
+  void updateCamera() {
     Vector2 mouseSpeed = InputManager.mouseSpeed();
     // Vector2 mouseSpeed = new Vector2(0.02, 0);
-
-    if(InputManager.held(Keybind.FORWARD)) {
-      velZ = speed/100;
-    }
-    if(InputManager.held(Keybind.BACK)) {
-      velZ = -speed/100;
-    }
-    if(InputManager.held(Keybind.LEFT)) {
-      velX = -speed/100;
-    }
-    if(InputManager.held(Keybind.RIGHT)) {
-      velX = speed/100;
-    }
-    canJump = true;
-    if(InputManager.pressed(Keybind.JUMP)) {
-      jumpPrebuffer = 0;
-      if(canJump) { velY = jumpHeight/100; }
-    } else if(InputManager.held(Keybind.JUMP) && canJump && (jumpPrebuffer <= 5)) {
-      velY = jumpHeight/100;
-    }
-    
-    jumpPrebuffer++;
 
     cameraTarget.x -= mouseSpeed.x * sensitivity;
     cameraTarget.y -= mouseSpeed.y * sensitivity;
@@ -133,8 +124,33 @@ public class PlayerController extends Component {
     );
 
     Scene.mainCamera.rotateCameraY(cameraSpeed.x);
-    Scene.mainCamera.pitchCamera(cameraSpeed.y);    
+    Scene.mainCamera.pitchCamera(cameraSpeed.y);
+  }
 
+  void updateMovement() {
+    if(InputManager.held(Keybind.FORWARD)) {
+      velZ = speed/100;
+    }
+    if(InputManager.held(Keybind.BACK)) {
+      velZ = -speed/100;
+    }
+    if(InputManager.held(Keybind.LEFT)) {
+      velX = -speed/100;
+    }
+    if(InputManager.held(Keybind.RIGHT)) {
+      velX = speed/100;
+    }
+    if(InputManager.pressed(Keybind.JUMP)) {
+      jumpPrebuffer = 0;
+      if(canJump) { velY = jumpHeight/100; }
+    } else if(InputManager.held(Keybind.JUMP) && canJump && (jumpPrebuffer <= 5)) {
+      velY = jumpHeight/100;
+    }
+    
+    jumpPrebuffer++;
+  }
+
+  void movePlayer() {
     double angle = (Scene.mainCamera.yaw)*Math.PI/180;
     double relativeVX = Math.cos(angle) * velX + Math.sin(-angle) * velZ;
     double relativeVZ = Math.sin(angle) * velX + Math.cos(-angle) * velZ;
@@ -158,10 +174,6 @@ public class PlayerController extends Component {
 
     gameObject.transform.position.y -= velY;
 
-    if(wallCollider.colliding(1)) {
-      respawn();
-    }
-
     if(onWall) {
       if(!canJump && velY < 0) {
         velY = 0;
@@ -169,7 +181,13 @@ public class PlayerController extends Component {
     }
 
     velY -= gravity/1000;
-    
+  }
+
+  void triggerCollisions() {
+    if(wallCollider.colliding(1)) {
+      respawn();
+    }
+
     if(gameObject.transform.position.y >= 10) {
       respawn();
     }
