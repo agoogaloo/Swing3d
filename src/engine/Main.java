@@ -6,7 +6,8 @@ import engine.stateMachine.StateManager;
 import engine.window.Window;
 
 public class Main {
-	public static final int WIDTH = 320, HEIGHT = 180;
+	public static final double aspectRatio = 16.0/9.0;
+	public static final int WIDTH = 320, HEIGHT = (int)((double)WIDTH/aspectRatio);
 	private static Window window;
 	private static boolean running = true;
 

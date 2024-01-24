@@ -25,7 +25,6 @@ public class InputManager {
         keyHandler = new KeyHandler(keyInputs, keyCodes);
         mouseMotionHandler = new MouseMotionHandler();
         jFrame.addKeyListener(keyHandler);
-        jFrame.addMouseMotionListener(mouseMotionHandler);
     }
 
     public static void update(){

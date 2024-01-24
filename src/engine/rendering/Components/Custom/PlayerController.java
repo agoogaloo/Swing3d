@@ -15,8 +15,7 @@ public class PlayerController extends Component {
   double gravity = 4;
   double jumpHeight = 10; 
 
-  double sensitivity = 80;
-  double smoothing = 1.25;
+  double sensitivity = 70;
   double maxAngle = 85;
 
   double velX = 0, velY = 0, velZ = 0;
@@ -89,8 +88,8 @@ public class PlayerController extends Component {
     }
 
     Vector2 cameraSpeed = new Vector2(
-      (cameraTarget.x - Scene.mainCamera.yaw)/smoothing,
-      (cameraTarget.y - Scene.mainCamera.pitch)/smoothing
+      (cameraTarget.x - Scene.mainCamera.yaw),
+      (cameraTarget.y - Scene.mainCamera.pitch)
     );
 
     Scene.mainCamera.rotateCameraY(cameraSpeed.x);
