@@ -10,6 +10,7 @@ import engine.CollisionData;
 import engine.Debug;
 import engine.rendering.*;
 import engine.rendering.Components.Custom.Startup;
+import engine.rendering.UI.TextObject;
 import engine.shapes.*;
 
 public class GameState implements State {
@@ -37,7 +38,7 @@ public class GameState implements State {
     public void render(BufferedImage image) {
         Scene.preRender();
 
-        renderer.render(image, Scene.meshes, Scene.mainCamera.cameraPosition, Scene.mainCamera.cameraDirection);
+        renderer.render(image, Scene.meshes, Scene.UI.text, Scene.mainCamera.cameraPosition, Scene.mainCamera.cameraDirection);
         Debug.clearPoints();
     }
 

@@ -1,10 +1,14 @@
 package engine.rendering;
 
+import java.awt.Font;
+import java.awt.Graphics2D;
 import java.awt.image.BufferedImage;
+import java.util.ArrayList;
 
 import engine.Debug;
 import engine.rendering.Shaders.FragmentShader;
 import engine.rendering.Shaders.VertexShader;
+import engine.rendering.UI.TextObject;
 import engine.rendering.VertexTramsforms.VertexTransform;
 import engine.shapes.Vector;
 import engine.shapes.integer.Vector2;
@@ -203,6 +207,18 @@ public class RenderPipeline {
               v0.y = v0.y + sy;
           }
       }
+  }
+
+  public void drawUI(ArrayList<TextObject> texts, BufferedImage frame) {
+    Graphics2D screen = frame.createGraphics();
+    for (TextObject text : texts) {
+      screen.setColor(text.color);
+      screen.setFont(text.font);
+      screen.drawString(text.text, 
+        (int)(((text.position.x+1)/2)*(double)FrameData.width), 
+        (int)((1-((text.position.y+1)/2))*(double)FrameData.height)+(text.font.getSize())
+      );
+    }
   }
 
   private double sign (double[] v0, double[] v1, double[] v2) {

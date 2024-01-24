@@ -1,12 +1,16 @@
 package engine.rendering.Components.Custom;
 
+import java.awt.Color;
+import java.awt.Font;
 import java.util.ArrayList;
 
 import engine.Debug;
 import engine.input.InputManager;
 import engine.input.Keybind;
 import engine.rendering.Scene;
+import engine.rendering.Time;
 import engine.rendering.Components.*;
+import engine.rendering.UI.TextObject;
 import engine.shapes.Vector2;
 import engine.shapes.Vector3;
 
@@ -26,6 +30,11 @@ public class PlayerController extends Component {
 
   Collider groundCollider, roofCollider, wallCollider, jumpCollider;
 
+  int frame = 0;
+  int bestTime = -1;
+  TextObject timer = new TextObject();
+  TextObject bestTimer = new TextObject();
+
   public void start() {
     groundCollider = new BoxCollider(new Vector3(0.5, 0.25, 0.5), new Vector3(0, 0.375, 0), 0);
     roofCollider = new BoxCollider(new Vector3(0.5, 0.25, 0.5), new Vector3(0, -0.375, 0), 0);
@@ -39,10 +48,34 @@ public class PlayerController extends Component {
     gameObject.addComponent(jumpCollider);
     gameObject.addComponent(roofCollider);
 
+    timer.setText("");
+    timer.setPosition(new Vector2(-0.97, 1.03));
+    timer.setColor(new Color(255, 0, 0));
+    bestTimer.setText("Best: ");
+    bestTimer.setPosition(new Vector2(-0.97, 0.86));
+    bestTimer.setColor(new Color(255, 0, 0));
+    bestTimer.setFont(new Font(Font.MONOSPACED, Font.ITALIC, 10));
+
+    Scene.UI.addText(timer);
+    Scene.UI.addText(bestTimer);
+
     respawn();
   }
   
   public void update()  {
+    frame++;
+
+    float[] HSV = new float[3];
+    Color.RGBtoHSB(0, 255, 0, HSV);
+    float offset = (float)Time.elapsedTime/20f;
+    Color newColor = new Color(Color.HSBtoRGB(
+      (float)(HSV[0] + offset), 
+      HSV[1], HSV[2]
+    ));
+    timer.setColor(newColor);
+    bestTimer.setColor(newColor);
+    timer.setText(String.format("%.4f", frame/60.0));
+    
     grounded = groundCollider.colliding(0);
     if(grounded) {
       velY = 0;
@@ -75,6 +108,7 @@ public class PlayerController extends Component {
     if(InputManager.held(Keybind.RIGHT)) {
       velX = speed/100;
     }
+    canJump = true;
     if(InputManager.pressed(Keybind.JUMP)) {
       jumpPrebuffer = 0;
       if(canJump) { velY = jumpHeight/100; }
@@ -139,11 +173,21 @@ public class PlayerController extends Component {
     if(gameObject.transform.position.y >= 10) {
       respawn();
     }
+    
+    if(jumpCollider.colliding(2)) {
+      System.out.println("ggwp" + frame/60.0);
+      if(bestTime == -1 || frame <= bestTime) {
+        bestTime = frame;
+        bestTimer.setText(String.format("Best:%.4f", bestTime/60.0));
+      }
+      respawn();
+    }
   }
   
   void respawn() {
     gameObject.transform.position = new Vector3(0, -1, 0);
     velX = 0; velY = 0; velZ = 0;
+    frame = 0;
   }
 
   double clamp(double min, double max, double t) {

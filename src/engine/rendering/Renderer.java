@@ -1,8 +1,10 @@
 package engine.rendering;
 
 import java.awt.image.BufferedImage;
+import java.util.ArrayList;
 
 import engine.rendering.Shaders.*;
+import engine.rendering.UI.TextObject;
 import engine.rendering.VertexTramsforms.*;
 import engine.shapes.Mesh;
 
@@ -45,7 +47,7 @@ public class Renderer {
     };
   }
 
-  public void render(BufferedImage frame, Mesh[] meshes, double[] cameraPosition, double[] cameraDirection) {
+  public void render(BufferedImage frame, Mesh[] meshes, ArrayList<TextObject> text, double[] cameraPosition, double[] cameraDirection) {
 
     int vertexCount = 0;
     for(int i = 0; i < meshes.length; i++) {
@@ -90,5 +92,6 @@ public class Renderer {
     renderPipeline.scan(false, true, true);
     renderPipeline.applyFragmentShaders(fragmentShaders);
     renderPipeline.display(frame);
+    renderPipeline.drawUI(text, frame);
   }
 }

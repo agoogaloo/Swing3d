@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import engine.CollisionData;
 import engine.rendering.Components.Collider;
 import engine.rendering.Components.Component;
+import engine.rendering.UI.UI;
 import engine.shapes.Mesh;
 
 public class Scene {
@@ -12,9 +13,9 @@ public class Scene {
   public static ArrayList<GameObject> objects = new ArrayList<GameObject>();
   public static ArrayList<Component> scripts = new ArrayList<Component>();
   public static Mesh[] meshes;
+  public static UI UI = new UI();
 
   static double startTime;
-  public static double elapsedTime;
 
   public static void addGameObject(GameObject object) {
     object.start();
