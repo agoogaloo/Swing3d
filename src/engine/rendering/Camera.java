@@ -35,26 +35,22 @@ public class Camera {
   }
   
   public void rotateCameraY(double angle) {
-    double[][] rotationMatrix = Matrix.makeRotationMatrixY(angle);
-    cameraDirection = Matrix.multiplyVectorMatrix344(cameraDirection, rotationMatrix);
-    
-    rotation[1] += angle;
     yaw += angle;
+    setRPRotation();
   }
   
   public void pitchCamera(double angle) {
-    double xAngle = Math.cos(yaw*Math.PI/180)*angle;
-    double zAngle = Math.sin(yaw*Math.PI/180)*angle;
-    
-    double[][] rotationMatrix;
-    
-    rotationMatrix = Matrix.makeRotationMatrixX(xAngle);
-    cameraDirection = Matrix.multiplyVectorMatrix344(cameraDirection, rotationMatrix);
-    rotationMatrix = Matrix.makeRotationMatrixZ(zAngle);
-    cameraDirection = Matrix.multiplyVectorMatrix344(cameraDirection, rotationMatrix);
-
     pitch += angle;
-    rotation[0] += xAngle;
-    rotation[2] += zAngle;
+    setRPRotation();
+  }
+  
+  void setRPRotation() {
+    double[][] rotationMatrix;
+
+    rotationMatrix = Matrix.makeRotationMatrixX(pitch);
+    cameraDirection = Matrix.multiplyVectorMatrix344(new double[] { 0, 0, 1 }, rotationMatrix);
+    
+    rotationMatrix = Matrix.makeRotationMatrixY(yaw);
+    cameraDirection = Matrix.multiplyVectorMatrix344(cameraDirection, rotationMatrix);
   }
 }

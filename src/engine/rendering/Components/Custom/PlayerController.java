@@ -22,6 +22,7 @@ public class PlayerController extends Component {
   Vector2 cameraTarget = new Vector2(0, 0);
 
   boolean canJump = false, grounded = false, onWall = false;
+  int jumpPrebuffer = 0;
 
   Collider groundCollider, roofCollider, wallCollider, jumpCollider;
 
@@ -74,10 +75,15 @@ public class PlayerController extends Component {
     if(InputManager.held(Keybind.RIGHT)) {
       velX = speed/100;
     }
-    if(InputManager.pressed(Keybind.JUMP) && canJump) {
+    if(InputManager.pressed(Keybind.JUMP)) {
+      jumpPrebuffer = 0;
+      if(canJump) { velY = jumpHeight/100; }
+    } else if(InputManager.held(Keybind.JUMP) && canJump && (jumpPrebuffer <= 5)) {
       velY = jumpHeight/100;
     }
     
+    jumpPrebuffer++;
+
     cameraTarget.x -= mouseSpeed.x * sensitivity;
     cameraTarget.y -= mouseSpeed.y * sensitivity;
 
