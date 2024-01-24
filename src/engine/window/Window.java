@@ -57,7 +57,7 @@ public class Window {
 		// frame.setResizable(false);// not letting you resize the window so it doesn't
 		// mess things up when rendering
 		display = new Display(width, height, scale);// making the display
-		frame.setTitle("Super jumping on abstract shapes in a vaguely constructed void 64");
+		frame.setTitle("Super Jumping on Abstract Shapes in a Vaguely Constructed Void 64");
 		frame.setCursor(frame.getToolkit().createCustomCursor(
 			new BufferedImage( 1, 1, BufferedImage.TYPE_INT_ARGB ),
 			new Point(),

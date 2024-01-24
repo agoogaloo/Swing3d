@@ -32,15 +32,16 @@ public class Renderer {
 
     };
     this.fragmentShaders = new FragmentShader[] {
+      // new PalletinatorShader(),
       new LinearLighting(),
       // new NormalMap(),
       new DepthShader(),
       new FunkyBackground(),
       // new LowQualityColor(),
-      //new PalletinatorShader(),
       // new HueShiftShader(),
-      new Retical(),
       // new InvertColors(),
+      // new Flip(),
+      new Retical(),
     };
   }
 
