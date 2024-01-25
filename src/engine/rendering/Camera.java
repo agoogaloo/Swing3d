@@ -11,7 +11,7 @@ public class Camera {
   public double[] cameraDirection = new double[] { 0, 0, 1 };
 
   public Camera() {
-    setRotation(cameraDirection);
+    setRotation(rotation);
   }
 
 

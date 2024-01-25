@@ -23,8 +23,8 @@ public class Renderer {
     renderPipeline = new RenderPipeline();
 
     this.preProjection = new VertexTransform[] {
-      new CameraTransform(), 
       new CullTriangles(),
+      new CameraTransform(), 
       new ClipTriangles(new double[] { 0, 0, 0.1 }, new double[] { 0, 0, 1 } ),
     };
     this.postProjection = new VertexTransform[] {

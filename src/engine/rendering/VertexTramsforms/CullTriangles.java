@@ -15,8 +15,7 @@ public class CullTriangles extends VertexTransform {
         (normal[2] * (vertex[2]-VertexData.cameraPosition[2]))
       );
 
-      VertexData.drawTriangles[i/3] = true;
-      // VertexData.drawTriangles[i/3] = (angle < 0);
+      VertexData.drawTriangles[i/3] = (angle < 0);
     }
   }
 }
