@@ -1,5 +1,7 @@
 package engine.rendering.Shaders;
 
+import java.util.Arrays;
+
 import engine.rendering.FrameData;
 
 public class PalletinatorShader extends FragmentShader {
@@ -20,44 +22,6 @@ public class PalletinatorShader extends FragmentShader {
 
   private double[][] palette = neonPallete;
 
-  public double[][][] compute(double[][][] frameBuffer, int width, int height) {
-    double[][][] updatedFrame = new double[width][height][4];
-    for (int px = 0; px < width; px++) {
-      for (int py = 0; py < height; py++) {
-        double[] pixel = frameBuffer[px][py];
-        double alpha = Math.abs(pixel[0]);
-        int colour = -1;
-        double minDiff = 255 * 3;
-
-        // going through each colour to check whats closest
-        for (int i = 0; i < palette.length; i++) {
-          // get the difference from each colour in the palette
-          double difference = Math.abs(pixel[1] * 255 * alpha - palette[i][0]);
-          difference += Math.abs(pixel[2] * 255 * alpha - palette[i][1]);
-          difference += Math.abs(pixel[3] * 255 * alpha - palette[i][2]);
-
-          // setting the colour to the one with the lowest difference
-
-          if (difference < minDiff) {
-            colour = i;
-            minDiff = difference;
-          }
-
-        }
-
-        // System.out.println(alpha);
-        // setting the colour to the one in the palette
-        // System.out.println(String.valueOf(pixel[1])+String.valueOf(pixel[2])+String.valueOf(pixel[3]));
-        updatedFrame[px][py] = new double[] { 1, palette[colour][0] / 255, palette[colour][1] / 255,
-            palette[colour][2] / 255 };
-
-        // updatedFrame[px][py] = new double[]
-        // {1,pixel[1]*alpha,pixel[2]*alpha,pixel[3]*alpha};
-
-      }
-    }
-    return updatedFrame;
-  }
 
   private void addDiff(int x, int y, double r, double g, double b) {
 
@@ -77,7 +41,7 @@ public class PalletinatorShader extends FragmentShader {
       for (int px = 0; px < FrameData.width; px++) {
         double[] pixel = FrameData.frameBuffer[px][py];
         double alpha = Math.abs(pixel[0]);
-        int colour = 0 - 1;
+        int colour = - 1;
         double minDiff = 9999999999f;
         // checking what colour in the palette the pixel is closest to
         for (int i = 0; i < palette.length; i++) {
@@ -92,14 +56,16 @@ public class PalletinatorShader extends FragmentShader {
             colour = i;
             minDiff = difference;
           }
+      
 
           // System.out.println(colour);
         }
         double diffR = pixel[1] - palette[colour][0] / 255f, diffG = pixel[2] - palette[colour][1] / 255f,
             diffB = pixel[3] - palette[colour][2] / 255f;
 
+
         // System.out.println(diffR + "," + diffG + ", " + diffB);
-        stuckiDither(px, py, diffR, diffG, diffB);
+        //stuckiDither(px, py, diffR, diffG, diffB);
 
         // System.out.println(alpha);
         // setting the colour to the one in the palette
@@ -115,6 +81,9 @@ public class PalletinatorShader extends FragmentShader {
 
   }
 
+  private void bayerDither(){
+
+  }
   private void floydDither(int x, int y, double diffR, double diffG, double diffB) {
     diffR /= 16;
     diffG /= 16;

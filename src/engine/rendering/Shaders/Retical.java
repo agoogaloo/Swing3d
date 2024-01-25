@@ -5,7 +5,7 @@ import engine.rendering.VertexData;
 import engine.shapes.Vector;
 
 public class Retical extends FragmentShader {
-  double r = 5;
+  double r = 16;
 
   public void compute() {
     for(int px = 0; px < FrameData.width; px++) {
