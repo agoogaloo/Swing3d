@@ -21,11 +21,10 @@ public class ShaderManager extends Component {
     new InvertColors(),
     new Retical(),
   };
-  FragmentShader[] three = new FragmentShader[] {
-    new DepthShader(),
-    new Blank(),
+  FragmentShader[] farsighted = new FragmentShader[] {
+    new DepthShader(true),
     new FunkyBackground(),
-    new EdgeShader(),
+    new BlurShader(),
     new Retical(),
   };
   FragmentShader[] four = new FragmentShader[] {
@@ -41,9 +40,10 @@ public class ShaderManager extends Component {
     new HueShiftShader(),
     new RotatingInvert(),
   };  
-  FragmentShader[] six = new FragmentShader[] {
+  FragmentShader[] mint = new FragmentShader[] {
     new DepthShader(),
     new PalletinatorShader(),
+    new InvertColors(),
     new Retical(),
   };
   FragmentShader[] seven = new FragmentShader[] {
@@ -64,26 +64,23 @@ public class ShaderManager extends Component {
     new BayerDither(),
     new Retical(),
   };
-  // FragmentShader[] nine = new FragmentShader[] {
-  //   new TVStatic(),
-  //   new RandomNoise(),
-  //   new PalletinatorShader(),
-  //   new RotatingInvert(),
-  //   new BayerDither(),
-  //   new Retical(),
-  // };
- 
-  FragmentShader[] superCrunch = new FragmentShader[] {
-    new DepthShader(),
-    new FunkyBackground(),
+  FragmentShader[] nine = new FragmentShader[] {
     new DepthShader(),
     new FunkyBackground(),
     new HueShiftShader(),
-    new EdgeShader(),
+    new LowQualityColor(8),
     new BlurShader(),
-    new PalletinatorShader(),
-    new LowQualityColor(16),
+    new Retical(),
+  };
+ 
+  FragmentShader[] superCrunch = new FragmentShader[] {
+    new EdgeShader(),
+    new DepthShader(),
+    new FunkyBackground(),
     new BayerDither(),
+    new PalletinatorShader(),
+    new HueShiftShader(),
+    new BlurShader(),
     new Retical(),
   };
 
@@ -99,7 +96,7 @@ public class ShaderManager extends Component {
       Scene.setShaders(flipside);
     }
     if(InputManager.pressed(Keybind.THREE)) {
-      Scene.setShaders(three);
+      Scene.setShaders(farsighted);
     }
     if(InputManager.pressed(Keybind.FOUR)) {
       Scene.setShaders(four);
@@ -108,7 +105,7 @@ public class ShaderManager extends Component {
       Scene.setShaders(five);
     }
     if(InputManager.pressed(Keybind.SIX)) {
-      Scene.setShaders(six);
+      Scene.setShaders(mint);
     }
     if(InputManager.pressed(Keybind.SEVEN)) {
       Scene.setShaders(seven);
@@ -116,7 +113,9 @@ public class ShaderManager extends Component {
     if(InputManager.pressed(Keybind.EIGHT)) {
       Scene.setShaders(asdfsafkjshdfkljsaf);
     }
-
+    if(InputManager.pressed(Keybind.NINE)) {
+      Scene.setShaders(nine);
+    }
     if(InputManager.pressed(Keybind.ZERO)) {
       Scene.setShaders(superCrunch);
     }

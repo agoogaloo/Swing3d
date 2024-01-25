@@ -31,7 +31,7 @@ public class EdgeShader extends FragmentShader {
       for(int py = 1; py < FrameData.height-1; py++) {
         if(FrameData.edgeBuffer[px][py] == 1) {
           FrameData.frameBuffer[px][py] = new double[] {
-            1,
+            color.getAlpha(),
             color.getRed()/255.0,
             color.getGreen()/255.0,
             color.getBlue()/255.0,
