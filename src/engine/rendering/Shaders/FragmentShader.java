@@ -15,6 +15,11 @@ public abstract class FragmentShader {
   double invLerp(double a, double b, double s) {
     return (s-a)/(b-a);
   }
+
+  double remap(double min, double max, double min2, double max2, double v) {
+    return lerp(min2, max2, invLerp(min, max, v));
+  }
+
   double clamp(double min, double max, double t) {
     if(t < min) { return min; }
     if(t > max) { return max; }

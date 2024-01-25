@@ -34,13 +34,16 @@ public class Renderer {
 
     };
     this.fragmentShaders = new FragmentShader[] {
-      // new PalletinatorShader(),
       new LinearLighting(),
+      new EdgeDetection(),
+      // new PalletinatorShader(),
       // new NormalMap(),
       new DepthShader(),
       new FunkyBackground(),
-      // new LowQualityColor(),
       // new HueShiftShader(),
+      // new EdgeShader(),
+      // new BlurShader(),
+      // new LowQualityColor(),
       // new InvertColors(),
       // new Flip(),
       new Retical(),

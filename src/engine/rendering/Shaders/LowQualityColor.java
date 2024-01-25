@@ -5,7 +5,7 @@ import java.awt.Color;
 import engine.rendering.FrameData;
 
 public class LowQualityColor extends FragmentShader {
-  int colorValues = 16;
+  int colorValues = 32;
 
   public void compute() {
     for(int px = 0; px < FrameData.width; px++) {

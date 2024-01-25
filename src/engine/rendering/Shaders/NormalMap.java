@@ -12,7 +12,10 @@ public class NormalMap extends FragmentShader {
         
         double[] normal = FrameData.normalMap[px][py];
         FrameData.frameBuffer[px][py] = new double[] {
-          1, -normal[0], -normal[1], -normal[2]
+          1, 
+          remap(-1, 1, 0, 1, -normal[0]), 
+          remap(-1, 1, 0, 1, -normal[1]), 
+          remap(-1, 1, 0, 1, -normal[2])
         };
       }
     }
