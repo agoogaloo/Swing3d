@@ -1,10 +1,9 @@
 package engine.rendering.Shaders;
 
 import engine.rendering.FrameData;
+import engine.rendering.Scene;
 
 public class BayerDither extends FragmentShader {
-  // the pallete that the screen gets confined to.
-  // currently uses this pallete https://lospec.com/palette-list/nebulaspace
   private double[][] neonPallete = new double[][] { { 77, 0, 76 }, { 143, 0, 118 }, { 199, 0, 131 }, { 245, 0, 120 },
       { 255, 71, 100 },
       { 255, 147, 147 }, { 255, 213, 204 }, { 255, 243, 240 }, { 0, 2, 33 }, { 0, 7, 105 }, { 0, 34, 143 },
@@ -22,6 +21,8 @@ public class BayerDither extends FragmentShader {
       { 3, 11, 1, 9 },
       { 15, 7, 13, 5 }
   };
+  // the bayer matrix it uses to dither. higher numbers are more likely to use the
+  // 2nd closest colour instead of the closest one
   private double[][] matrix = {
       { 0, 32, 8, 40, 2, 34, 10, 42 },
       { 48, 16, 56, 24, 50, 18, 58, 26 },
@@ -36,23 +37,27 @@ public class BayerDither extends FragmentShader {
 
   private double[][] palette = neonPallete;
 
-  private void addDiff(int x, int y, double r, double g, double b) {
-
-    if (x < 0 || x >= FrameData.width || y >= FrameData.height || y < 0) {
-      return;
-    }
-
-    FrameData.frameBuffer[x][y][0] += r;
-    FrameData.frameBuffer[x][y][1] += g;
-    FrameData.frameBuffer[x][y][2] += b;
-
-  }
+  private int xOffset = 0, yOffset = 0;
 
   @Override
   public void compute() {
     for (int py = 0; py < FrameData.height; py++) {
       for (int px = 0; px < FrameData.width; px++) {
         double[] pixel = FrameData.frameBuffer[px][py];
+
+          xOffset=(int)Scene.mainCamera.yaw;
+          yOffset = (int)Scene.mainCamera.pitch;
+          if(px-xOffset<0){
+            int diff = xOffset-px;
+            //System.out.println(diff+", "+(int)((diff+matrixSize)/matrixSize)*matrixSize);
+            xOffset-=(int)((diff+matrixSize)/matrixSize)*matrixSize;
+          }
+          
+          if(py-yOffset<0){
+            int diff = yOffset-py;
+            //System.out.println(diff+", "+(int)((diff+matrixSize)/matrixSize)*matrixSize);
+            yOffset-=(int)((diff+matrixSize)/matrixSize)*matrixSize;
+          }
 
         colourDither(pixel, px, py);
         // System.out.println(alpha);
@@ -104,7 +109,9 @@ public class BayerDither extends FragmentShader {
       }
 
     }
-    double matrixBrighness = matrix[(px % matrixSize)][(py % matrixSize)] / (matrixSize * matrixSize);
+
+    double matrixBrighness = matrix[((px - xOffset) % matrixSize)][((py - yOffset) % matrixSize)]
+        / (matrixSize * matrixSize);
 
     if (dist / 255 < matrixBrighness) {
 
