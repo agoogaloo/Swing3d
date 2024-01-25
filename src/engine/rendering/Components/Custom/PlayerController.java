@@ -22,7 +22,7 @@ public class PlayerController extends Component {
   double sensitivity = 70;
   double maxAngle = 85;
 
-  double velX = 0, velY = 0, velZ = 0;
+  double velX = 0, velY = 0, velZ = 0, bump = 0.0001;
   Vector2 cameraTarget = new Vector2(0, 0);
 
   boolean canJump = false, grounded = false, onWall = false;
@@ -53,7 +53,7 @@ public class PlayerController extends Component {
     timer.setText("");
     timer.setPosition(new Vector2(-0.97, 1.03));
     timer.setColor(new Color(255, 0, 0));
-    bestTimer.setText("Best: ");
+    bestTimer.setText("");
     bestTimer.setPosition(new Vector2(-0.97, 0.86));
     bestTimer.setColor(new Color(255, 0, 0));
     bestTimer.setFont(new Font(Font.MONOSPACED, Font.ITALIC, 10));
@@ -67,10 +67,10 @@ public class PlayerController extends Component {
   public void update()  {
     if(InputManager.pressed(Keybind.ESCAPE)) {
       paused = !paused;
-      Scene.UI.clear();
       if(paused) {
         pauseScreen();
       } else {
+        Scene.UI.clear();
         Scene.UI.addText(timer);
         Scene.UI.addText(bestTimer);
       }
@@ -96,13 +96,13 @@ public class PlayerController extends Component {
     if(grounded) {
       velY = 0;
       while(groundCollider.colliding(0)) {
-        gameObject.transform.position.y -= 0.001;
+        gameObject.transform.position.y -= bump;
       }
     }
     if(roofCollider.colliding(0)) {
       velY = 0;
       while(roofCollider.colliding(0)) {
-        gameObject.transform.position.y += 0.001;
+        gameObject.transform.position.y += bump;
       }
     }
   }
@@ -143,7 +143,6 @@ public class PlayerController extends Component {
   }
 
   void updateMovement() {
-    canJump = true;
     if(InputManager.held(Keybind.FORWARD)) {
       velZ = speed/100;
     }
@@ -200,10 +199,6 @@ public class PlayerController extends Component {
   }
 
   void triggerCollisions() {
-    if(wallCollider.colliding(1)) {
-      respawn();
-    }
-
     if(gameObject.transform.position.y >= 10) {
       respawn();
     }
@@ -212,8 +207,12 @@ public class PlayerController extends Component {
       System.out.println("ggwp" + frame/60.0);
       if(bestTime == -1 || frame <= bestTime) {
         bestTime = frame;
-        bestTimer.setText(String.format("Best:%.4f", bestTime/60.0));
       }
+      bestTimer.setText(String.format("Best:%.4f", bestTime/60.0));
+      respawn();
+    }
+
+    if(wallCollider.colliding(1)) {
       respawn();
     }
   }

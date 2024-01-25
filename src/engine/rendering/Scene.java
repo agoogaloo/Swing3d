@@ -3,6 +3,7 @@ package engine.rendering;
 import java.util.ArrayList;
 
 import engine.CollisionData;
+import engine.audio.MusicManager;
 import engine.rendering.Components.Collider;
 import engine.rendering.Components.Component;
 import engine.rendering.UI.UI;
@@ -14,6 +15,7 @@ public class Scene {
   public static ArrayList<Component> scripts = new ArrayList<Component>();
   public static Mesh[] meshes;
   public static UI UI = new UI();
+  public static MusicManager audio = new MusicManager();
 
   static double startTime;
 
@@ -35,6 +37,7 @@ public class Scene {
     for (Component script : scripts) {
       script.start();
     }
+    audio.start();
   }
 
   public static void preRender() {
