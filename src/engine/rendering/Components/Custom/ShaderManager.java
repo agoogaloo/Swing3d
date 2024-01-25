@@ -32,6 +32,13 @@ public class ShaderManager extends Component {
     new Retical(),
     new PalletinatorShader(),
   };  
+  FragmentShader[] five = new FragmentShader[] {
+    new DepthShader(),
+    new FunkyBackground(),
+    new Retical(),
+    new HueShiftShader(),
+    new RotatingInvert(),
+  };  
   FragmentShader[] superCrunch = new FragmentShader[] {
     new DepthShader(),
     new FunkyBackground(),
@@ -61,6 +68,9 @@ public class ShaderManager extends Component {
     }
     if(InputManager.pressed(Keybind.FOUR)) {
       Scene.setShaders(four);
+    }
+    if(InputManager.pressed(Keybind.FIVE)) {
+      Scene.setShaders(five);
     }
 
     if(InputManager.pressed(Keybind.ZERO)) {
