@@ -26,7 +26,7 @@ public class Window {
 	private JFrame frame;
 	private Display display;
 	private int windowWidth, windowHeight;
-	private double scale=4, xOffset, yOffset;
+	private double scale=5, xOffset, yOffset;
 
 	ComponentAdapter screenResize = new ComponentAdapter() {
 		public void componentResized(ComponentEvent evt) {

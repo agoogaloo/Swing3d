@@ -36,10 +36,10 @@ public class Renderer {
     this.fragmentShaders = new FragmentShader[] {
       new LinearLighting(),
       new EdgeDetection(),
-      // new PalletinatorShader(),
       // new NormalMap(),
       new DepthShader(),
-      new FunkyBackground(),
+      //new FunkyBackground(),
+      new NonFunkyBackground(),
       // new HueShiftShader(),
       // new EdgeShader(),
       // new BlurShader(),
@@ -47,6 +47,7 @@ public class Renderer {
       // new InvertColors(),
       // new Flip(),
       new Retical(),
+      new PalletinatorShader(),
     };
   }
 
