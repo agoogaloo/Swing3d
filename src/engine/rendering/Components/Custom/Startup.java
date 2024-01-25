@@ -1,7 +1,5 @@
 package engine.rendering.Components.Custom;
 
-import java.util.ArrayList;
-
 import engine.rendering.GameObject;
 import engine.rendering.Scene;
 import engine.rendering.Components.*;

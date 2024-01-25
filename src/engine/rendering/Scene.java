@@ -6,8 +6,10 @@ import engine.CollisionData;
 import engine.audio.MusicManager;
 import engine.rendering.Components.Collider;
 import engine.rendering.Components.Component;
+import engine.rendering.Shaders.FragmentShader;
 import engine.rendering.UI.UI;
 import engine.shapes.Mesh;
+import engine.stateMachine.GameState;
 
 public class Scene {
   public static Camera mainCamera;
@@ -16,8 +18,13 @@ public class Scene {
   public static Mesh[] meshes;
   public static UI UI = new UI();
   public static MusicManager audio = new MusicManager();
+  static Renderer renderer;
 
   static double startTime;
+
+  public static void setRenderer(Renderer rend) {
+    renderer = rend;
+  }
 
   public static void addGameObject(GameObject object) {
     object.start();
@@ -57,5 +64,9 @@ public class Scene {
     for (Component script : scripts) {
       script.update();
     }
+  }
+
+  public static void setShaders(FragmentShader[] shaders) {
+    renderer.setShaders(shaders);
   }
 }

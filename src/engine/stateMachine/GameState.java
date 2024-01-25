@@ -9,6 +9,7 @@ import java.util.Scanner;
 import engine.CollisionData;
 import engine.Debug;
 import engine.rendering.*;
+import engine.rendering.Components.Custom.ShaderManager;
 import engine.rendering.Components.Custom.Startup;
 import engine.rendering.UI.TextObject;
 import engine.shapes.*;
@@ -23,8 +24,10 @@ public class GameState implements State {
         Scene.mainCamera = new Camera();
 
         this.renderer = new Renderer();
+        Scene.setRenderer(renderer);
 
         Scene.addScript(new Startup());
+        Scene.addScript(new ShaderManager());
 
         Scene.start();
     }

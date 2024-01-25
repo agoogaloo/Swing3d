@@ -17,6 +17,7 @@ public class Renderer {
   VertexTransform[] screenClipping;
   VertexShader[] vertexShaders;
   FragmentShader[] fragmentShaders;
+  FragmentShader[] customShaders = new FragmentShader[] { };
 
   public Renderer() {
     renderPipeline = new RenderPipeline();
@@ -36,18 +37,6 @@ public class Renderer {
     this.fragmentShaders = new FragmentShader[] {
       new LinearLighting(),
       new EdgeDetection(),
-      // new NormalMap(),
-      new DepthShader(),
-      //new FunkyBackground(),
-      new NonFunkyBackground(),
-      // new HueShiftShader(),
-      // new EdgeShader(),
-      // new BlurShader(),
-      // new LowQualityColor(),
-      // new InvertColors(),
-      // new Flip(),
-      new Retical(),
-      new PalletinatorShader(),
     };
   }
 
@@ -95,7 +84,12 @@ public class Renderer {
     renderPipeline.applyVertexShaders(vertexShaders);
     renderPipeline.scan(false, true, true);
     renderPipeline.applyFragmentShaders(fragmentShaders);
+    renderPipeline.applyFragmentShaders(customShaders);
     renderPipeline.display(frame);
     renderPipeline.drawUI(text, frame);
+  }
+
+  public void setShaders(FragmentShader[] shaders) {
+    this.customShaders = shaders;
   }
 }

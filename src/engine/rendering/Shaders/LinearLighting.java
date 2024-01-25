@@ -17,7 +17,7 @@ public class LinearLighting extends FragmentShader {
           normal[2] * VertexData.lightDirection[2]
         );
         if(luminance < 0) { luminance = 0; }
-        luminance += 0.7;
+        luminance += 0.5;
         if(luminance > 1) { luminance = 1; }
 
         triangleLuminance[i] = luminance;

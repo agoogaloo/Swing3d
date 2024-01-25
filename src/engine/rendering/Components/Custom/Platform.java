@@ -17,9 +17,9 @@ public class Platform extends Component {
     gameObject.transform.translate(pos);
     gameObject.transform.setScale(size);
     if(layer == 0) { 
-      gameObject.mesh.colors = MeshColors.blue;
+      gameObject.mesh.colors = MeshColors.lightTeal;
     } else if(layer == 1) { 
-      gameObject.mesh.colors = MeshColors.red;
+      gameObject.mesh.colors = MeshColors.pink;
     } else if(layer == 2) { 
       gameObject.mesh.colors = MeshColors.green;
     } 

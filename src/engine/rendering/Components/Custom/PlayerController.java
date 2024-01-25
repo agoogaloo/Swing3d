@@ -230,7 +230,7 @@ public class PlayerController extends Component {
       new Font(Font.DIALOG, Font.BOLD, 30)
     );
 
-    Scene.UI.addText(pauseText);
+    // Scene.UI.addText(pauseText);
   }
 
   double clamp(double min, double max, double t) {

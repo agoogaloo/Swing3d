@@ -8,6 +8,16 @@ public enum Keybind {
   JUMP(32),
   DOWN(16),
   ESCAPE(27),
+  ONE(49),
+  TWO(50),
+  THREE(51),
+  FOUR(52),
+  FIVE(53),
+  SIX(54),
+  SEVEN(55),
+  EIGHT(56),
+  NINE(57),
+  ZERO(48)
   ;
 
   public int default_bind;
