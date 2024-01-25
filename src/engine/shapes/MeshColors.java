@@ -50,5 +50,9 @@ public class MeshColors {
   };
 
   public static final double[][] lightTeal = Collections.nCopies(12, new double[]{1,71/255f,235/255f,1}).toArray(new double[12][3]);
+  public static final double[][] darkBlue = Collections.nCopies(12, new double[]{1,0, 34/255f, 143/255f}).toArray(new double[12][3]);
+  public static final double[][] midTeal = Collections.nCopies(12, new double[]{1,0, 139/255f, 245/255f}).toArray(new double[12][3]);
+  
+
 
 }

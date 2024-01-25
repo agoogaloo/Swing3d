@@ -6,7 +6,9 @@ import engine.rendering.FrameData;
 
 public class NonFunkyBackground extends FragmentShader {
   double brightness = 0.75;
-  Color newColor = new Color(0,34,143);
+  Color deepBlue = new Color(0,34,143);
+  Color deepRed = new Color(77, 0, 76);
+  Color newColor = deepRed;
 
   public void compute() {
    

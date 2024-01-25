@@ -30,7 +30,9 @@ public class ShaderManager extends Component {
   FragmentShader[] four = new FragmentShader[] {
     new DepthShader(),
     new NonFunkyBackground(),
+    new EdgeShader(new Color(147, 255, 248)),
     new Retical(),
+    
     new BayerDither(),
   };  
   FragmentShader[] five = new FragmentShader[] {
