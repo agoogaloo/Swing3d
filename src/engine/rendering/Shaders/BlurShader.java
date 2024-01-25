@@ -6,8 +6,6 @@ import engine.rendering.FrameData;
 
 public class BlurShader extends FragmentShader {
   public void compute() {
-    FrameData.edgeBuffer = new int[FrameData.width][FrameData.height];
-
     for(int px = 1; px < FrameData.width-1; px++) {
       for(int py = 1; py < FrameData.height-1; py++) {
         double[] pixel = FrameData.frameBuffer[px][py];

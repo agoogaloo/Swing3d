@@ -1,5 +1,7 @@
 package engine.rendering.Components.Custom;
 
+import java.awt.Color;
+
 import engine.input.InputManager;
 import engine.input.Keybind;
 import engine.rendering.Scene;
@@ -39,12 +41,38 @@ public class ShaderManager extends Component {
     new HueShiftShader(),
     new RotatingInvert(),
   };  
-  FragmentShader[] test = new FragmentShader[] {
+  FragmentShader[] six = new FragmentShader[] {
     new DepthShader(),
-    new NonFunkyBackground(),
+    new PalletinatorShader(),
     new Retical(),
-    //new BayerDither(),
-  };  
+  };
+  FragmentShader[] seven = new FragmentShader[] {
+    new FunkyBackground(),
+    new RandomNoise(),
+    new PalletinatorShader(),
+    new BlurShader(),
+    new EdgeShader(new Color(0, 255, 200)),
+    new DepthShader(),
+    new FunkyBackground(),
+    new Retical(),
+  };
+  FragmentShader[] asdfsafkjshdfkljsaf = new FragmentShader[] {
+    new TVStatic(),
+    new RandomNoise(),
+    new PalletinatorShader(),
+    new RotatingInvert(),
+    new BayerDither(),
+    new Retical(),
+  };
+  // FragmentShader[] nine = new FragmentShader[] {
+  //   new TVStatic(),
+  //   new RandomNoise(),
+  //   new PalletinatorShader(),
+  //   new RotatingInvert(),
+  //   new BayerDither(),
+  //   new Retical(),
+  // };
+ 
   FragmentShader[] superCrunch = new FragmentShader[] {
     new DepthShader(),
     new FunkyBackground(),
@@ -55,6 +83,7 @@ public class ShaderManager extends Component {
     new BlurShader(),
     new PalletinatorShader(),
     new LowQualityColor(16),
+    new BayerDither(),
     new Retical(),
   };
 
@@ -79,7 +108,13 @@ public class ShaderManager extends Component {
       Scene.setShaders(five);
     }
     if(InputManager.pressed(Keybind.SIX)) {
-      Scene.setShaders(test);
+      Scene.setShaders(six);
+    }
+    if(InputManager.pressed(Keybind.SEVEN)) {
+      Scene.setShaders(seven);
+    }
+    if(InputManager.pressed(Keybind.EIGHT)) {
+      Scene.setShaders(asdfsafkjshdfkljsaf);
     }
 
     if(InputManager.pressed(Keybind.ZERO)) {
