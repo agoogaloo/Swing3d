@@ -85,7 +85,7 @@ public class Mesh {
           triangle[k][2],
         };
       }
-      colorsCopy[j] = colors[j];
+      colorsCopy[j] = colors[j % colors.length];
     }
     return new Mesh(trianglesCopy, colorsCopy);
   }

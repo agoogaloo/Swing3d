@@ -35,7 +35,7 @@ public class PlayerController extends Component {
   TextObject timer = new TextObject();
   TextObject bestTimer = new TextObject();
 
-  boolean paused = false;
+  boolean menu = true, paused = false;
 
   public void start() {
     groundCollider = new BoxCollider(new Vector3(0.5, 0.25, 0.5), new Vector3(0, 0.375, 0), 0);
@@ -58,8 +58,8 @@ public class PlayerController extends Component {
     bestTimer.setColor(new Color(255, 0, 0));
     bestTimer.setFont(new Font(Font.MONOSPACED, Font.ITALIC, 10));
 
-    Scene.UI.addText(timer);
-    Scene.UI.addText(bestTimer);
+    // Scene.UI.addText(timer);
+    // Scene.UI.addText(bestTimer);
 
     respawn();
   }
@@ -67,15 +67,18 @@ public class PlayerController extends Component {
   public void update()  {
     if(InputManager.pressed(Keybind.ESCAPE)) {
       paused = !paused;
-      if(paused) {
-        pauseScreen();
-      } else {
-        Scene.UI.clear();
-        Scene.UI.addText(timer);
-        Scene.UI.addText(bestTimer);
+      if(!menu) {
+        if(paused) {
+          pauseScreen();
+        } else {
+          showTimers();
+        }
       }
     }
-    if(paused) {
+    if(menu) {
+      menu();
+    }
+    if(paused || menu) {
       return;
     }
     frame++;
@@ -222,15 +225,64 @@ public class PlayerController extends Component {
     velX = 0; velY = 0; velZ = 0;
     frame = 0;
   }
-
+  
   void pauseScreen() {
     TextObject pauseText = new TextObject(
       "Paused", new Vector2(-0.35, 0.75),
       new Color(255, 0, 0),
       new Font(Font.DIALOG, Font.BOLD, 30)
     );
+      
+    Scene.UI.addText(pauseText);
+  }
+    
+    void menu() {
+      if(frame == 0) {
+        frame++;
+        TextObject text1 = new TextObject(
+        "Jumping", new Vector2(-0.15, 0.75),
+          new Color(255, 255, 255),
+          new Font(Font.DIALOG, Font.BOLD, 30)
+        );
+        TextObject text2 = new TextObject(
+          "on Abstract Shapes", new Vector2(-0.75, 0.25),
+          new Color(255, 255, 255),
+          new Font(Font.DIALOG, Font.BOLD, 20)
+        );
+        TextObject text3 = new TextObject(
+          "in the Void to Reach", new Vector2(-0.5, -0.1),
+          new Color(255, 255, 255),
+          new Font(Font.DIALOG, Font.BOLD, 15)
+        );
+        TextObject text4 = new TextObject(
+          "an Unknown Position 64", new Vector2(-0.5, -0.4),
+          new Color(255, 255, 255),
+          new Font(Font.DIALOG, Font.BOLD, 10)
+        );
+        TextObject text5 = new TextObject(
+          "press space to start pressing space", new Vector2(-0.65, -0.7),
+          new Color(255, 255, 255),
+          new Font(Font.DIALOG, Font.BOLD, 9)
+        );
+        
+        Scene.UI.addText(text1);
+        Scene.UI.addText(text2);
+        Scene.UI.addText(text3);
+        Scene.UI.addText(text4);
+        Scene.UI.addText(text5);
+      }
+      gameObject.transform.position = new Vector3(0, -10, 0);
 
-    // Scene.UI.addText(pauseText);
+    if(InputManager.pressed(Keybind.JUMP)) {
+      menu = false;
+      showTimers();
+    }
+  }
+
+  void showTimers() {
+    Scene.UI.clear();
+    Scene.UI.addText(timer);
+    Scene.UI.addText(bestTimer);
   }
 
   double clamp(double min, double max, double t) {

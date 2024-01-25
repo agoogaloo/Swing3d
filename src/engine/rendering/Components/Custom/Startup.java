@@ -32,7 +32,8 @@ public class Startup extends Component {
 
   public void start() {
     Mesh cube = Mesh.copy(unitCube);
-    // shipMesh = loadObjectFromFile("VideoShip.obj");
+    Mesh superText = Mesh.copy(Scene.loadObjectFromFile("super.obj"), MeshColors.red);
+    
     // axisMesh = loadObjectFromFile("axis.obj");
 
     player = new GameObject(cube);
@@ -92,7 +93,7 @@ public class Startup extends Component {
       new Platform(new Vector3(61.5, 16, 29), new Vector3(0.8, 4, 0.8), 1),
       
       new Platform(new Vector3(63, 16, 26), new Vector3(2, 2, 2), 2),
-      new Platform(new Vector3(6, 5, 5), new Vector3(2, 2, 2), 2),
+      // new Platform(new Vector3(6, 5, 5), new Vector3(2, 2, 2), 2),
     };
 
     for (Platform platform : platforms) {
@@ -101,6 +102,10 @@ public class Startup extends Component {
 
       Scene.addGameObject(platformObject);
     }
+    
+    GameObject superTextObject = new GameObject(superText);
+    superTextObject.addComponent(new SuperText());
+    Scene.addGameObject(superTextObject);
   }
 
   public void update() {

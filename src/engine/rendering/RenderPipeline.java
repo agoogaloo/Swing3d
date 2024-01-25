@@ -10,7 +10,6 @@ import engine.rendering.Shaders.FragmentShader;
 import engine.rendering.Shaders.VertexShader;
 import engine.rendering.UI.TextObject;
 import engine.rendering.VertexTramsforms.VertexTransform;
-import engine.shapes.Vector;
 import engine.shapes.integer.Vector2;
 
 public class RenderPipeline {  
