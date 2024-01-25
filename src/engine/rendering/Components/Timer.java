@@ -1,6 +1,7 @@
 package engine.rendering.Components;
 
 import engine.rendering.Scene;
+import engine.rendering.Time;
 
 public class Timer {
   double startTime;
@@ -13,13 +14,13 @@ public class Timer {
 
   public void start() {
     if(!started) {
-      this.startTime = Scene.elapsedTime;
+      this.startTime = Time.elapsedTime;
       started = true;
     }
   }
 
   public boolean running() {
-    if(started && Scene.elapsedTime - startTime >= time) {
+    if(started && Time.elapsedTime - startTime >= time) {
       started = false;
     }
     return started;

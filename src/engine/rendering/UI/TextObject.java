@@ -9,11 +9,16 @@ public class TextObject {
   public String text;
   public Vector2 position;
   public Color color;
-  public Font font = new Font(Font.MONOSPACED, Font.BOLD, 15);
+  public Font font;
 
-  public TextObject(String text, Vector2 position) {
+  public TextObject(String text, Vector2 position, Color color, Font font) {
     this.text = text;
     this.position = position;
+    this.color = color;
+    this.font = font;
+  }
+  public TextObject(String text, Vector2 position) {
+    this(text, position, new Color(255, 0, 0), new Font(Font.MONOSPACED, Font.BOLD, 15));
   }
 
   public TextObject() {

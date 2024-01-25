@@ -35,6 +35,8 @@ public class PlayerController extends Component {
   TextObject timer = new TextObject();
   TextObject bestTimer = new TextObject();
 
+  boolean paused = false;
+
   public void start() {
     groundCollider = new BoxCollider(new Vector3(0.5, 0.25, 0.5), new Vector3(0, 0.375, 0), 0);
     roofCollider = new BoxCollider(new Vector3(0.5, 0.25, 0.5), new Vector3(0, -0.375, 0), 0);
@@ -63,6 +65,19 @@ public class PlayerController extends Component {
   }
   
   public void update()  {
+    if(InputManager.pressed(Keybind.ESCAPE)) {
+      paused = !paused;
+      Scene.UI.clear();
+      if(paused) {
+        pauseScreen();
+      } else {
+        Scene.UI.addText(timer);
+        Scene.UI.addText(bestTimer);
+      }
+    }
+    if(paused) {
+      return;
+    }
     frame++;
     textUpdate();
 
@@ -128,6 +143,7 @@ public class PlayerController extends Component {
   }
 
   void updateMovement() {
+    canJump = true;
     if(InputManager.held(Keybind.FORWARD)) {
       velZ = speed/100;
     }
@@ -173,7 +189,7 @@ public class PlayerController extends Component {
     }
 
     gameObject.transform.position.y -= velY;
-
+    
     if(onWall) {
       if(!canJump && velY < 0) {
         velY = 0;
@@ -206,6 +222,16 @@ public class PlayerController extends Component {
     gameObject.transform.position = new Vector3(0, -1, 0);
     velX = 0; velY = 0; velZ = 0;
     frame = 0;
+  }
+
+  void pauseScreen() {
+    TextObject pauseText = new TextObject(
+      "Paused", new Vector2(-0.35, 0.75),
+      new Color(255, 0, 0),
+      new Font(Font.DIALOG, Font.BOLD, 30)
+    );
+
+    Scene.UI.addText(pauseText);
   }
 
   double clamp(double min, double max, double t) {
