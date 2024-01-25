@@ -6,6 +6,7 @@ import engine.Debug;
 import engine.rendering.*;
 import engine.rendering.Components.Custom.ShaderManager;
 import engine.rendering.Components.Custom.Startup;
+import engine.rendering.Components.Custom.TempText;
 
 public class GameState implements State {
     Renderer renderer;
@@ -21,6 +22,7 @@ public class GameState implements State {
 
         Scene.addScript(new Startup());
         Scene.addScript(new ShaderManager());
+        Scene.addScript(new TempText());
 
         Scene.start();
     }
