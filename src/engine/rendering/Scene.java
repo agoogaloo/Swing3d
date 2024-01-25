@@ -76,7 +76,7 @@ public class Scene {
 
   public static Mesh loadObjectFromFile(String fileName) {
     try {
-      File file = new File("./src/engine/obj/" + fileName);
+      File file = new File("res/obj/" + fileName);
       Scanner fileReader = new Scanner(file);
 
       ArrayList<double[][]> triangles = new ArrayList<double[][]>();
