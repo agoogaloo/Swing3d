@@ -59,6 +59,7 @@ public class BayerDither extends FragmentShader {
             yOffset-=(int)((diff+matrixSize)/matrixSize)*matrixSize;
           }
 
+       //   oneBitDither(pixel, px, py);
         colourDither(pixel, px, py);
         // System.out.println(alpha);
         // setting the colour to the one in the palette
@@ -109,11 +110,14 @@ public class BayerDither extends FragmentShader {
       }
 
     }
+    double paletteDiff = Math.abs(palette[colour][0] - palette[nextColour][0]);
+      paletteDiff += Math.abs(palette[colour][1] - palette[nextColour][1]);
+      paletteDiff += Math.abs(palette[colour][2] - palette[nextColour][2]);
 
     double matrixBrighness = matrix[((px - xOffset) % matrixSize)][((py - yOffset) % matrixSize)]
         / (matrixSize * matrixSize);
 
-    if (dist / 255 < matrixBrighness) {
+    if (dist  < matrixBrighness*paletteDiff) {
 
       FrameData.frameBuffer[px][py] = new double[] { 1, palette[colour][0] / 255f, palette[colour][1] / 255f,
           palette[colour][2] / 255f };

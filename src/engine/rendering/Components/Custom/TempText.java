@@ -42,9 +42,9 @@ public class TempText extends Component {
 
   public void update() {
     if(Main.lagging) {
-      text.setText("GPU ACCELERATION IS");
-      text2.setText("AN ACTIVE AREA OF");
-      text3.setText("RESEARCH");
+     // text.setText("GPU ACCELERATION IS");
+      //text2.setText("AN ACTIVE AREA OF");
+      //text3.setText("RESEARCH");
     } else {
       text.setText("");
     }

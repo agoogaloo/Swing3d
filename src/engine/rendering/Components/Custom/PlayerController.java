@@ -36,7 +36,7 @@ public class PlayerController extends Component {
   TextObject bestTimer = new TextObject();
   TextObject pauseText, text1, text2, text3, text4, text5;
 
-  boolean menu = false, paused = false;
+  boolean menu = true, paused = false;
 
   public void start() {
     groundCollider = new BoxCollider(new Vector3(0.5, 0.25, 0.5), new Vector3(0, 0.375, 0), 0);
