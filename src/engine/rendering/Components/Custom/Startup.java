@@ -85,7 +85,7 @@ public class Startup extends Component {
       new Platform(new Vector3(65, 16.95, 34), new Vector3(0.5, 4, 10), 1),
       new Platform(new Vector3(61, 16.95, 34), new Vector3(0.5, 4, 10), 1),
       new Platform(new Vector3(63, 18.7, 34), new Vector3(4, 0.5, 10), 1),
-      new Platform(new Vector3(63, 18.6, 34), new Vector3(3, 0.5, 9.5), 0),
+      new Platform(new Vector3(63, 18.6, 34), new Vector3(3, 0.5, 9.9), 0),
       new Platform(new Vector3(63, 16, 36), new Vector3(0.8, 4, 0.8), 1),
       new Platform(new Vector3(64.5, 16, 32.75), new Vector3(0.8, 4, 0.8), 1),
       new Platform(new Vector3(61.5, 16, 32.75), new Vector3(0.8, 4, 0.8), 1),

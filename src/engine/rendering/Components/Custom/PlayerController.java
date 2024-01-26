@@ -31,7 +31,7 @@ public class PlayerController extends Component {
   Collider groundCollider, roofCollider, wallCollider, jumpCollider;
 
   int frame = 0;
-  int bestTime = -1;
+  double startTime = 0, bestTime = 0;
   TextObject timer = new TextObject();
   TextObject bestTimer = new TextObject();
   TextObject pauseText, text1, text2, text3, text4, text5;
@@ -90,9 +90,7 @@ public class PlayerController extends Component {
       new Color(255, 255, 255),
       new Font(Font.DIALOG, Font.BOLD, 9)
     );
-    
-    
-    
+        
     Scene.UI.addText(timer);
     Scene.UI.addText(bestTimer);
     Scene.UI.addText(pauseText);
@@ -248,11 +246,13 @@ public class PlayerController extends Component {
     }
     
     if(jumpCollider.colliding(2)) {
-      System.out.println("ggwp" + frame/60.0);
-      if(bestTime == -1 || frame <= bestTime) {
-        bestTime = frame;
+      double delta = Time.elapsedTime - startTime;
+      startTime = Time.elapsedTime;
+      System.out.println("ggwp" + delta);
+      if(bestTime == 0 || delta <= bestTime) {
+        bestTime = delta;
       }
-      bestTimer.setText(String.format("Best:%.4f", bestTime/60.0));
+      bestTimer.setText(String.format("Best:%.4f", bestTime));
       respawn();
     }
 
@@ -285,6 +285,7 @@ public class PlayerController extends Component {
       text3.setText("");
       text4.setText("");
       text5.setText("");
+      startTime = Time.elapsedTime;
     }
   }
 

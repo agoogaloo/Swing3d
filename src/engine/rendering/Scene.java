@@ -25,6 +25,8 @@ public class Scene {
 
   static double startTime;
 
+  public static double fps, tps;
+
   public static void setRenderer(Renderer rend) {
     renderer = rend;
   }

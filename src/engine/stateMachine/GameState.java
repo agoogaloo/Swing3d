@@ -6,12 +6,13 @@ import engine.Debug;
 import engine.rendering.*;
 import engine.rendering.Components.Custom.ShaderManager;
 import engine.rendering.Components.Custom.Startup;
-import engine.rendering.Components.Custom.TempText;
+import engine.rendering.Components.Custom.FpsText;
 
 public class GameState implements State {
     Renderer renderer;
     
     GameObject cubeObject, ground;
+    long prevRender, prevUpdate;
     
     @Override
     public void start(State prevState) {
@@ -22,7 +23,7 @@ public class GameState implements State {
 
         Scene.addScript(new Startup());
         Scene.addScript(new ShaderManager());
-        Scene.addScript(new TempText());
+        Scene.addScript(new FpsText());
 
         Scene.start();
     }
@@ -30,6 +31,9 @@ public class GameState implements State {
     @Override
     public void update() {
         Scene.update();
+        long time = System.currentTimeMillis();
+        Scene.tps = 1f/((time-prevUpdate)/1000f);
+        prevUpdate = time;
     }
     
     @Override
@@ -38,6 +42,9 @@ public class GameState implements State {
 
         renderer.render(image, Scene.meshes, Scene.UI.text, Scene.mainCamera.cameraPosition, Scene.mainCamera.cameraDirection);
         Debug.clearPoints();
+        long time = System.currentTimeMillis();
+        Scene.fps = 1f/((time-prevRender)/1000f);
+        prevRender = time;
     }
 
     @Override
